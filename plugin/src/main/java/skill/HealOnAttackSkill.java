@@ -67,7 +67,7 @@ public class HealOnAttackSkill extends Skill {
     private boolean healPlayer(Player player) {
         double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
         if (player.getHealth() < maxHealth) {
-            player.setHealth(player.getHealth() + HEAL_AMOUNT);
+            player.setHealth(Math.min(maxHealth, player.getHealth() + HEAL_AMOUNT));
             return true;
         }
         return false;
