@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/skill")
+@RequestMapping("/api/skill")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SkillController {
     private final SkillRepository skillRepository;

@@ -23,9 +23,7 @@ public record SkillApplier(List<Skill> skills) implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         UUID uuid = e.getPlayer().getUniqueId();
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<SkillEntity[]> response =
-                restTemplate.getForEntity("http://localhost:80/skill/" + uuid, SkillEntity[].class);
+        ResponseEntity<SkillEntity[]> response = RestService.getSkillsOfPlayer(uuid);
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
             System.out.println("response = " + response);
             Stream.of(response.getBody())

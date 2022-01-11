@@ -16,7 +16,7 @@ import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @RestController
-@RequestMapping("/player")
+@RequestMapping("/api/player")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PlayerController {
     private final PlayerRepository playerRepository;
@@ -45,7 +45,7 @@ public class PlayerController {
     }
 
     @GetMapping("/{uuid}/add")
-    private ResponseEntity<PlayerEntity> addSkillpoint(@PathVariable("uuid") String uuid) {
+    public ResponseEntity<PlayerEntity> addSkillpoint(@PathVariable("uuid") String uuid) {
         Optional<PlayerEntity> optionalPlayer = playerRepository.findById(uuid);
         if (optionalPlayer.isPresent()) {
             PlayerEntity player = optionalPlayer.get();

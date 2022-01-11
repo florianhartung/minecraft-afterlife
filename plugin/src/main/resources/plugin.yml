@@ -3,3 +3,6 @@ version: 1.0
 author: florianhartung
 main: main.Main
 description: desc
+commands:
+  skills:
+    description: Redirects to the skill tree

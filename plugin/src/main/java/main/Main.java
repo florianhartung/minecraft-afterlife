@@ -27,6 +27,8 @@ public class Main extends JavaPlugin {
 
         SkillApplier skillApplier = new SkillApplier(SKILLS);
         pluginManager.registerEvents(skillApplier, this);
+        pluginManager.registerEvents(new AdvancementListener(), this);
+        getCommand("skills").setExecutor(new SkillsExecutor());
     }
 
     @Override
