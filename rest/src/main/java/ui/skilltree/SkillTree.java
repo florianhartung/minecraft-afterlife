@@ -26,60 +26,14 @@ public class SkillTree extends PolymerTemplate<SkillTreeModel> {
         updateConnections();
     }
 
-    @ClientCallable
-    public void move(String idString, int x, int y) {
-        Optional<Integer> optionalId = idFromSkillNodeId(idString);
-        if(optionalId.isEmpty() || optionalId.get() == 0) {
-            return;
-        }
-
-        SkillNode skillNode = skillNodes.get(optionalId.get());
-        skillNode.setX(x);
-        skillNode.setY(y);
-        getModel().setSkillNodes(skillNodes);
-        updateConnections();
-    }
-
-    @ClientCallable
-    public String coordinatesOf(String idString) {
-        Optional<Integer> optionalId = idFromSkillNodeId(idString);
-        if(optionalId.isEmpty()) {
-            return "0:0";
-        }
-
-        SkillNode skillNode = skillNodes.get(optionalId.get());
-        int x = skillNode.getX();
-        int y = skillNode.getY();
-
-        return x + ":" + y;
-    }
-
-    @ClientCallable
-    public void connectNodes(String idStringFrom, String idStringTo) {
-        int from = idFromSkillNodeId(idStringFrom).orElse(-1);
-        int to = idFromSkillNodeId(idStringTo).orElse(-1);
-
-        if(from == -1 || to == -1) {
-            return;
-        }
-
-        connect(from, to);
-        updateConnections();
-    }
-
     @EventHandler
     public void handleSkillClick() {
-        // unused in skill tree builder
-        // clicks are already used to move skill nodes
+        System.out.println("Skill clicked!");
     }
 
     public void setSkillNodes(List<SkillNode> skillNodes) {
         getModel().setSkillNodes(skillNodes);
         this.skillNodes = skillNodes;
-    }
-
-    public List<SkillNode> getSkillNodes() {
-        return skillNodes;
     }
 
     public void connect(int from, int to) {
@@ -111,10 +65,6 @@ public class SkillTree extends PolymerTemplate<SkillTreeModel> {
             skillConnection.setY2(toNode.getY());
         });
         getModel().setSkillConnections(skillConnections);
-    }
-
-    public List<SkillConnection> getSkillConnections() {
-        return skillConnections;
     }
 
     private static Optional<Integer> idFromSkillNodeId(String idString) {

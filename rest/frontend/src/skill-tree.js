@@ -168,44 +168,7 @@ class SkillTree extends PolymerElement {
             yOffsetLast: {
                 type: Number,
                 value: 0
-            },
-            isMouseOverSkillNode: {
-                type: Boolean,
-                value: false
-            },
-            mouseLastOver: {
-                type: String,
-                value: "skill-9999"
-            },
-            mouseSecondLastOver: {
-                type: String,
-                value: "skill-9998"
-            },
-            movingSkillNode: {
-                type: Boolean,
-                value: false
-            },
-            nodeGotMoved: {
-                type: Boolean,
-                value: true
-            },
-            lastNodeGotMoved: {
-                type: Boolean,
-                value: true
-            },
-            lastNodeClicked: {
-                type: String,
-                value: "skill-9997"
-            },
-            secondLastNodeClicked: {
-                type: String,
-                value: "skill-9996"
-            },
-            lastOut: {
-                type: String,
-                value: " "
             }
-
         };
     }
 
@@ -216,17 +179,23 @@ class SkillTree extends PolymerElement {
         this.addEventListener('mouseup', this.mouseup.bind(this));
         this.addEventListener('mousemove', this.mousemove.bind(this));
 
-        const $_documentContainer = document.createElement('template');
 
-        $_documentContainer.innerHTML = `<custom-style>
-    <style>
-                @font-face {
-                    font-family: minecraft-font;
-                    /*noinspection CssUnknownTarget*/
-                    src: url("./assets/MinecraftFont.ttf") format("truetype");
-                }
-    </style>
-</custom-style>`;
+        this.addCustomFonts();
+    }
+
+    addCustomFonts() {
+        // custom font requires the custom-style tags around css styles
+        const $_documentContainer = document.createElement('template');
+        $_documentContainer.innerHTML = `
+            <custom-style>
+               <style>
+                    @font-face {
+                        font-family: minecraft-font;
+                        /*noinspection CssUnknownTarget*/
+                        src: url("./assets/MinecraftFont.ttf") format("truetype");
+                    }
+                </style>
+            </custom-style>`;
 
         document.head.appendChild($_documentContainer.content);
     }
@@ -238,10 +207,8 @@ class SkillTree extends PolymerElement {
     }
 
     // noinspection JSUnusedGlobalSymbols
-    mouseOverSkillNode(event) {
-        if (!this.mousePressed && !this.movingSkillNode) {
-            this.mouseSecondLastOver = this.mouseLastOver;
-            this.mouseLastOver = event.target.id;
+    mouseOverSkillNode() {
+        if (!this.mousePressed) {
             this.isMouseOverSkillNode = true;
         }
     }
@@ -251,60 +218,23 @@ class SkillTree extends PolymerElement {
         this.isMouseOverSkillNode = false;
     }
 
-    async mousedown(event) {
-        const offsets = this.setOffsets.bind(this);
+    mousedown(event) {
         if (!this.isMouseOverSkillNode) {
             this.xOffsetLast = this.xOffset - event.clientX;
             this.yOffsetLast = this.yOffset - event.clientY;
             this.mousePressed = true;
-        } else {
-            this.lastNodeGotMoved = this.nodeGotMoved;
-            this.nodeGotMoved = false;
-            this.movingSkillNode = true;
-            // noinspection JSUnresolvedFunction
-            let coordinates = await this.$server.coordinatesOf(this.mouseLastOver);
-            let split = coordinates.split(":");
-            let x = split[0];
-            let y = split[1];
-
-            offsets(x - event.clientX, y - event.clientY);
         }
-    }
-
-    setOffsets(xOffsetLast, yOffsetLast) {
-        this.xOffsetLast = xOffsetLast;
-        this.yOffsetLast = yOffsetLast;
     }
 
     mouseup() {
-
-        if (this.movingSkillNode) {
-            this.secondLastNodeClicked = this.lastNodeClicked;
-            this.lastNodeClicked = this.mouseLastOver;
-            if (!this.nodeGotMoved && !this.lastNodeGotMoved && this.lastNodeClicked !== this.secondLastNodeClicked) {
-                // noinspection JSUnresolvedFunction
-                this.$server.connectNodes(this.lastNodeClicked, this.secondLastNodeClicked);
-                this.nodeGotMoved = true;
-
-            }
-        }
-
         this.mousePressed = false;
-        this.movingSkillNode = false;
     }
 
     mousemove(event) {
-
         if (this.mousePressed) {
             event.preventDefault();
             this.xOffset = this.xOffsetLast + event.clientX;
             this.yOffset = this.yOffsetLast + event.clientY;
-        } else if (this.movingSkillNode) {
-            this.nodeGotMoved = true;
-            event.preventDefault();
-            let x = this.xOffsetLast + event.clientX;
-            let y = this.yOffsetLast + event.clientY;
-            this.$server.move(this.mouseLastOver, x, y);
         }
     }
 }
