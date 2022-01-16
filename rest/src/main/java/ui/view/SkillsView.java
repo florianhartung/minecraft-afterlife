@@ -1,14 +1,22 @@
 package ui.view;
 
+import com.google.gson.Gson;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.apache.commons.lang3.tuple.Pair;
+import data.Skill;
+import ui.skilltree.config.ConnectionConfig;
+import ui.skilltree.config.SkillConfig;
+import ui.skilltree.config.SkillTreeConfiguration;
+import ui.skilltree.SkillConnection;
 import ui.skilltree.SkillNode;
 import ui.skilltree.SkillTree;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 @Route("skills")
@@ -16,28 +24,82 @@ import java.util.List;
 @UIScope
 public class SkillsView extends VerticalLayout {
 
-    private static final List<SkillNode> skillNodes = List.of(
-            new SkillNode("Start", 0, 500, 500, true, "Dies ist der Start. Du kannst Skills der Reihenfolge nach, wie sie verbunden sind, freischalten."),
-            new SkillNode("Barriere", 1, 600, 380, true, "Absorption bei 1 Minute ohne Schaden (3 Herzen)"),
-            new SkillNode("Blutrausch", 2, 350, 300, false, "Töten gibt Schnelligkeit für ein paar Sekunden"),
-            new SkillNode("Dauerläufer", 3, 800, 780, false, "Desto länger du am stück sprintest desto schneller wirst du"));
-    private static final List<Pair<Integer, Integer>> skillConnections = List.of(
-            Pair.of(0, 1),
-            Pair.of(0, 2),
-            Pair.of(0,3));
+    private final SkillTreeConfiguration skillTreeConfiguration;
 
+    private final SkillTree skillTree;
 
-    public SkillsView() {
+    public SkillsView(SkillTreeConfiguration skillTreeConfiguration) {
+        this.skillTreeConfiguration = skillTreeConfiguration;
+
         setWidth("100%");
         setHeight("100%");
         setPadding(false);
         setMargin(false);
 
-        SkillTree skillTree = new SkillTree();
-        skillTree.setSkillNodes(skillNodes);
-        skillConnections.forEach(pair -> skillTree.connect(pair.getLeft(), pair.getRight()));
+        skillTree = new SkillTree();
+
+        // use to load from file
+        load();
+
+        // use to load empty skills from {@link Skill} enum
+        //loadFromSkillsEnum();
+
         skillTree.build();
 
-        add(skillTree);
+        Button saveButton = new Button("Save");
+        saveButton.getStyle().set("position", "absolute");
+        saveButton.getStyle().set("top", "0");
+        saveButton.getStyle().set("right", "0");
+        saveButton.addClickListener(buttonClickEvent -> System.out.println(skillTreeToJson()));
+
+        add(skillTree, saveButton);
+    }
+
+    @Deprecated
+    private void loadFromSkillsEnum() {
+        List<SkillNode> skillNodes = new LinkedList<>();
+        Skill[] allSkills = Skill.values();
+        SkillNode startNode = new SkillNode("Start", 0, 10, 10, false, "EMPTY", null, true);
+        skillNodes.add(startNode);
+        for (int i = 1; i <= allSkills.length; i++) {
+            double a = i * (2 * Math.PI) / 4.5d;
+            double dist = 85 * a / (2 * Math.PI);
+            int x = (int) (dist * Math.sin(a));
+            int y = (int) (dist * Math.cos(a));
+
+
+            Skill skill = allSkills[i - 1];
+            SkillNode skillNode = new SkillNode(skill.name(), i , x, y, false, "EMPTY", skill.name(), false);
+            skillNodes.add(skillNode);
+        }
+        skillTree.setSkillNodes(skillNodes);
+    }
+
+    private void load() {
+        List<SkillNode> skillNodes = Stream.of(skillTreeConfiguration.getSkills())
+                .map(node -> new SkillNode(node.getLabel(), node.getId(), node.getX(), node.getY(), false, node.getDescription(), node.getSkillName(), false))
+                .toList();
+        skillNodes.get(0).setStart(true);
+
+        skillTree.setSkillNodes(skillNodes);
+
+        Stream.of(skillTreeConfiguration.getConnections())
+                .forEach(connection -> skillTree.connect(connection.getFrom(), connection.getTo()));
+    }
+
+    private String skillTreeToJson() {
+        List<SkillNode> skills = skillTree.getSkillNodes();
+        List<SkillConnection> connections = skillTree.getSkillConnections();
+
+        SkillConfig[] skillConfigs = skills.stream()
+                .map(skillNode -> new SkillConfig(skillNode.getId(), skillNode.getLabel(), skillNode.getX(), skillNode.getY(), skillNode.getDescription(), skillNode.getSkill()))
+                .toArray(SkillConfig[]::new);
+
+        ConnectionConfig[] connectionConfigs = connections.stream()
+                .map(connection -> new ConnectionConfig(connection.getFromId(), connection.getToId()))
+                .toArray(ConnectionConfig[]::new);
+        SkillTreeConfiguration skillTreeConfiguration = new SkillTreeConfiguration(skillConfigs, connectionConfigs);
+
+        return new Gson().toJson(skillTreeConfiguration);
     }
 }

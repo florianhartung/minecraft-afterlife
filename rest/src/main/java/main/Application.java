@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(scanBasePackages = {"controller", "repository", "data", "ui"})
+@SpringBootApplication(scanBasePackages = {"controller", "repository", "data", "ui", "ui.skilltree.config"})
 @EnableJpaRepositories(basePackages = "repository")
 @EntityScan(basePackages = "data")
 @EnableVaadin("ui")

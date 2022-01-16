@@ -1,4 +1,4 @@
-package ui.skilltree;
+package ui.skilltree.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,13 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SkillNode {
-    private String label;
+public class SkillConfig {
     private int id;
+    private String label;
     private int x;
     private int y;
-    private boolean unlocked;
     private String description;
-    private String skill;
-    private boolean start;
+    private String skillName;
 }
