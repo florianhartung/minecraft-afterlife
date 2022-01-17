@@ -1,6 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 
-// noinspection CssUnresolvedCustomProperty
+// noinspection CssUnresolvedCustomProperty,HtmlUnknownAttribute
 class SkillTree extends PolymerElement {
 
     // noinspection JSUnusedGlobalSymbols
@@ -24,7 +24,7 @@ class SkillTree extends PolymerElement {
                 }
 
                 .skill-tree-button {
-                    font-family: minecraft-font, sans-serif;
+                    font-family: minecraft-regular, sans-serif;
                     font-size: 1.5em;
                     position: absolute;
                     padding: 0;
@@ -38,13 +38,28 @@ class SkillTree extends PolymerElement {
                     transition: border linear 0.1s, background-color linear 0.1s, scale linear 0.05s;
                     color: var(--skill-tree-text);
                     align-content: center;
-                    z-index: 1;
+                    user-select: none;
                 }
 
                 .skill-tree-button:hover:not([skilled, start]) {
                     box-shadow: 0 0 6px #9ecaed60;
                     background-color: var(--skill-tree-button-background-hover);
+                    cursor: none;
+                }
+
+                .skill-tree-button[skillable] {
+                    box-shadow: 0 0 6px #9ecaed60;
+                    background-color: #de2b96;
                     cursor: pointer;
+                }
+
+                .skill-tree-button:not(:hover[skillable]) {
+                    transition: background-color linear 0.5s;
+                }
+
+                .skill-tree-button:hover[skillable] {
+                    box-shadow: 0 0 6px #9ecaed60;
+                    background-color: #de2b2b;
                 }
 
                 .skill-tree-button[skilled] {
@@ -62,11 +77,21 @@ class SkillTree extends PolymerElement {
                     width: 100%;
                     height: 100%;
                     background-color: #0000;
-                    z-index: 0;
                 }
 
                 .skill-tree-connection {
-                    stroke: var(--skill-tree-connection);
+                    stroke: var(--skill-tree-button-background);
+                    stroke-width: 2;
+                    transition: linear 0.5s;
+                }
+
+                .skill-tree-connection[unlocked] {
+                    stroke: var(--skill-tree-button-background-skilled);
+                    stroke-width: 5;
+                }
+
+                .skill-tree-connection[skillable] {
+                    stroke: #de2b96;
                     stroke-width: 2;
                 }
 
@@ -80,6 +105,7 @@ class SkillTree extends PolymerElement {
                     background-size: 500px;
                     font-size: 1.35em;
                     padding: 20px;
+                    user-select: none;
                 }
 
                 .skill-tree-button .skill-tree-skill-tooltip {
@@ -87,13 +113,12 @@ class SkillTree extends PolymerElement {
                     position: absolute;
                     top: calc(30px - 25%);
                     left: 60px;
-                    z-index: 2;
                 }
 
 
                 .skill-tree-button:hover .skill-tree-skill-tooltip {
                     visibility: visible;
-                    position: absolute;
+                    z-index: 1;
                 }
 
                 .skill-tree-skill-tooltip-header {
@@ -102,6 +127,7 @@ class SkillTree extends PolymerElement {
                 }
 
                 .divbg {
+                    position: absolute;
                     width: 100%;
                     height: 100%;
                     /*noinspection CssUnknownTarget*/
@@ -109,16 +135,42 @@ class SkillTree extends PolymerElement {
                     background-size: 150px;
                     image-rendering: pixelated;
                     background-repeat: repeat;
+                    overflow: hidden;
+                }
+
+                .skill-tree-skillpoints {
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                    color: white;
+                    font-size: 2.5em;
+                    font-family: minecraft-regular, sans-serif;
+                    z-index: 3;
+                    user-select: none;
                 }
             </style>
             <!--suppress CssOverwrittenProperties -->
             <div class="divbg" style="background-position: top {{yOffset}}px left {{xOffset}}px;">
+                <template is="dom-repeat" items="{{skillConnections}}">
+                    <svg class="skill-tree-connections">
+                        <line unlocked$="{{item.unlocked}}"
+                              skillable$="{{item.skillable}}"
+                              x1$="calc({{item.x1}} + {{xOffset}} + 30)"
+                              y1$="calc({{item.y1}} + {{yOffset}} + 30)"
+                              x2$="calc({{item.x2}} + {{xOffset}} + 30)"
+                              y2$="calc({{item.y2}} + {{yOffset}} + 30)"
+                              class="skill-tree-connection"
+                        />
+                    </svg>
+                </template>
                 <template is="dom-repeat" items="{{skillNodes}}">
                     <button id$="skill-{{item.id}}" class="skill-tree-button" on-click="handleSkillClick"
-                            style$="top:calc({{yOffset}}px + {{item.y}}px); left:calc({{xOffset}}px + {{item.x}}px)"
+                            on-mouseup="mouseOutOfSkillNode"
+                            style$="position:absolute;overflow: visible;top:calc({{yOffset}}px + {{item.y}}px); left:calc({{xOffset}}px + {{item.x}}px)"
                             skilled$="{{item.unlocked}}"
-                            disabled$="{{item.unlocked}}"
+                            disabled$="{{!item.skillable}}"
                             start$="{{item.start}}"
+                            skillable$="{{item.skillable}}"
                             on-mouseover="mouseOverSkillNode"
                             on-mouseout="mouseOutOfSkillNode">{{item.label}}
 
@@ -131,13 +183,9 @@ class SkillTree extends PolymerElement {
                     </span>
                     </button>
                 </template>
-                <template is="dom-repeat" items="{{skillConnections}}">
-                    <svg class="skill-tree-connections">
-                        <line x1$="calc({{item.x1}} + {{xOffset}} + 30)" y1$="calc({{item.y1}} + {{yOffset}} + 30)"
-                              x2$="calc({{item.x2}} + {{xOffset}} + 30)" y2$="calc({{item.y2}} + {{yOffset}} + 30)"
-                              class="skill-tree-connection"/>
-                    </svg>
-                </template>
+                <div class="skill-tree-skillpoints">
+                    Skillpoints: {{skillpoints}}
+                </div>
             </div>
         `;
     }
@@ -190,9 +238,9 @@ class SkillTree extends PolymerElement {
             <custom-style>
                <style>
                     @font-face {
-                        font-family: minecraft-font;
+                        font-family: minecraft-regular;
                         /*noinspection CssUnknownTarget*/
-                        src: url("./assets/MinecraftFont.ttf") format("truetype");
+                        src: url("./assets/MinecraftRegular.otf") format("opentype");
                     }
                 </style>
             </custom-style>`;

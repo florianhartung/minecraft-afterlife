@@ -14,4 +14,6 @@ public class SkillConnection {
     private int y1;
     private int x2;
     private int y2;
+    private boolean unlocked;
+    private boolean skillable;
 }

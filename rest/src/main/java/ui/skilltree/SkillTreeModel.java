@@ -4,6 +4,7 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 
 import java.util.List;
 
+@SuppressWarnings("deprecation")
 public interface SkillTreeModel extends TemplateModel {
     List<SkillNode> getSkillNodes();
 
@@ -12,4 +13,6 @@ public interface SkillTreeModel extends TemplateModel {
     List<SkillConnection> getSkillConnections();
 
     void setSkillConnections(List<SkillConnection> skillConnections);
+
+    void setSkillpoints(int skillpoints);
 }

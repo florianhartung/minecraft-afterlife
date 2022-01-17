@@ -13,6 +13,7 @@ public class SkillNode {
     private int x;
     private int y;
     private boolean unlocked;
+    private boolean skillable;
     private String description;
     private String skill;
     private boolean start;

@@ -1,6 +1,5 @@
 package controller;
 
-import data.PlayerEntity;
 import data.Skill;
 import data.SkillEntity;
 import lombok.RequiredArgsConstructor;
@@ -72,23 +71,34 @@ public class SkillController {
         }
     }
 
-    private boolean subtractSkillpoint(String uuid) {
-        Optional<PlayerEntity> optionalPlayer = playerRepository.findById(uuid)
-                .filter(p -> p.getSkillPoints() > 0);
-        if (optionalPlayer.isPresent()) {
-            PlayerEntity player = optionalPlayer.get();
-            player.setSkillPoints(player.getSkillPoints() - 1);
-            playerRepository.save(player);
-            return true;
+    @GetMapping("/{uuid}/removeall")
+    public ResponseEntity<List<SkillEntity>> removeAll(@PathVariable("uuid") String uuid) {
+        int skillCount = skillRepository.findAllByUuid(uuid).size();
+        skillRepository.deleteAllByUuid(uuid);
+        if (addSkillpoint(uuid, skillCount)) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
-        return false;
+        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    }
+
+    private boolean subtractSkillpoint(String uuid) {
+        return addSkillpoint(uuid, -1);
     }
 
     private void addSkillpoint(String uuid) {
-        playerRepository.findById(uuid)
-                .ifPresent(player -> {
-                    player.setSkillPoints(player.getSkillPoints() + 1);
+        addSkillpoint(uuid, 1);
+    }
+
+    private boolean addSkillpoint(String uuid, int amount) {
+        return playerRepository.findById(uuid)
+                .map(player -> {
+                    int newSkillpoints = player.getSkillPoints() + amount;
+                    if (newSkillpoints < 0) {
+                        return false;
+                    }
+                    player.setSkillPoints(newSkillpoints);
                     playerRepository.save(player);
-                });
+                    return true;
+                }).orElse(false);
     }
 }
