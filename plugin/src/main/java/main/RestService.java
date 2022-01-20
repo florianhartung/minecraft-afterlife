@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.UUID;
 
 public class RestService {
-    private static RestTemplate restTemplate;
+    private static final RestTemplate restTemplate;
 
     static {
         restTemplate = new RestTemplate();

@@ -16,6 +16,7 @@ import repository.SkillRepository;
 import java.util.List;
 import java.util.Optional;
 
+// TODO Integrate into PlayerController
 @RestController
 @RequestMapping("/api/skill")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))

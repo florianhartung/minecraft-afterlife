@@ -1,6 +1,5 @@
 package main;
 
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import skill.SkillManager;
 
@@ -10,19 +9,11 @@ import skill.SkillManager;
 public class Main extends JavaPlugin {
 
     @Override
-    public void onLoad() {
-
-    }
-
-    @Override
     public void onEnable() {
         SkillManager.init(this);
         SkillManager.startUpdater();
 
-
-        PluginManager pluginManager = getServer().getPluginManager();
-
-        pluginManager.registerEvents(new AdvancementListener(), this);
+        getServer().getPluginManager().registerEvents(new AdvancementListener(), this);
         getCommand("skills").setExecutor(new SkillsExecutor());
     }
 
