@@ -29,7 +29,7 @@ public class PlayerController {
                         .toList());
     }
 
-    @GetMapping("/new")
+    @GetMapping("/new") // TODO register new players on first login
     public ResponseEntity<PlayerEntity> newPlayer() {
         PlayerEntity player = new PlayerEntity();
         player.setUuid(UUID.randomUUID().toString());

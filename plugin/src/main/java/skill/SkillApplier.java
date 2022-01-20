@@ -1,14 +1,14 @@
-package main;
+package skill;
 
 import data.SkillEntity;
+import main.RestService;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-import skill.Skill;
+import skill.generic.MinecraftSkill;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,30 +18,28 @@ import java.util.stream.Stream;
 /**
  * This is a temporary listener, that when a player types 'apply skills' or 'remove skills' in chat, all the given skills get applied to them or removed from them
  */
-public record SkillApplier(List<Skill> skills) implements Listener {
+public record SkillApplier(List<MinecraftSkill> minecraftSkills) implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
         UUID uuid = e.getPlayer().getUniqueId();
         ResponseEntity<SkillEntity[]> response = RestService.getSkillsOfPlayer(uuid);
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-            System.out.println("response = " + response);
             Stream.of(response.getBody())
                     .map(SkillEntity::getSkill)
-                    .map(SkillMapper::map)
-                    .forEach(skill -> Objects.requireNonNull(skill).apply(e.getPlayer()));
-        } else {
-            System.out.println("response = " + response);
+                    .map(SkillHolder::getMinecraftSkill)
+                    .forEach(minecraftSkill -> Objects.requireNonNull(minecraftSkill).apply(e.getPlayer()));
         }
     }
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
         if (e.getMessage().equals("apply")) {
-            skills.forEach(skill -> skill.apply(e.getPlayer()));
+            minecraftSkills.forEach(minecraftSkill -> minecraftSkill.apply(e.getPlayer()));
         } else if (e.getMessage().equals("remove")) {
-            skills.forEach(skill -> skill.remove(e.getPlayer()));
-        } else {
+            minecraftSkills.forEach(minecraftSkill -> minecraftSkill.remove(e.getPlayer()));
+        } else if (e.getMessage().equals("update")) {
+            SkillManager.reloadSkills();
             return;
         }
         e.setCancelled(true);

@@ -1,18 +1,18 @@
-package skill;
+package skill.listener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
+import skill.generic.MinecraftSkill;
 
-public class HitmanSkill implements Listener {
+public class HitmanSkill extends MinecraftSkill {
 
     private int taskId = -1;
     private final Plugin plugin;
@@ -62,4 +62,13 @@ public class HitmanSkill implements Listener {
         }
     }
 
+    @Override
+    public void apply(Player player) {
+
+    }
+
+    @Override
+    public void remove(Player player) {
+
+    }
 }

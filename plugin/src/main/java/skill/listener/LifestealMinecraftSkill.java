@@ -1,4 +1,4 @@
-package skill;
+package skill.listener;
 
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -7,6 +7,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import skill.generic.MinecraftSkill;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.UUID;
 /**
  * This class represents an skill, that whenever a player damages another entity, they get healed by a fixed amount
  */
-public class HealOnAttackSkill extends Skill {
+public class LifestealMinecraftSkill extends MinecraftSkill {
 
     /**
      * The chance that a player affected by this skill gets healed when they attack another entity

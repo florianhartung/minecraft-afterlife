@@ -1,4 +1,4 @@
-package skill;
+package skill.generic;
 
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
@@ -12,17 +12,19 @@ import java.util.UUID;
 /**
  * This class represents a single skill, that modifies an attribute of the player
  */
-public abstract class AttributeSkill extends Skill {
+public class AttributeMinecraftSkill extends MinecraftSkill {
 
     private final Attribute attribute;
     private final UUID uuid;
     private final String name;
     private final AttributeModifier.Operation operation;
+    private final double amount;
 
-    public AttributeSkill(Attribute attribute, UUID uuid, String name, AttributeModifier.Operation operation) {
+    public AttributeMinecraftSkill(Attribute attribute, UUID uuid, String name, double amount, AttributeModifier.Operation operation) {
         this.attribute = attribute;
         this.uuid = uuid;
         this.name = name;
+        this.amount = amount;
         this.operation = operation;
     }
 
@@ -33,7 +35,7 @@ public abstract class AttributeSkill extends Skill {
      * @param amount The amount
      */
     protected void setAttributeAmount(Player player, double amount) {
-        if (!checkAttributeCompatibility(player)) {
+        if (isIncompatibleWith(player)) {
             return;
         }
 
@@ -44,9 +46,13 @@ public abstract class AttributeSkill extends Skill {
                 .stream()
                 .filter(modifier -> modifier.getUniqueId().equals(uuid))
                 .findFirst();
-
-        optionalAttributeModifier.ifPresent(attributeInstance::removeModifier);
-        if (amount != 0) {
+        if (optionalAttributeModifier.isPresent()) {
+            AttributeModifier attributeModifier = optionalAttributeModifier.get();
+            if (attributeModifier.getAmount() != amount) {
+                attributeInstance.removeModifier(attributeModifier);
+                attributeInstance.addModifier(newAttributeModifier(amount));
+            }
+        } else {
             attributeInstance.addModifier(newAttributeModifier(amount));
         }
     }
@@ -57,11 +63,18 @@ public abstract class AttributeSkill extends Skill {
      * @param player A player from which the attribute modifier is removed from
      */
     protected void removeAttribute(Player player) {
-        double a = switch (operation) {
-            case ADD_NUMBER, MULTIPLY_SCALAR_1 -> 0.0d;
-            case ADD_SCALAR -> 1.0d;
-        };
-        setAttributeAmount(player, a);
+        if (isIncompatibleWith(player)) {
+            return;
+        }
+        AttributeInstance attributeInstance = player.getAttribute(attribute);
+        assert attributeInstance != null;
+
+
+        attributeInstance.getModifiers()
+                .stream()
+                .filter(modifier -> modifier.getUniqueId().equals(uuid))
+                .findFirst()
+                .ifPresent(attributeInstance::removeModifier);
     }
 
     /**
@@ -80,11 +93,21 @@ public abstract class AttributeSkill extends Skill {
      * @param player The player
      * @return true if they are compatible, otherwise false
      */
-    private boolean checkAttributeCompatibility(Player player) {
+    private boolean isIncompatibleWith(Player player) {
         if (player.getAttribute(attribute) == null) {
             Bukkit.getLogger().warning("Can not get attribute " + attribute + " from player " + player.getDisplayName() + ".\nAttribute name is " + name);
-            return false;
+            return true;
         }
-        return true;
+        return false;
+    }
+
+    @Override
+    public void apply(Player player) {
+        setAttributeAmount(player, amount);
+    }
+
+    @Override
+    public void remove(Player player) {
+        removeAttribute(player);
     }
 }

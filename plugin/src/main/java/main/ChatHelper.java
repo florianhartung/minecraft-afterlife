@@ -22,7 +22,7 @@ public class ChatHelper {
 
     private static TextComponent skillsUrlMessage(Player player) {
         TextComponent text = new TextComponent(PREFIX + "§6§oKlicke hier, um deine Skillpunkte auszugeben");
-        text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://localhost/skills/" + player.getUniqueId()));
+        text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://localhost/skills?uuid=" + player.getUniqueId()));
         return text;
     }
 }
