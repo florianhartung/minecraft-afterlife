@@ -12,7 +12,6 @@ import repository.PlayerRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.StreamSupport;
 
 @RestController
@@ -29,11 +28,11 @@ public class PlayerController {
                         .toList());
     }
 
-    @GetMapping("/new") // TODO register new players on first login
-    public ResponseEntity<PlayerEntity> newPlayer() {
+    @GetMapping("/new/{uuid}")
+    public ResponseEntity<PlayerEntity> newPlayer(@PathVariable("uuid") String uuid) {
         PlayerEntity player = new PlayerEntity();
-        player.setUuid(UUID.randomUUID().toString());
-        player.setSkillPoints((int) (Math.random() * 100));
+        player.setUuid(uuid);
+        player.setSkillPoints(0);
         PlayerEntity saved = playerRepository.save(player);
         return ResponseEntity.ok(saved);
 

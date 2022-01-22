@@ -14,6 +14,7 @@ public class Main extends JavaPlugin {
         SkillManager.startUpdater();
 
         getServer().getPluginManager().registerEvents(new AdvancementListener(), this);
+        getServer().getPluginManager().registerEvents(new PlayerRegistrationListener(), this);
         getCommand("skills").setExecutor(new SkillsExecutor());
     }
 

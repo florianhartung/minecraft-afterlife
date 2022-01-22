@@ -21,4 +21,12 @@ public class RestService {
     public static ResponseEntity<SkillEntity[]> getSkillsOfPlayer(UUID playerUUID) {
         return restTemplate.getForEntity("http://localhost:80/api/skill/" + playerUUID, SkillEntity[].class);
     }
+
+    public static ResponseEntity<PlayerEntity> saveNewPlayer(String playerUUID) {
+        return restTemplate.getForEntity("http://localhost:80/api/player/new/" + playerUUID, PlayerEntity.class);
+    }
+
+    public static ResponseEntity<PlayerEntity> getPlayer(String playerUUID) {
+        return restTemplate.getForEntity("http://localhost:80/api/player/" + playerUUID, PlayerEntity.class);
+    }
 }
