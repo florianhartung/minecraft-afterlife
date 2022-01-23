@@ -11,6 +11,7 @@
     <modules>
         <module>plugin</module>
         <module>rest</module>
+        <module>persistence</module>
     </modules>
 
     <properties>

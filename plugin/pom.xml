@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.florianhartung</groupId>
-            <artifactId>rest</artifactId>
+            <artifactId>persistence</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
