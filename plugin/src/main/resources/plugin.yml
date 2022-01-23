@@ -1,8 +1,9 @@
-name: MinecraftProjekt
+name: Minecraft-Afterlife
 version: 1.0
 author: florianhartung
 main: main.Main
 description: desc
+api-version: 1.18
 commands:
   skills:
     description: Redirects to the skill tree
