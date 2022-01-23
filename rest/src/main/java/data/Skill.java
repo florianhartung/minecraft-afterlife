@@ -5,7 +5,7 @@ public enum Skill {
     BACKSTAB,
     BARRIER,
     BLOODLUST,
-    CARPENTER,
+    CARPENTER, // TODO
     CRYSTAL_KING,
     DIMENSION_JUMPER,
     DUSKBLADE,

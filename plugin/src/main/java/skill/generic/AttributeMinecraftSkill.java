@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * This class represents a single skill, that modifies an attribute of the player
  */
-public class AttributeMinecraftSkill extends MinecraftSkill {
+public class AttributeMinecraftSkill implements MinecraftSkill {
 
     private final Attribute attribute;
     private final UUID uuid;

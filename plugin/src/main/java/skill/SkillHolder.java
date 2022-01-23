@@ -3,8 +3,7 @@ package skill;
 import data.Skill;
 import org.bukkit.plugin.Plugin;
 import skill.generic.MinecraftSkill;
-import skill.listener.HitmanSkill;
-import skill.listener.LifestealMinecraftSkill;
+import skill.listener.*;
 import skill.listener.factory.FastFactory;
 import skill.listener.factory.NinjaFactory;
 import skill.listener.factory.StackableSkillFactory;
@@ -34,6 +33,12 @@ public class SkillHolder {
 
         skills.put(Skill.HITMAN, new HitmanSkill(plugin));
         skills.put(Skill.LIFESTEAL, new LifestealMinecraftSkill());
+        skills.put(Skill.ADRENALINE, new AdrenalineMinecraftSkill());
+        skills.put(Skill.BACKSTAB, new BackstabMinecraftSkill());
+        skills.put(Skill.BARRIER, new BarrierMinecraftSkill(plugin));
+        skills.put(Skill.BLOODLUST, new BloodlustMinecraftSkill());
+        skills.put(Skill.CRYSTAL_KING, new CrystalKingMinecraftSkill());
+        skills.put(Skill.DIMENSION_JUMPER, new DimensionJumperMinecraftSkill());
     }
 
     private static void putStackableSkills(List<Skill> skills, StackableSkillFactory factory) {

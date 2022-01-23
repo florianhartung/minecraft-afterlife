@@ -1,7 +1,6 @@
 package skill.listener;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 import skill.generic.MinecraftSkill;
 
-public class HitmanSkill extends MinecraftSkill {
+public class HitmanSkill implements MinecraftSkill {
 
     private int taskId = -1;
     private final Plugin plugin;
@@ -23,8 +22,8 @@ public class HitmanSkill extends MinecraftSkill {
 
     @EventHandler
     public void onToggleSneak(PlayerToggleSneakEvent e) {
-        System.out.println("toggle");
-        System.out.println(e.isSneaking());
+        //System.out.println("toggle");
+        //System.out.println(e.isSneaking());
         if (e.isSneaking()) {
             taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 e.getPlayer().sendMessage("You successfully sneaked for 5 seconds");
@@ -52,12 +51,12 @@ public class HitmanSkill extends MinecraftSkill {
             double angleInDegrees = angle / Math.PI * 180;
             if (angleInDegrees < 30) {
                 if (e.getPlayer().hasLineOfSight(target)) {
-                    e.getPlayer().sendMessage(angleInDegrees + ": " + ChatColor.GREEN + "yes");
+                    //e.getPlayer().sendMessage(angleInDegrees + ": " + ChatColor.GREEN + "yes");
                 }
 
             } else {
 
-                e.getPlayer().sendMessage(angleInDegrees + ": " + ChatColor.RED + "no");
+                //e.getPlayer().sendMessage(angleInDegrees + ": " + ChatColor.RED + "no");
             }
         }
     }

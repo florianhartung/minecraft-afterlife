@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
+import skill.SkillUpdater;
 
 
 public class PlayerRegistrationListener implements Listener {
@@ -19,8 +20,10 @@ public class PlayerRegistrationListener implements Listener {
         } catch (RestClientException exception) {
             if (!createNewPlayer(uuid)) {
                 e.disallow(PlayerLoginEvent.Result.KICK_OTHER, "Du konnest nicht im System registriert werden. Bitte kontaktiere einen Admin.");
+                return;
             }
         }
+        SkillUpdater.reloadSkillsForPlayer(e.getPlayer());
     }
 
     private boolean createNewPlayer(String uuid) {

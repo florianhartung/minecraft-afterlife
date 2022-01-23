@@ -17,7 +17,7 @@ import java.util.UUID;
 /**
  * This class represents an skill, that whenever a player damages another entity, they get healed by a fixed amount
  */
-public class LifestealMinecraftSkill extends MinecraftSkill {
+public class LifestealMinecraftSkill implements MinecraftSkill {
 
     /**
      * The chance that a player affected by this skill gets healed when they attack another entity

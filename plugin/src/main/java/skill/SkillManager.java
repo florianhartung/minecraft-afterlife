@@ -36,12 +36,9 @@ public class SkillManager {
     }
 
     public static void reloadSkills() {
-        long timestampBefore = System.currentTimeMillis();
         for (int i = 0; i < 20; i++) {
             Bukkit.getServer().getOnlinePlayers()
                     .forEach(SkillUpdater::reloadSkillsForPlayer);
         }
-        long timestampAfter = System.currentTimeMillis();
-        System.out.println("Reloading skills took " + (timestampAfter - timestampBefore) + " milliseconds");
     }
 }
