@@ -39,6 +39,7 @@ public class SkillHolder {
         skills.put(Skill.BLOODLUST, new BloodlustMinecraftSkill());
         skills.put(Skill.CRYSTAL_KING, new CrystalKingMinecraftSkill());
         skills.put(Skill.DIMENSION_JUMPER, new DimensionJumperMinecraftSkill());
+        skills.put(Skill.GHOST_SOUL, new GhostSoulMinecraftSkill(plugin));
     }
 
     private static void putStackableSkills(List<Skill> skills, StackableSkillFactory factory) {

@@ -1,0 +1,4 @@
+server:
+  root: http://localhost
+  api: /api
+  skills-page: /skills?uuid=%s

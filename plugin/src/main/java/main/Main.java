@@ -10,6 +10,9 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+        RestService.setConfig(getConfig());
+
         SkillManager.init(this);
         SkillManager.startUpdater();
 

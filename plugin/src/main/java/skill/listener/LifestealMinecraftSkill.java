@@ -7,17 +7,14 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import skill.generic.MinecraftSkill;
+import skill.generic.PlayerMinecraftSkill;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * This class represents an skill, that whenever a player damages another entity, they get healed by a fixed amount
  */
-public class LifestealMinecraftSkill implements MinecraftSkill {
+public class LifestealMinecraftSkill extends PlayerMinecraftSkill {
 
     /**
      * The chance that a player affected by this skill gets healed when they attack another entity
@@ -29,14 +26,10 @@ public class LifestealMinecraftSkill implements MinecraftSkill {
      */
     private static final double HEAL_AMOUNT = 6.0d;
 
-    /**
-     * Contains the uuids of all players who are currently affected by this skill
-     */
-    List<UUID> playersAffected = new ArrayList<>();
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player player) {
+        if (e.getDamager() instanceof Player player && isActiveFor(player)) {
             double rand = Math.random();
             if (rand < HEAL_CHANCE) {
                 if (healPlayer(player)) {
@@ -45,18 +38,6 @@ public class LifestealMinecraftSkill implements MinecraftSkill {
                 }
             }
         }
-    }
-
-    @Override
-    public void apply(Player player) {
-        if (!playersAffected.contains(player.getUniqueId())) {
-            playersAffected.add(player.getUniqueId());
-        }
-    }
-
-    @Override
-    public void remove(Player player) {
-        playersAffected.remove(player.getUniqueId());
     }
 
     /**

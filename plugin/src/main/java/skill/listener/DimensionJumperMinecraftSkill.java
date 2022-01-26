@@ -18,7 +18,7 @@ public class DimensionJumperMinecraftSkill extends CooldownMinecraftSkill {
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player player) {
+        if (e.getEntity() instanceof Player player && isActiveFor(player)) {
             if (isOnCooldown(player)) {
                 e.setCancelled(true);
                 boolean playEffects = true;
