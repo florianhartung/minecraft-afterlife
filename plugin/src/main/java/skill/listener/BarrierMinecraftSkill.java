@@ -4,19 +4,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import skill.generic.ChargingMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
+@Configurable("barrier")
 public class BarrierMinecraftSkill extends ChargingMinecraftSkill {
 
-    private static final double ABSORPTION_AMOUNT = 6.0d;
-    private static final int CHARGE_TIME = 3 * 20;
+    @ConfigValue("absorption-amount")
+    private double ABSORPTION_AMOUNT;
+    @ConfigValue("charge-time")
+    private int CHARGE_TIME;
 
-    public BarrierMinecraftSkill(Plugin plugin) {
-        super(plugin, CHARGE_TIME);
-    }
 
     @Override
     public void apply(Player player) {
@@ -45,5 +46,11 @@ public class BarrierMinecraftSkill extends ChargingMinecraftSkill {
             maxAbsorptionFromEffects = currentEffect.getAmplifier() * 4.0d + 4.0d;
         }
         player.setAbsorptionAmount(Math.min(player.getAbsorptionAmount() + ABSORPTION_AMOUNT, maxAbsorptionFromEffects + ABSORPTION_AMOUNT));
+    }
+
+    @Override
+    protected void beginCharging(Player player) {
+        setChargeTime(CHARGE_TIME);
+        super.beginCharging(player);
     }
 }

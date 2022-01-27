@@ -6,10 +6,15 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.util.Vector;
 import skill.generic.PlayerMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
+@Configurable("backstab")
 public class BackstabMinecraftSkill extends PlayerMinecraftSkill {
-    private static final double MAX_ANGLE = 60.0d;
-    private static final double DAMAGE_AMPLIFICATION = 2.0d;
+    @ConfigValue("max-angle")
+    private double MAX_ANGLE;
+    @ConfigValue("damage-amplification")
+    private double DAMAGE_AMPLIFICATION;
 
 
     @EventHandler

@@ -4,10 +4,17 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import skill.generic.AttributeMinecraftSkill;
 import skill.generic.MinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
 import java.util.UUID;
 
+@Configurable("fast")
 public class FastFactory implements StackableSkillFactory {
+
+    @ConfigValue("speed-amount")
+    private static double AMOUNT;
+
     @Override
     public MinecraftSkill get(int i) {
         return switch (i) {
@@ -19,6 +26,6 @@ public class FastFactory implements StackableSkillFactory {
     }
 
     private static AttributeMinecraftSkill of(String name, UUID uuid) {
-        return new AttributeMinecraftSkill(Attribute.GENERIC_MOVEMENT_SPEED, uuid, name, 0.002, AttributeModifier.Operation.ADD_NUMBER);
+        return new AttributeMinecraftSkill(Attribute.GENERIC_MOVEMENT_SPEED, uuid, name, AMOUNT, AttributeModifier.Operation.ADD_NUMBER);
     }
 }

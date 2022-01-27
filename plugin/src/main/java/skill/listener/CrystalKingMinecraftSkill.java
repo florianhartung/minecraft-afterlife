@@ -7,15 +7,20 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import skill.generic.PlayerMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
 import java.util.List;
 import java.util.Random;
 
+@Configurable("crystal-king")
 public class CrystalKingMinecraftSkill extends PlayerMinecraftSkill {
-    private static final List<Material> MATERIALS = List.of(Material.DIAMOND_ORE, Material.DEEPSLATE_DIAMOND_ORE, Material.AMETHYST_CLUSTER, Material.EMERALD_ORE, Material.DEEPSLATE_EMERALD_ORE);
+    @ConfigValue(value = "materials", mapper = "mapMaterials")
+    private List<Material> MATERIALS;
 
-    private static final double STDDEV = 0.5d;
-    private static final Random random = new Random();
+    @ConfigValue("stddev")
+    private double STDDEV;
+    private final Random random = new Random();
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent e) {
@@ -26,14 +31,20 @@ public class CrystalKingMinecraftSkill extends PlayerMinecraftSkill {
                     List<ItemStack> drops = e.getBlock()
                             .getDrops(itemInMainHand, e.getPlayer())
                             .stream()
+                            .filter(itemStack -> itemStack.getType() != Material.AIR)
                             .toList();
                     double lootFactor = Math.abs(random.nextGaussian(0, STDDEV));
-                    e.getPlayer().sendMessage(String.valueOf(lootFactor));
 
                     drops.forEach(drop -> drop.setAmount((int) Math.round(drop.getAmount() * lootFactor)));
                     drops.forEach(drop -> e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), drop));
                 }
             }
         }
+    }
+
+    private List<Material> mapMaterials(List<String> materials) {
+        return materials.stream()
+                .map(Material::valueOf)
+                .toList();
     }
 }

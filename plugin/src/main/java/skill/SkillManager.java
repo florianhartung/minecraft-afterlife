@@ -1,8 +1,14 @@
 package skill;
 
+import data.Skill;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import skill.generic.MinecraftSkill;
+
+import java.util.Map;
+import java.util.logging.Level;
 
 
 public class SkillManager {
@@ -11,13 +17,25 @@ public class SkillManager {
     private static Plugin plugin;
     private static int updaterTaskId = -1;
 
-    public static void init(Plugin plugin) {
+    public static void init(Plugin plugin, FileConfiguration skillsConfiguration) {
         SkillManager.plugin = plugin;
-        SkillHolder.init(plugin);
+        populateSkillHolder(plugin, skillsConfiguration);
 
         PluginManager pluginManager = plugin.getServer().getPluginManager();
         SkillHolder.getAllMinecraftSkills()
                 .forEach(minecraftSkill -> pluginManager.registerEvents(minecraftSkill, plugin));
+    }
+
+    private static void populateSkillHolder(Plugin plugin, FileConfiguration skillsConfiguration) {
+        try {
+            SkillInitializer skillInitializer = new SkillInitializer(plugin, skillsConfiguration);
+            Map<Skill, ? extends MinecraftSkill> skillInstances = skillInitializer.initializeSkills(SkillMapper.getMinecraftSkillClasses());
+
+            SkillHolder.addSkills(skillInstances);
+        } catch (SkillInitializer.SkillInitializeException e) {
+            Bukkit.getLogger().log(Level.SEVERE, "Could not initialize minecraft skills", e);
+        }
+
     }
 
     public static void startUpdater() {
@@ -36,9 +54,7 @@ public class SkillManager {
     }
 
     public static void reloadSkills() {
-        for (int i = 0; i < 20; i++) {
-            Bukkit.getServer().getOnlinePlayers()
-                    .forEach(SkillUpdater::reloadSkillsForPlayer);
-        }
+        Bukkit.getServer().getOnlinePlayers()
+                .forEach(SkillUpdater::reloadSkillsForPlayer);
     }
 }

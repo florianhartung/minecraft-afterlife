@@ -8,23 +8,28 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import skill.generic.PlayerMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
 import java.util.Objects;
 
 /**
  * This class represents an skill, that whenever a player damages another entity, they get healed by a fixed amount
  */
+@Configurable("lifesteal")
 public class LifestealMinecraftSkill extends PlayerMinecraftSkill {
 
     /**
      * The chance that a player affected by this skill gets healed when they attack another entity
      */
-    private static final double HEAL_CHANCE = 1.0 / 8.0;
+    @ConfigValue("heal-chance")
+    private static double HEAL_CHANCE;
 
     /**
      * The amount of healing the player receives
      */
-    private static final double HEAL_AMOUNT = 6.0d;
+    @ConfigValue("heal-amount")
+    private static double HEAL_AMOUNT;
 
 
     @EventHandler

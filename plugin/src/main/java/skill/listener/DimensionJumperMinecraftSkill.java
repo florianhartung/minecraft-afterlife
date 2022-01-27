@@ -8,13 +8,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import skill.generic.CooldownMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
+@Configurable("dimension-jumper")
 public class DimensionJumperMinecraftSkill extends CooldownMinecraftSkill {
-    private static final int INVINCIBILITY_DURATION = 30 * 1000; // in ms
 
-    public DimensionJumperMinecraftSkill() {
-        super(30 * 1000);
-    }
+    @ConfigValue("invincibility-duration")
+    private int INVINCIBILITY_DURATION;
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
@@ -37,5 +38,11 @@ public class DimensionJumperMinecraftSkill extends CooldownMinecraftSkill {
     @EventHandler
     public void onDimensionChange(PlayerChangedWorldEvent e) {
         startCooldown(e.getPlayer());
+    }
+
+    @Override
+    protected void startCooldown(Player player) {
+        setCooldown(INVINCIBILITY_DURATION);
+        super.startCooldown(player);
     }
 }

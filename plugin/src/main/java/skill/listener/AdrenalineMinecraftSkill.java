@@ -9,18 +9,20 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import skill.generic.CooldownMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
-
+@Configurable("adrenaline")
 public class AdrenalineMinecraftSkill extends CooldownMinecraftSkill {
+    @ConfigValue("cooldown")
+    private int COOLDOWN;
+    @ConfigValue("heal-duration")
+    private int HEAL_DURATION; //ticks
+    @ConfigValue("heal-amplifier")
+    private int HEAL_AMPLIFIER;
+    @ConfigValue("activation-health")
+    private double ACTIVATION_HEALTH; // half hearts
 
-    private static final int COOLDOWN = 20 * 1000; // ticks
-    private static final int HEAL_DURATION = 1 * 20; //ticks
-    private static final int HEAL_AMPLIFIER = 4;
-    private static final double ACTIVATION_HEALTH = 3.0d; // half hearts
-
-    public AdrenalineMinecraftSkill() {
-        super(COOLDOWN);
-    }
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
@@ -33,5 +35,11 @@ public class AdrenalineMinecraftSkill extends CooldownMinecraftSkill {
                 startCooldown(player);
             }
         }
+    }
+
+    @Override
+    protected void startCooldown(Player player) {
+        setCooldown(COOLDOWN);
+        super.startCooldown(player);
     }
 }

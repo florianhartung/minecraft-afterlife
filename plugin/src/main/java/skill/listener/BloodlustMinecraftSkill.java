@@ -11,11 +11,16 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import skill.generic.PlayerMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
+@Configurable("bloodlust")
 public class BloodlustMinecraftSkill extends PlayerMinecraftSkill {
 
-    private static final int SPEED_DURATION = 3 * 20; // in ticks
-    private static final int SPEED_AMPLIFIER = 0;
+    @ConfigValue("speed-duration")
+    private static int SPEED_DURATION; // in ticks
+    @ConfigValue("speed-amplifier")
+    private static int SPEED_AMPLIFIER;
 
     @EventHandler
     public void onKill(EntityDeathEvent e) {

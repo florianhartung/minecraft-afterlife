@@ -22,8 +22,6 @@ public class HitmanSkill implements MinecraftSkill {
 
     @EventHandler
     public void onToggleSneak(PlayerToggleSneakEvent e) {
-        //System.out.println("toggle");
-        //System.out.println(e.isSneaking());
         if (e.isSneaking()) {
             taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 e.getPlayer().sendMessage("You successfully sneaked for 5 seconds");
