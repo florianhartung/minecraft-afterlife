@@ -59,6 +59,8 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <skipAssembly>${env.SKIP_PLUGIN_BUILD}</skipAssembly>
                 </configuration>
                 <executions>
                     <execution>
