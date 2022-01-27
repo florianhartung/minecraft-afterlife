@@ -7,15 +7,18 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class CooldownMinecraftSkill extends PlayerMinecraftSkill {
+public abstract class CooldownMinecraftSkill extends PlayerMinecraftSkill {
 
     private final Map<UUID, Long> lastActivation;
 
-    private final int cooldown;
+    private int cooldown;
 
-    protected CooldownMinecraftSkill(int cooldown) {
-        this.cooldown = cooldown;
+    protected CooldownMinecraftSkill() {
         lastActivation = new HashMap<>();
+    }
+
+    protected void setCooldown(int cooldown) {
+        this.cooldown = cooldown;
     }
 
     protected void startCooldown(Player player) {

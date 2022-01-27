@@ -1,0 +1,32 @@
+adrenaline:
+  cooldown: 20000
+  heal-duration: 20
+  heal-amplifier: 4
+  activation-health: 3.0
+backstab:
+  max-angle: 60.0
+  damage-amplification: 2.0
+barrier:
+  charge-time: 60
+  absorption-amount: 6.0
+bloodlust:
+  speed-duration: 60
+  speed-amplifier: 0
+crystal-king:
+  materials:
+    - DIAMOND_ORE
+    - DEEPSLATE_DIAMOND_ORE
+    - AMETHYST_CLUSTER
+    - EMERALD_ORE
+    - DEEPSLATE_EMERALD_ORE
+  stddev: 0.5
+dimension-jumper:
+  invincibility-duration: 30000
+ghost-soul:
+  cooldown: 180000
+  activation-duration: 60
+  activation-threshold: 6.0
+  step-interval: 10
+lifesteal:
+  heal-amount: 6.0
+  heal-chance: 0.125

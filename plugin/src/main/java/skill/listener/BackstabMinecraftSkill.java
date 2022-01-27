@@ -1,15 +1,17 @@
 package skill.listener;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.util.Vector;
+import skill.Configurable;
 import skill.generic.PlayerMinecraftSkill;
 
-public class BackstabMinecraftSkill extends PlayerMinecraftSkill {
-    private static final double MAX_ANGLE = 60.0d;
-    private static final double DAMAGE_AMPLIFICATION = 2.0d;
+public class BackstabMinecraftSkill extends PlayerMinecraftSkill implements Configurable {
+    private static double MAX_ANGLE;
+    private static double DAMAGE_AMPLIFICATION;
 
 
     @EventHandler
@@ -31,5 +33,16 @@ public class BackstabMinecraftSkill extends PlayerMinecraftSkill {
                 e.setDamage(e.getFinalDamage() * DAMAGE_AMPLIFICATION);
             }
         }
+    }
+
+    @Override
+    public void setConfig(ConfigurationSection config) {
+        MAX_ANGLE = config.getDouble("max-angle");
+        DAMAGE_AMPLIFICATION = config.getDouble("damage-amplification");
+    }
+
+    @Override
+    public String getConfigPath() {
+        return "backstab";
     }
 }

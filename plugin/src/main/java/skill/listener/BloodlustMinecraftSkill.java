@@ -2,6 +2,7 @@ package skill.listener;
 
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -10,12 +11,13 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import skill.Configurable;
 import skill.generic.PlayerMinecraftSkill;
 
-public class BloodlustMinecraftSkill extends PlayerMinecraftSkill {
+public class BloodlustMinecraftSkill extends PlayerMinecraftSkill implements Configurable {
 
-    private static final int SPEED_DURATION = 3 * 20; // in ticks
-    private static final int SPEED_AMPLIFIER = 0;
+    private static int SPEED_DURATION; // in ticks
+    private static int SPEED_AMPLIFIER;
 
     @EventHandler
     public void onKill(EntityDeathEvent e) {
@@ -26,5 +28,16 @@ public class BloodlustMinecraftSkill extends PlayerMinecraftSkill {
                 e.getEntity().getWorld().spawnParticle(Particle.BLOCK_CRACK, e.getEntity().getLocation().add(0, 1, 0), 10, 0.3, 0.5, 0.3, new MaterialData(Material.REDSTONE_BLOCK));
             }
         }
+    }
+
+    @Override
+    public void setConfig(ConfigurationSection config) {
+        SPEED_DURATION = config.getInt("speed-duration");
+        SPEED_AMPLIFIER = config.getInt("speed-amplifier");
+    }
+
+    @Override
+    public String getConfigPath() {
+        return "bloodlust";
     }
 }

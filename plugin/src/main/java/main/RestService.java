@@ -11,7 +11,6 @@ import java.util.UUID;
 public class RestService {
     private static final RestTemplate restTemplate;
 
-    private static FileConfiguration config;
     private static String rootUrl;
     private static String apiSubdomain;
 
@@ -21,7 +20,6 @@ public class RestService {
 
     public static ResponseEntity<PlayerEntity> addSkillpoint(UUID playerUUID) {
         String url = buildUrl("player/") + playerUUID + "/add";
-        System.out.println("addSkillpoint: url = " + url);
         return restTemplate.getForEntity(url, PlayerEntity.class);
     }
 
@@ -33,7 +31,6 @@ public class RestService {
 
     public static ResponseEntity<PlayerEntity> saveNewPlayer(String playerUUID) {
         String url = buildUrl("player/new/") + playerUUID;
-        System.out.println("saveNewPlayer url = " + url);
         return restTemplate.getForEntity(url, PlayerEntity.class);
     }
 
@@ -48,10 +45,7 @@ public class RestService {
     }
 
     public static void setConfig(FileConfiguration config) {
-        RestService.config = config;
         rootUrl = config.getString("server.root");
         apiSubdomain = config.getString("server.api");
-        System.out.println("rootUrl = " + rootUrl);
-        System.out.println("apiSubdomain = " + apiSubdomain);
     }
 }

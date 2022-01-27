@@ -1,6 +1,7 @@
 package skill.listener;
 
 import org.bukkit.*;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -12,6 +13,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 import org.springframework.data.util.Pair;
+import skill.Configurable;
+import skill.PluginConsumer;
 import skill.generic.CooldownMinecraftSkill;
 
 import java.util.HashMap;
@@ -19,44 +22,32 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill {
+public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill implements Configurable, PluginConsumer {
 
-    private static final int COOLDOWN = 3 * 60 * 1000; // in milliseconds
-    private static final double ACTIVATION_THRESHOLD = 6.0d; // in half hearts
-    private static final int ACTIVATION_DURATION = 3 * 20; // in ticks
+    private static int COOLDOWN; // in milliseconds
+    private static double ACTIVATION_THRESHOLD; // in half hearts
+    private static int ACTIVATION_DURATION; // in ticks
 
-    private static final int STEP_INTERVAL = 10; // in ticks
+    private static int STEP_INTERVAL; // in ticks
 
     private final HashMap<String, Pair<Integer, Integer>> activations;
-    private final Plugin plugin;
+    private Plugin plugin;
 
 
-    public GhostSoulMinecraftSkill(Plugin plugin) {
-        super(COOLDOWN);
-        this.plugin = plugin;
-
+    public GhostSoulMinecraftSkill() {
         activations = new HashMap<>();
     }
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player player) {
-            if (isActiveFor(player)) {
-                if (!isOnCooldown(player)) {
-                    if (!activations.containsKey(player.getUniqueId().toString())) {
-                        double finalHealth = player.getHealth() - event.getFinalDamage();
-                        if (finalHealth > 0 && finalHealth <= ACTIVATION_THRESHOLD) {
-                            activateForPlayer(player);
-                            startCooldown(player);
-                        }
-                    } else {
-                        player.sendMessage("schon in geisterseele");
-                    }
-                } else {
-                    player.sendMessage("Noch auf cooldown");
+        if (event.getEntity() instanceof Player player && isActiveFor(player) && !isOnCooldown(player)) {
+            if (!activations.containsKey(player.getUniqueId().toString())) {
+                double finalHealth = player.getHealth() - event.getFinalDamage();
+                if (finalHealth > 0 && finalHealth <= ACTIVATION_THRESHOLD) {
+                    System.out.println();
+                    activateForPlayer(player);
+                    startCooldown(player);
                 }
-            } else {
-                player.sendMessage("Nicht geskillt");
             }
         }
     }
@@ -162,5 +153,23 @@ public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill {
 
     private boolean isInGhostForm(Player player) {
         return isActiveFor(player) && activations.containsKey(player.getUniqueId().toString());
+    }
+
+    @Override
+    public void setConfig(ConfigurationSection config) {
+        ACTIVATION_DURATION = config.getInt("activation-duration");
+        ACTIVATION_THRESHOLD = config.getDouble("activation-threshold");
+        STEP_INTERVAL = config.getInt("step-interval");
+        setCooldown(config.getInt("cooldown"));
+    }
+
+    @Override
+    public String getConfigPath() {
+        return "ghost-soul";
+    }
+
+    @Override
+    public void setPlugin(Plugin plugin) {
+        this.plugin = plugin;
     }
 }

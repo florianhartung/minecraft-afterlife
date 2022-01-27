@@ -1,20 +1,22 @@
 package skill.listener;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import skill.Configurable;
 import skill.generic.PlayerMinecraftSkill;
 
 import java.util.List;
 import java.util.Random;
 
-public class CrystalKingMinecraftSkill extends PlayerMinecraftSkill {
-    private static final List<Material> MATERIALS = List.of(Material.DIAMOND_ORE, Material.DEEPSLATE_DIAMOND_ORE, Material.AMETHYST_CLUSTER, Material.EMERALD_ORE, Material.DEEPSLATE_EMERALD_ORE);
+public class CrystalKingMinecraftSkill extends PlayerMinecraftSkill implements Configurable {
+    private static List<Material> MATERIALS;
 
-    private static final double STDDEV = 0.5d;
+    private static double STDDEV;
     private static final Random random = new Random();
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -35,5 +37,20 @@ public class CrystalKingMinecraftSkill extends PlayerMinecraftSkill {
                 }
             }
         }
+    }
+
+    @Override
+    public void setConfig(ConfigurationSection config) {
+        MATERIALS = config.getList("materials")
+                .stream()
+                .map(element -> Material.valueOf(element.toString()))
+                .toList();
+        STDDEV = config.getDouble("stddev");
+
+    }
+
+    @Override
+    public String getConfigPath() {
+        return "crystal-king";
     }
 }

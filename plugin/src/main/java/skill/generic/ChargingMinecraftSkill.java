@@ -3,20 +3,24 @@ package skill.generic;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import skill.PluginConsumer;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class ChargingMinecraftSkill extends PlayerMinecraftSkill {
+public abstract class ChargingMinecraftSkill extends PlayerMinecraftSkill implements PluginConsumer {
     private final Map<UUID, Integer> taskIds;
-    private final Plugin plugin;
-    private final int chargeTime;
+    protected Plugin plugin;
+    private int chargeTime;
 
-    protected ChargingMinecraftSkill(Plugin plugin, int chargeTime) {
-        this.plugin = plugin;
-        this.chargeTime = chargeTime;
+    protected ChargingMinecraftSkill() {
         taskIds = new HashMap<>();
+    }
+
+    @Override
+    public void setPlugin(Plugin plugin) {
+        this.plugin = plugin;
     }
 
     protected void beginCharging(Player player) {
@@ -43,6 +47,10 @@ public abstract class ChargingMinecraftSkill extends PlayerMinecraftSkill {
         if (isPlayerStillOnServer) {
             onChargingFinished(player);
         }
+    }
+
+    protected void setChargeTime(int chargeTime) {
+        this.chargeTime = chargeTime;
     }
 
     protected abstract void onChargingFinished(Player player);

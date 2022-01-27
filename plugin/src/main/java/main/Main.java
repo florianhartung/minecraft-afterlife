@@ -1,7 +1,11 @@
 package main;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import skill.SkillManager;
+
+import java.io.File;
 
 /**
  * The plugin entry point
@@ -13,7 +17,7 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
         RestService.setConfig(getConfig());
 
-        SkillManager.init(this);
+        SkillManager.init(this, getSkillsConfiguration());
         SkillManager.startUpdater();
 
         getServer().getPluginManager().registerEvents(new AdvancementListener(), this);
@@ -25,5 +29,9 @@ public class Main extends JavaPlugin {
     public void onDisable() {
         super.onDisable();
         SkillManager.stopUpdater();
+    }
+
+    private FileConfiguration getSkillsConfiguration() {
+        return YamlConfiguration.loadConfiguration(new File(getDataFolder(), "skills.yml"));
     }
 }

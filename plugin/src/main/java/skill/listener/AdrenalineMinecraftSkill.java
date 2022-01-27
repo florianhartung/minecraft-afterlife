@@ -3,24 +3,21 @@ package skill.listener;
 import main.ChatHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import skill.Configurable;
 import skill.generic.CooldownMinecraftSkill;
 
 
-public class AdrenalineMinecraftSkill extends CooldownMinecraftSkill {
+public class AdrenalineMinecraftSkill extends CooldownMinecraftSkill implements Configurable {
+    private static int HEAL_DURATION; //ticks
+    private static int HEAL_AMPLIFIER;
+    private static double ACTIVATION_HEALTH; // half hearts
 
-    private static final int COOLDOWN = 20 * 1000; // ticks
-    private static final int HEAL_DURATION = 1 * 20; //ticks
-    private static final int HEAL_AMPLIFIER = 4;
-    private static final double ACTIVATION_HEALTH = 3.0d; // half hearts
-
-    public AdrenalineMinecraftSkill() {
-        super(COOLDOWN);
-    }
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
@@ -33,5 +30,18 @@ public class AdrenalineMinecraftSkill extends CooldownMinecraftSkill {
                 startCooldown(player);
             }
         }
+    }
+
+    @Override
+    public void setConfig(ConfigurationSection config) {
+        HEAL_DURATION = config.getInt("heal-duration");
+        HEAL_AMPLIFIER = config.getInt("heal-amplifier");
+        ACTIVATION_HEALTH = config.getDouble("activation-health");
+        setCooldown(config.getInt("cooldown"));
+    }
+
+    @Override
+    public String getConfigPath() {
+        return "adrenaline";
     }
 }
