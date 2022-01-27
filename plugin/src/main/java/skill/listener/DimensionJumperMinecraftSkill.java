@@ -3,15 +3,19 @@ package skill.listener;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import skill.Configurable;
 import skill.generic.CooldownMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
-public class DimensionJumperMinecraftSkill extends CooldownMinecraftSkill implements Configurable {
+@Configurable("dimension-jumper")
+public class DimensionJumperMinecraftSkill extends CooldownMinecraftSkill {
+
+    @ConfigValue("invincibility-duration")
+    private int INVINCIBILITY_DURATION;
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
@@ -37,12 +41,8 @@ public class DimensionJumperMinecraftSkill extends CooldownMinecraftSkill implem
     }
 
     @Override
-    public void setConfig(ConfigurationSection config) {
-        setCooldown(config.getInt("invincibility-duration"));
-    }
-
-    @Override
-    public String getConfigPath() {
-        return "dimension-jumper";
+    protected void startCooldown(Player player) {
+        setCooldown(INVINCIBILITY_DURATION);
+        super.startCooldown(player);
     }
 }

@@ -3,25 +3,22 @@ package skill.generic;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import skill.PluginConsumer;
+import skill.injection.InjectPlugin;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class ChargingMinecraftSkill extends PlayerMinecraftSkill implements PluginConsumer {
+public abstract class ChargingMinecraftSkill extends PlayerMinecraftSkill {
     private final Map<UUID, Integer> taskIds;
+    @InjectPlugin
     protected Plugin plugin;
-    private int chargeTime;
+    protected int chargeTime;
 
     protected ChargingMinecraftSkill() {
         taskIds = new HashMap<>();
     }
 
-    @Override
-    public void setPlugin(Plugin plugin) {
-        this.plugin = plugin;
-    }
 
     protected void beginCharging(Player player) {
         UUID uuid = player.getUniqueId();

@@ -1,19 +1,22 @@
 package skill.listener;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import skill.Configurable;
-import skill.PluginConsumer;
 import skill.generic.ChargingMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
-public class BarrierMinecraftSkill extends ChargingMinecraftSkill implements Configurable, PluginConsumer {
+@Configurable("barrier")
+public class BarrierMinecraftSkill extends ChargingMinecraftSkill {
 
-    private static double ABSORPTION_AMOUNT;
+    @ConfigValue("absorption-amount")
+    private double ABSORPTION_AMOUNT;
+    @ConfigValue("charge-time")
+    private int CHARGE_TIME;
 
 
     @Override
@@ -46,13 +49,8 @@ public class BarrierMinecraftSkill extends ChargingMinecraftSkill implements Con
     }
 
     @Override
-    public void setConfig(ConfigurationSection config) {
-        ABSORPTION_AMOUNT = config.getDouble("absorption-amount");
-        setChargeTime(config.getInt("charge-time"));
-    }
-
-    @Override
-    public String getConfigPath() {
-        return "barrier";
+    protected void beginCharging(Player player) {
+        setChargeTime(CHARGE_TIME);
+        super.beginCharging(player);
     }
 }

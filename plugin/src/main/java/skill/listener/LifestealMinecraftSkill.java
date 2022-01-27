@@ -4,28 +4,31 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import skill.Configurable;
 import skill.generic.PlayerMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
 
 import java.util.Objects;
 
 /**
  * This class represents an skill, that whenever a player damages another entity, they get healed by a fixed amount
  */
-public class LifestealMinecraftSkill extends PlayerMinecraftSkill implements Configurable {
+@Configurable("lifesteal")
+public class LifestealMinecraftSkill extends PlayerMinecraftSkill {
 
     /**
      * The chance that a player affected by this skill gets healed when they attack another entity
      */
+    @ConfigValue("heal-chance")
     private static double HEAL_CHANCE;
 
     /**
      * The amount of healing the player receives
      */
+    @ConfigValue("heal-amount")
     private static double HEAL_AMOUNT;
 
 
@@ -55,16 +58,5 @@ public class LifestealMinecraftSkill extends PlayerMinecraftSkill implements Con
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void setConfig(ConfigurationSection config) {
-        HEAL_AMOUNT = config.getDouble("heal-amount");
-        HEAL_CHANCE = config.getDouble("heal-chance");
-    }
-
-    @Override
-    public String getConfigPath() {
-        return "lifesteal";
     }
 }

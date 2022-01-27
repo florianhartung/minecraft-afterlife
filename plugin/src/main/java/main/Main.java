@@ -16,6 +16,7 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         RestService.setConfig(getConfig());
+        ChatHelper.setConfig(getConfig());
 
         SkillManager.init(this, getSkillsConfiguration());
         SkillManager.startUpdater();

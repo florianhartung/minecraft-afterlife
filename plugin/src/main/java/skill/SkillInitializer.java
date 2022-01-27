@@ -1,10 +1,10 @@
 package skill;
 
 import data.Skill;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import skill.generic.MinecraftSkill;
+import skill.injection.SkillInjector;
 import skill.listener.factory.FastFactory;
 import skill.listener.factory.NinjaFactory;
 import skill.listener.factory.StackableSkillFactory;
@@ -17,12 +17,10 @@ import java.util.Map;
 
 public class SkillInitializer {
 
-    private final Plugin plugin;
-    private final ConfigurationSection skillsConfiguration;
+    private final SkillInjector skillInjector;
 
     public SkillInitializer(Plugin plugin, FileConfiguration skillsConfiguration) {
-        this.plugin = plugin;
-        this.skillsConfiguration = skillsConfiguration;
+        this.skillInjector = new SkillInjector(plugin, skillsConfiguration);
     }
 
     public Map<Skill, ? extends MinecraftSkill> initializeSkills(Map<Skill, Class<? extends MinecraftSkill>> minecraftSkillClasses) throws SkillInitializeException {
@@ -31,12 +29,9 @@ public class SkillInitializer {
         for (Map.Entry<Skill, Class<? extends MinecraftSkill>> entry : minecraftSkillClasses.entrySet()) {
             Skill skill = entry.getKey();
             Class<? extends MinecraftSkill> minecraftSkillClass = entry.getValue();
-            System.out.println("initializeSkill:" + skill);
 
             MinecraftSkill instance = getInstanceFromClass(minecraftSkillClass);
-
-            populate(instance);
-
+            skillInjector.inject(instance);
             instances.put(skill, instance);
         }
 
@@ -45,7 +40,7 @@ public class SkillInitializer {
         return instances;
     }
 
-    private static Map<Skill, MinecraftSkill> getAllStackableSkills() {
+    private Map<Skill, MinecraftSkill> getAllStackableSkills() {
         Map<Skill, MinecraftSkill> skillInstances = new HashMap<>();
         skillInstances.putAll(getStackableSkills(List.of(Skill.TANK1, Skill.TANK2, Skill.TANK3, Skill.TANK4, Skill.TANK5), new TankFactory()));
         skillInstances.putAll(getStackableSkills(List.of(Skill.NINJA1, Skill.NINJA2, Skill.NINJA3, Skill.NINJA4, Skill.NINJA5), new NinjaFactory()));
@@ -54,7 +49,9 @@ public class SkillInitializer {
     }
 
 
-    private static Map<Skill, MinecraftSkill> getStackableSkills(List<Skill> skills, StackableSkillFactory factory) {
+    private Map<Skill, MinecraftSkill> getStackableSkills(List<Skill> skills, StackableSkillFactory factory) {
+        skillInjector.inject(factory);
+
         Map<Skill, MinecraftSkill> skillInstances = new HashMap<>();
         for (int i = 0; i < skills.size(); i++) {
             skillInstances.put(skills.get(i), factory.get(i + 1));
@@ -67,17 +64,6 @@ public class SkillInitializer {
             return clazz.getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new SkillInitializeException(e);
-        }
-    }
-
-    private void populate(MinecraftSkill instance) {
-        if (instance instanceof Configurable configurable) {
-            String skillConfigPath = configurable.getConfigPath();
-            ConfigurationSection skillConfigurationSection = skillsConfiguration.getConfigurationSection(skillConfigPath);
-            configurable.setConfig(skillConfigurationSection);
-        }
-        if (instance instanceof PluginConsumer pluginConsumer) {
-            pluginConsumer.setPlugin(plugin);
         }
     }
 

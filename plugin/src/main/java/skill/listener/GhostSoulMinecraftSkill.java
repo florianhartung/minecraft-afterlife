@@ -1,7 +1,6 @@
 package skill.listener;
 
 import org.bukkit.*;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -13,24 +12,31 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 import org.springframework.data.util.Pair;
-import skill.Configurable;
-import skill.PluginConsumer;
 import skill.generic.CooldownMinecraftSkill;
+import skill.injection.ConfigValue;
+import skill.injection.Configurable;
+import skill.injection.InjectPlugin;
 
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill implements Configurable, PluginConsumer {
+@Configurable("ghost-soul")
+public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill {
 
+    @ConfigValue("cooldown")
     private static int COOLDOWN; // in milliseconds
+    @ConfigValue("activation-threshold")
     private static double ACTIVATION_THRESHOLD; // in half hearts
+    @ConfigValue("activation-duration")
     private static int ACTIVATION_DURATION; // in ticks
 
+    @ConfigValue("step-interval")
     private static int STEP_INTERVAL; // in ticks
 
     private final HashMap<String, Pair<Integer, Integer>> activations;
+    @InjectPlugin
     private Plugin plugin;
 
 
@@ -44,7 +50,6 @@ public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill implements C
             if (!activations.containsKey(player.getUniqueId().toString())) {
                 double finalHealth = player.getHealth() - event.getFinalDamage();
                 if (finalHealth > 0 && finalHealth <= ACTIVATION_THRESHOLD) {
-                    System.out.println();
                     activateForPlayer(player);
                     startCooldown(player);
                 }
@@ -156,20 +161,8 @@ public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill implements C
     }
 
     @Override
-    public void setConfig(ConfigurationSection config) {
-        ACTIVATION_DURATION = config.getInt("activation-duration");
-        ACTIVATION_THRESHOLD = config.getDouble("activation-threshold");
-        STEP_INTERVAL = config.getInt("step-interval");
-        setCooldown(config.getInt("cooldown"));
-    }
-
-    @Override
-    public String getConfigPath() {
-        return "ghost-soul";
-    }
-
-    @Override
-    public void setPlugin(Plugin plugin) {
-        this.plugin = plugin;
+    protected void startCooldown(Player player) {
+        setCooldown(COOLDOWN);
+        super.startCooldown(player);
     }
 }

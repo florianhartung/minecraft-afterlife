@@ -25,7 +25,6 @@ public class RestService {
 
     public static ResponseEntity<SkillEntity[]> getSkillsOfPlayer(UUID playerUUID) {
         String url = buildUrl("skill/") + playerUUID;
-        System.out.println("getSkillsOfPlayer url = " + url);
         return restTemplate.getForEntity(url, SkillEntity[].class);
     }
 
@@ -36,7 +35,6 @@ public class RestService {
 
     public static ResponseEntity<PlayerEntity> getPlayer(String playerUUID) {
         String url = buildUrl("player/") + playerUUID;
-        System.out.println("getPlayer url = " + url);
         return restTemplate.getForEntity(url, PlayerEntity.class);
     }
 
