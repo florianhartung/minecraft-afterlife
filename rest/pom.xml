@@ -16,6 +16,8 @@
         <vaadin.version>22.0.2</vaadin.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <!--suppress UnresolvedMavenProperty -->
+        <vaadin.productionMode>${env.PRODUCTION}</vaadin.productionMode>
     </properties>
 
     <repositories>
@@ -116,15 +118,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>production</id>
-            <properties>
-                <vaadin.productionMode>true</vaadin.productionMode>
-            </properties>
-        </profile>
-    </profiles>
-
 
 </project>
