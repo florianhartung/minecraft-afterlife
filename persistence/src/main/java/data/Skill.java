@@ -19,7 +19,7 @@ public enum Skill {
     GHOST_SOUL,
     HEAVY_METAL,
     HITMAN,
-    INDIAN,
+    INDIAN, // SLUG
     INSECT,
     KARMA,
     LIEUTENANT,

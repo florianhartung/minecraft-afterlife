@@ -2,6 +2,7 @@ package main;
 
 import data.PlayerEntity;
 import data.SkillEntity;
+import data.TokenEntity;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -36,6 +37,21 @@ public class RestService {
     public static ResponseEntity<PlayerEntity> getPlayer(String playerUUID) {
         String url = buildUrl("player/") + playerUUID;
         return restTemplate.getForEntity(url, PlayerEntity.class);
+    }
+
+    public static ResponseEntity<TokenEntity> newToken(String playerUUID) {
+        String url = buildUrl("token/new/") + playerUUID;
+        return restTemplate.getForEntity(url, TokenEntity.class);
+    }
+
+    public static ResponseEntity<TokenEntity> getToken(String tokenId) {
+        String url = buildUrl("token/") + tokenId;
+        return restTemplate.getForEntity(url, TokenEntity.class);
+    }
+
+    public static ResponseEntity<TokenEntity> revokeToken(String playerUUID) {
+        String url = buildUrl("token/revoke/") + playerUUID;
+        return restTemplate.getForEntity(url, TokenEntity.class);
     }
 
     private static String buildUrl(String endpoint) {

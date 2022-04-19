@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import java.util.UUID;
 
 import static main.ChatHelper.sendMessage;
-import static main.ChatHelper.sendSkillsURL;
 
 public class AdvancementListener implements Listener {
 
@@ -37,7 +36,6 @@ public class AdvancementListener implements Listener {
             e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, actionBarText);
 
             sendMessage(e.getPlayer(), "Du hast jetzt " + response.getBody().getSkillPoints() + " Skillpunkte.");
-            sendSkillsURL(e.getPlayer());
         }
     }
 }

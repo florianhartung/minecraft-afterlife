@@ -22,8 +22,8 @@ public class SkillInjector {
     }
 
     public void inject(Object instance) {
-        injectPlugin(instance);
         injectConfiguration(instance);
+        injectPlugin(instance);
     }
 
     private void injectConfiguration(Object instance) {
@@ -35,6 +35,9 @@ public class SkillInjector {
         }
         String sectionPath = configurable.value();
         ConfigurationSection skillConfigSection = skillsConfiguration.getConfigurationSection(sectionPath);
+        if (skillConfigSection == null) {
+            throw new NullPointerException("Could not find configuration section \"" + sectionPath + "\"");
+        }
 
         List<Field> allFields = getAllFields(new ArrayList<>(), clazz);
         for (Field field : allFields) {
@@ -47,6 +50,10 @@ public class SkillInjector {
             String mapper = annotation.mapper();
 
             Object value = skillConfigSection.get(valuePath);
+
+            if (value == null) {
+                throw new NullPointerException("Could not find value of configuration \"" + valuePath + "\" in section \"" + sectionPath + "\"");
+            }
 
             Method mapperMethod = null;
             Object mappedValue;
@@ -90,6 +97,24 @@ public class SkillInjector {
                     field.setAccessible(true);
                     try {
                         field.set(instance, plugin);
+                        String postInjectMethodName = injectPlugin.postInject();
+                        if (postInjectMethodName != null && postInjectMethodName.length() > 0) {
+                            try {
+                                for (Method method : clazz.getDeclaredMethods()) {
+                                    List<Class<?>> parameterTypes = List.of(method.getParameterTypes());
+                                    if (method.getName().equals(postInjectMethodName) && parameterTypes.size() == 0) {
+                                        method.setAccessible(true);
+                                        method.invoke(instance);
+                                        return;
+                                    }
+                                }
+                                System.err.println(clazz.getName() + ": Could not find the specified postInject method for @InjectPlugin annotation!");
+                            } catch (InvocationTargetException | IllegalAccessException e) {
+                                e.printStackTrace();
+                                return;
+                            }
+                        }
+
                     } catch (IllegalAccessException e) {
                         e.printStackTrace();
                     }

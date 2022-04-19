@@ -15,17 +15,17 @@ public class ChatHelper {
         send(player, new TextComponent(PREFIX + message));
     }
 
-    public static void sendSkillsURL(Player player) {
-        send(player, skillsUrlMessage(player));
+    public static void sendSkillsURL(Player player, String token) {
+        send(player, skillsUrlMessage(token));
     }
 
     private static void send(Player player, TextComponent textComponent) {
         player.spigot().sendMessage(textComponent);
     }
 
-    private static TextComponent skillsUrlMessage(Player player) {
+    private static TextComponent skillsUrlMessage(String token) {
         TextComponent text = new TextComponent(PREFIX + "§6§oKlicke hier, um deine Skillpunkte auszugeben");
-        text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, skillPageUrl.formatted(player.getUniqueId())));
+        text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, skillPageUrl.formatted(token)));
         return text;
     }
 

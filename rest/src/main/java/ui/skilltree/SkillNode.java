@@ -17,4 +17,6 @@ public class SkillNode {
     private String description;
     private String skill;
     private boolean start;
+    private String color;
+    private String icon;
 }
