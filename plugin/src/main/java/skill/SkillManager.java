@@ -32,6 +32,7 @@ public class SkillManager {
             Map<Skill, ? extends MinecraftSkill> skillInstances = skillInitializer.initializeSkills(SkillMapper.getMinecraftSkillClasses());
 
             SkillHolder.addSkills(skillInstances);
+            Bukkit.getLogger().log(Level.INFO, "[Minecraft-Afterlife] Successfully loaded " + skillInstances.size() + " skills!");
         } catch (SkillInitializer.SkillInitializeException e) {
             Bukkit.getLogger().log(Level.SEVERE, "Could not initialize minecraft skills", e);
         }
