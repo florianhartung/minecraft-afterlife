@@ -37,13 +37,17 @@ ninja:
 tank:
   hp-amount: 2.0
 hitman:
-  max-range: 20
-  max-angle: 50
-  stalk-rate: 1
-  stalk-decrease-rate: 0.2
+  max-range: 70
+  max-angle: 60
+  stalk-rate: 0.5
+  stalk-decrease-rate: 0.25
   stalk-update-delay: 1
-  stalk-update-effects: 7
   stalk-in-hunt-decrease-rate: 0.1
   hunt-damage-multiplier: 1.3
-  hunt-speed: 0.1
+  hunt-speed: 0.03
+  hunt-slow: 0.02
   sneak-duration: 40
+virus:
+  chain-jumps: 3
+  damage-falloff: 0.5
+  max-jump-distance: 5
