@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public abstract class PlayerMinecraftSkill implements MinecraftSkill {
 
-    private final List<UUID> activePlayers;
+    protected final List<UUID> activePlayers;
 
     protected PlayerMinecraftSkill() {
         activePlayers = new ArrayList<>();

@@ -52,6 +52,7 @@ public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill {
                 if (finalHealth > 0 && finalHealth <= ACTIVATION_THRESHOLD) {
                     activateForPlayer(player);
                     startCooldown(player);
+                    event.setCancelled(false);
                 }
             }
         }

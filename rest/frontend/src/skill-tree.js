@@ -9,7 +9,6 @@ class SkillTree extends PolymerElement {
             <style>
                 :host {
                     --skill-tree-button-background: #1A469D;
-                    --skill-tree-button-background-hover: #F05738;
                     --skill-tree-button-background-skilled: #DE372B;
                     --skill-tree-button-border: #F0EFF4;
                     --skill-tree-text: #F0EFF4;
@@ -21,35 +20,75 @@ class SkillTree extends PolymerElement {
                     cursor: grab;
                     overflow: hidden;
                     overscroll-behavior: none;
+                    filter: blur(0px);
                 }
 
                 .skill-tree-button {
                     font-family: minecraft-regular, sans-serif;
                     font-size: 1.5em;
-                    position: absolute;
+                    position: relative;
                     padding: 0;
                     margin: 0;
                     outline: none;
-                    border: 1px solid var(--skill-tree-button-border);
+                    border: 0;
                     width: 60px;
                     height: 60px;
-                    border-radius: 50%;
-                    background-color: var(--skill-tree-button-background);
+                    border-radius: 0;
+                    /*noinspection CssUnknownTarget*/
                     transition: border linear 0.1s, background-color linear 0.1s, scale linear 0.05s;
-                    color: var(--skill-tree-text);
                     align-content: center;
                     user-select: none;
+                    box-shadow: 0 0 50px #0005;
                 }
 
-                .skill-tree-button:hover:not([skilled, start]) {
-                    box-shadow: 0 0 6px #9ecaed60;
-                    background-color: var(--skill-tree-button-background-hover);
-                    cursor: none;
+                .skill-tree-button-background {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: currentColor;
+                    filter: saturate(0.4);
+                    transition: 0.12s;
+                }
+
+                .skill-tree-button-icon {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    /*noinspection CssUnknownTarget*/
+                    background-image: var(--button-icon);
+                    background-repeat: no-repeat, no-repeat;
+                    background-size: 80%, 50%;
+                    background-position: center;
+                    pointer-events: none;
+                    filter: saturate(0.4);
+                    transition: 0.12s;
+                }
+
+                .skill-tree-button[skilled] .skill-tree-button-background {
+                    filter: saturate(1.2);
+                }
+
+                .skill-tree-button[skilled] .skill-tree-button-icon {
+                    filter: saturate(1.2);
+                }
+
+                .skill-tree-button[skillable]:hover .skill-tree-button-background {
+                    filter: saturate(1.2);
+                }
+
+                .skill-tree-button[skillable]:hover .skill-tree-button-icon {
+                    filter: saturate(1.2);
+                }
+
+                .skill-tree-button[skilled]:hover, .skill-tree-button[start]:hover {
+                    cursor: default;
                 }
 
                 .skill-tree-button[skillable] {
-                    box-shadow: 0 0 6px #9ecaed60;
-                    background-color: #de2b96;
                     cursor: pointer;
                 }
 
@@ -57,19 +96,46 @@ class SkillTree extends PolymerElement {
                     transition: background-color linear 0.5s;
                 }
 
-                .skill-tree-button:hover[skillable] {
-                    box-shadow: 0 0 6px #9ecaed60;
-                    background-color: #de2b2b;
+                .skill-tree-button[skilled] {
+                    box-shadow: 0 0 15px currentColor;
                 }
 
-                .skill-tree-button[skilled] {
-                    background-color: var(--skill-tree-button-background-skilled);
-                    box-shadow: 0 0 15px #DE372B;
+                .skill-tree-button:hover[skillable] {
+                    box-shadow: 0 0 30px currentColor;
                 }
 
                 .skill-tree-button[start] {
-                    background-color: red;
-                    box-shadow: 0 0 15px #DE372B;
+                    /*noinspection CssUnknownTarget*/
+                    background-image: url("./assets/start_node.webp");
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    box-shadow: 0 0 30px #c77e4f77;
+                    border-radius: 0;
+                    border: 0;
+                    width: 90px;
+                    height: 90px;
+                    filter: saturate(1.2);
+                }
+
+                .skill-tree-button[start] .skill-tree-button-icon {
+                    filter: saturate(1.2);
+                }
+
+                .skill-tree-button[start] .skill-tree-button-background {
+                    filter: saturate(1.2);
+                }
+
+                .skill-tree-button:not([start])::after {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    content: "";
+                    /*noinspection CssUnknownTarget*/
+                    background-image: url("./assets/shadow.webp");
+                    background-size: 100%;
                 }
 
                 .skill-tree-connections {
@@ -81,7 +147,7 @@ class SkillTree extends PolymerElement {
 
                 .skill-tree-connection {
                     stroke: var(--skill-tree-button-background);
-                    stroke-width: 2;
+                    stroke-width: 0;
                     transition: linear 0.5s;
                 }
 
@@ -96,6 +162,7 @@ class SkillTree extends PolymerElement {
                 }
 
                 .skill-tree-skill-tooltip {
+                    visibility: hidden;
                     position: relative;
                     display: inline-block;
                     width: 350px;
@@ -106,6 +173,7 @@ class SkillTree extends PolymerElement {
                     font-size: 1.35em;
                     padding: 20px;
                     user-select: none;
+                    filter: saturate(1.2);
                 }
 
                 .skill-tree-button .skill-tree-skill-tooltip {
@@ -132,7 +200,7 @@ class SkillTree extends PolymerElement {
                     height: 100%;
                     /*noinspection CssUnknownTarget*/
                     background-image: url("./assets/background.png");
-                    background-size: 150px;
+                    background-size: 1024px;
                     image-rendering: pixelated;
                     background-repeat: repeat;
                     overflow: hidden;
@@ -166,21 +234,29 @@ class SkillTree extends PolymerElement {
                 <template is="dom-repeat" items="{{skillNodes}}">
                     <button id$="skill-{{item.id}}" class="skill-tree-button" on-click="handleSkillClick"
                             on-mouseup="mouseOutOfSkillNode"
-                            style$="position:absolute;overflow: visible;top:calc({{yOffset}}px + {{item.y}}px); left:calc({{xOffset}}px + {{item.x}}px)"
+                            style$="
+                                position:absolute;
+                                overflow: visible;
+                                top:calc({{yOffset}}px + {{item.y}}px);
+                                left:calc({{xOffset}}px + {{item.x}}px);
+                                color: {{item.color}};"
                             skilled$="{{item.unlocked}}"
                             disabled$="{{!item.skillable}}"
                             start$="{{item.start}}"
                             skillable$="{{item.skillable}}"
                             on-mouseover="mouseOverSkillNode"
-                            on-mouseout="mouseOutOfSkillNode">{{item.label}}
+                            on-mouseout="mouseOutOfSkillNode">
 
+                        <div class="skill-tree-button-background"></div>
+                        <div class="skill-tree-button-icon"
+                             style$="--button-icon: url('./assets/skillicons/{{item.icon}}');"></div>
                         <span class="skill-tree-skill-tooltip">
-                        <span class="skill-tree-skill-tooltip-header">
-                            {{item.label}}
-                        </span>
+                            <span class="skill-tree-skill-tooltip-header">
+                                {{item.label}}
+                            </span>
                         <br><br>
                         {{item.description}}
-                    </span>
+                        </span>
                     </button>
                 </template>
                 <div class="skill-tree-skillpoints">
@@ -248,10 +324,16 @@ class SkillTree extends PolymerElement {
         document.head.appendChild($_documentContainer.content);
     }
 
+    tokenCheck() {
+        this.$server.tokenCheck();
+    }
+
     ready() {
         super.ready();
         this.xOffset = window.innerWidth / 2 - 30;
         this.yOffset = window.innerHeight / 2 - 30;
+
+        this.tokenTimer = setInterval(this.tokenCheck.bind(this), 2000);
     }
 
     // noinspection JSUnusedGlobalSymbols

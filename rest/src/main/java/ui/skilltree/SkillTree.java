@@ -1,5 +1,6 @@
 package ui.skilltree;
 
+import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.EventData;
 import com.vaadin.flow.component.Tag;
@@ -21,12 +22,19 @@ public class SkillTree extends PolymerTemplate<SkillTreeModel> {
     private List<SkillNode> skillNodes;
     private final List<SkillConnection> skillConnections;
     private int skillpoints;
+    private final Runnable tokenValidityCheckRunnable;
 
-    public SkillTree() {
+    public SkillTree(Runnable tokenValidityCheckRunnable) {
+        this.tokenValidityCheckRunnable = tokenValidityCheckRunnable;
         skillNodes = new ArrayList<>();
         skillConnections = new LinkedList<>();
         updateNodes();
         updateConnections();
+    }
+
+    @ClientCallable
+    public void tokenCheck() {
+        tokenValidityCheckRunnable.run();
     }
 
     @EventHandler

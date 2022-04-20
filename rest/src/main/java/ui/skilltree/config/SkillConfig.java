@@ -14,4 +14,6 @@ public class SkillConfig {
     private int y;
     private String description;
     private String skillName;
+    private String color;
+    private String icon;
 }
