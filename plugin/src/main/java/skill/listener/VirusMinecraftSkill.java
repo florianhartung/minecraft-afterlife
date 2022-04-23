@@ -1,12 +1,14 @@
 package skill.listener;
 
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.springframework.data.util.Pair;
 import skill.generic.PlayerMinecraftSkill;
@@ -38,6 +40,9 @@ public class VirusMinecraftSkill extends PlayerMinecraftSkill {
     @ConfigValue("max-jump-distance")
     private static double MAX_JUMP_DISTANCE;
 
+    @ConfigValue("fire-per-level-of-fire-aspect")
+    private static int FIRE_PER_LEVEL_OF_FIRE_ASPECT;
+
     /**
      * Damage that still has to be dealth by virus in pairs of the damager and target.<br>
      * This prevents the event loopback (which leads to a stackoverflow) where when the virus damage is dealt the event itself is fired again.
@@ -53,6 +58,8 @@ public class VirusMinecraftSkill extends PlayerMinecraftSkill {
         if (e.getDamager() instanceof Player damager && isActiveFor(damager) && e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
             Entity targetEntity = e.getEntity();
             if (targetEntity instanceof LivingEntity target) {
+                int fireAspectLevel = getFireAspectLevelOfCurrentWeapon(damager);
+
                 List<LivingEntity> jumpTargets = new ArrayList<>();
                 jumpTargets.add(damager);
                 jumpTargets.add(target);
@@ -74,6 +81,7 @@ public class VirusMinecraftSkill extends PlayerMinecraftSkill {
                     toBeDamaged.add(Pair.of(damager.getUniqueId(), le.getUniqueId()));
                     lastDamage *= DAMAGE_FALLOFF;
                     le.damage(lastDamage, damager);
+                    le.setFireTicks(le.getFireTicks() + fireAspectLevel * FIRE_PER_LEVEL_OF_FIRE_ASPECT);
 
                     drawParticleLine(lastLoc, le.getEyeLocation(), 0.1);
                     drawHitParticle(le.getEyeLocation());
@@ -141,6 +149,14 @@ public class VirusMinecraftSkill extends PlayerMinecraftSkill {
             return;
         }
         world.spawnParticle(Particle.CRIT, loc, 3, 0.2, 0.5, 0.2, 0.2);
+    }
+
+    private int getFireAspectLevelOfCurrentWeapon(Player player) {
+        ItemStack weapon = player.getInventory().getItemInMainHand();
+        Map<Enchantment, Integer> enchantments = weapon.getEnchantments();
+
+        return enchantments.getOrDefault(Enchantment.FIRE_ASPECT, 0);
+
     }
 
 }

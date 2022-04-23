@@ -1,8 +1,14 @@
 package main;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.hover.content.Text;
+import net.minecraft.SystemUtils;
+import net.minecraft.network.chat.ChatMessageType;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.protocol.game.PacketPlayOutChat;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class ChatHelper {
@@ -24,12 +30,18 @@ public class ChatHelper {
     }
 
     private static TextComponent skillsUrlMessage(String token) {
-        TextComponent text = new TextComponent(PREFIX + "§6§oKlicke hier, um deine Skillpunkte auszugeben");
+        TextComponent text = new TextComponent(PREFIX + ChatColor.GOLD + ChatColor.ITALIC + "Klicke hier, um deine Skillpunkte auszugeben");
+        text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(new BaseComponent[]{new TranslatableComponent("chat.link.open")})));
         text.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, skillPageUrl.formatted(token)));
         return text;
     }
 
     public static void setConfig(FileConfiguration config) {
         skillPageUrl = config.getString("server.root") + config.getString("server.skills-page");
+    }
+
+    public static void send(Player player, IChatBaseComponent component) {
+        PacketPlayOutChat packet = new PacketPlayOutChat(component, ChatMessageType.a((byte) net.md_5.bungee.api.ChatMessageType.CHAT.ordinal()), SystemUtils.b);
+        ((CraftPlayer) player).getHandle().b.a(packet);
     }
 }
