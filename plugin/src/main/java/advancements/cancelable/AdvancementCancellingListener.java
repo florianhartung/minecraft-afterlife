@@ -41,10 +41,14 @@ public class AdvancementCancellingListener implements Listener {
 
     private void broadcastAdvancementMessage(Advancement advancement, Player player) {
 
-
         IChatBaseComponent advancementDetails = ((CraftAdvancement) advancement).getHandle().j();
 
-        String messageKey = "chat.type.advancement." + getAdvancementType(advancement);
+
+        Optional<String> optionalAdvancementType = getAdvancementType(advancement);
+        if (optionalAdvancementType.isEmpty()) {
+            return;
+        }
+        String messageKey = "chat.type.advancement." + optionalAdvancementType.get();
 
         ChatMessage msg = new ChatMessage(messageKey, player.getDisplayName(), advancementDetails);
 
@@ -53,12 +57,11 @@ public class AdvancementCancellingListener implements Listener {
     }
 
     /**
-     * @return One of the following advancement types: task, challenge, goal
+     * @return an empty optional if the advancement is a recipe, else one of the following advancement types: task, challenge, goal
      */
-    private String getAdvancementType(Advancement advancement) {
+    private Optional<String> getAdvancementType(Advancement advancement) {
         return Optional.ofNullable((CraftAdvancement) advancement)
                 .map(CraftAdvancement::getHandle)
-                .map(net.minecraft.advancements.Advancement::c).map(AdvancementDisplay::e).map(AdvancementFrameType::a)
-                .orElse("task");
+                .map(net.minecraft.advancements.Advancement::c).map(AdvancementDisplay::e).map(AdvancementFrameType::a);
     }
 }
