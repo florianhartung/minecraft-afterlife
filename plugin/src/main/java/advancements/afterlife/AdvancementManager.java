@@ -1,7 +1,7 @@
 package advancements.afterlife;
 
 import advancements.ParentCompletedRequirement;
-import advancements.afterlife.advancements.FoundConstructAdvancement;
+import advancements.afterlife.advancements.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
@@ -14,6 +14,10 @@ public class AdvancementManager {
 
     static {
         advancementListeners.add(new FoundConstructAdvancement());
+        advancementListeners.add(new TrackerAdvancement());
+        advancementListeners.add(new TurtleKillerAdvancement());
+        advancementListeners.add(new CoalceptionAdvancement());
+        advancementListeners.add(new BerryBushAdvancement());
     }
 
     public static void init(Plugin plugin) {

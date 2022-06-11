@@ -36,7 +36,7 @@ public class Main extends JavaPlugin implements Listener {
         AdvancementManager.init(this);
 
         register(new SkillpageOpener(this::saveConfig));
-        register(new AdvancementListener());
+        register(new SkillPointAdvancementListener());
         register(new PlayerRegistrationListener());
         register(new AdvancementCancellingListener());
         register(this);

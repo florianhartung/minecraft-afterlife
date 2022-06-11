@@ -3,13 +3,16 @@ package advancements.afterlife.advancements;
 import advancements.afterlife.AdvancementListener;
 import config.Config;
 import config.ConfigType;
+import main.ChatHelper;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static main.Util.unsafeListCast;
@@ -21,7 +24,7 @@ public class FoundConstructAdvancement extends AdvancementListener {
     private List<Location> skillBlockLocations;
 
     public FoundConstructAdvancement() {
-        super("afterlifetest", "adv1");
+        super("afterlife", "find_construct_shard");
     }
 
     @EventHandler
@@ -44,6 +47,8 @@ public class FoundConstructAdvancement extends AdvancementListener {
 
         if (inRangeOfSkillBlock) {
             grantAdvancement(e.getPlayer());
+            e.getPlayer().discoverRecipe(Objects.requireNonNull(NamespacedKey.fromString("afterlife:construct_shard_tracker")));
+            ChatHelper.sendMessage(e.getPlayer(), "Du kannst nun einen Gral-Kompass herstellen.\nSieh ihn dir in deinem Rezeptbuch an.");
         }
     }
 

@@ -26,6 +26,10 @@ public class AdvancementListener implements Listener {
     }
 
     public void grantAdvancement(Player receivingPlayer) {
+        if (hasAchievedAdvancement(receivingPlayer)) {
+            return;
+        }
+
         AdvancementProgress progress = receivingPlayer.getAdvancementProgress(advancement);
         progress.getRemainingCriteria().forEach(progress::awardCriteria);
     }

@@ -62,6 +62,9 @@ public class AdvancementCancellingListener implements Listener {
     private Optional<String> getAdvancementType(Advancement advancement) {
         return Optional.ofNullable((CraftAdvancement) advancement)
                 .map(CraftAdvancement::getHandle)
-                .map(net.minecraft.advancements.Advancement::c).map(AdvancementDisplay::e).map(AdvancementFrameType::a);
+                .filter(adv -> adv.b() != null) // Ensure message is not broadcasted for root advancements
+                .map(net.minecraft.advancements.Advancement::c)
+                .map(AdvancementDisplay::e)
+                .map(AdvancementFrameType::a);
     }
 }

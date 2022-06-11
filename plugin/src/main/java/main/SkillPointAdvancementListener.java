@@ -21,11 +21,11 @@ import java.util.UUID;
 import static main.ChatHelper.sendMessage;
 import static main.Util.unsafeListCast;
 
-public class AdvancementListener implements Listener {
+public class SkillPointAdvancementListener implements Listener {
 
     private final List<String> affectedAdvancementNamespaces;
 
-    public AdvancementListener() {
+    public SkillPointAdvancementListener() {
         affectedAdvancementNamespaces = unsafeListCast(Config.get(ConfigType.DEFAULT).getList("skillpoints-advancement-namespaces"));
     }
 
