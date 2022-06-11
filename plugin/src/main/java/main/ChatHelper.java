@@ -2,13 +2,10 @@ package main;
 
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Text;
-import net.minecraft.SystemUtils;
-import net.minecraft.network.chat.ChatMessageType;
-import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.protocol.game.PacketPlayOutChat;
+import net.minecraft.network.chat.Component;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class ChatHelper {
@@ -40,8 +37,7 @@ public class ChatHelper {
         skillPageUrl = config.getString("server.root") + config.getString("server.skills-page");
     }
 
-    public static void send(Player player, IChatBaseComponent component) {
-        PacketPlayOutChat packet = new PacketPlayOutChat(component, ChatMessageType.a((byte) net.md_5.bungee.api.ChatMessageType.CHAT.ordinal()), SystemUtils.b);
-        ((CraftPlayer) player).getHandle().b.a(packet);
+    public static void send(Player player, Component component) {
+        ((CraftPlayer) player).getHandle().sendSystemMessage(component);
     }
 }

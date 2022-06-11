@@ -1,13 +1,12 @@
 package advancements.cancelable;
 
-import net.minecraft.advancements.AdvancementDisplay;
-import net.minecraft.advancements.AdvancementFrameType;
-import net.minecraft.network.chat.ChatMessage;
-import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.advancements.DisplayInfo;
+import net.minecraft.advancements.FrameType;
+import net.minecraft.network.chat.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
-import org.bukkit.craftbukkit.v1_18_R1.advancement.CraftAdvancement;
+import org.bukkit.craftbukkit.v1_19_R1.advancement.CraftAdvancement;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -41,7 +40,7 @@ public class AdvancementCancellingListener implements Listener {
 
     private void broadcastAdvancementMessage(Advancement advancement, Player player) {
 
-        IChatBaseComponent advancementDetails = ((CraftAdvancement) advancement).getHandle().j();
+        Component advancementDetails = ((CraftAdvancement) advancement).getHandle().getChatComponent();
 
 
         Optional<String> optionalAdvancementType = getAdvancementType(advancement);
@@ -50,7 +49,8 @@ public class AdvancementCancellingListener implements Listener {
         }
         String messageKey = "chat.type.advancement." + optionalAdvancementType.get();
 
-        ChatMessage msg = new ChatMessage(messageKey, player.getDisplayName(), advancementDetails);
+
+        Component msg = Component.translatable(messageKey, player.getDisplayName(), advancementDetails);
 
         Bukkit.getOnlinePlayers()
                 .forEach(p -> send(p, msg));
@@ -62,9 +62,9 @@ public class AdvancementCancellingListener implements Listener {
     private Optional<String> getAdvancementType(Advancement advancement) {
         return Optional.ofNullable((CraftAdvancement) advancement)
                 .map(CraftAdvancement::getHandle)
-                .filter(adv -> adv.b() != null) // Ensure message is not broadcasted for root advancements
-                .map(net.minecraft.advancements.Advancement::c)
-                .map(AdvancementDisplay::e)
-                .map(AdvancementFrameType::a);
+                .filter(adv -> adv.getParent() != null) // Ensure message is not broadcasted for root advancements
+                .map(net.minecraft.advancements.Advancement::getDisplay)
+                .map(DisplayInfo::getFrame)
+                .map(FrameType::getName);
     }
 }

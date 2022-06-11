@@ -4,7 +4,7 @@ import advancements.cancelable.AdvancementCompletedEvent;
 import config.Config;
 import config.ConfigType;
 import org.bukkit.advancement.Advancement;
-import org.bukkit.craftbukkit.v1_18_R1.advancement.CraftAdvancement;
+import org.bukkit.craftbukkit.v1_19_R1.advancement.CraftAdvancement;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
@@ -38,7 +38,7 @@ public class ParentCompletedRequirement implements Listener {
     private Optional<Advancement> getParentAdvancement(Advancement child) {
         return Optional.ofNullable(((CraftAdvancement) child))
                 .map(CraftAdvancement::getHandle)
-                .map(net.minecraft.advancements.Advancement::b)
+                .map(net.minecraft.advancements.Advancement::getParent)
                 .map(advancement -> advancement.bukkit);
     }
 }
