@@ -18,6 +18,13 @@ public class AdvancementManager {
         advancementListeners.add(new TurtleKillerAdvancement());
         advancementListeners.add(new CoalceptionAdvancement());
         advancementListeners.add(new BerryBushAdvancement());
+        advancementListeners.add(new SummonLightningAdvancement());
+        advancementListeners.add(new CraftDiamondPieceAdvancement());
+        advancementListeners.add(new EscapeTheEndAdvancement());
+        advancementListeners.add(new FlyWithFireworkAdvancement());
+        advancementListeners.add(new PlayDiscAdvancement());
+        advancementListeners.add(new RepairElytraAdvancement());
+        advancementListeners.add(new ThrowEyeOfEnderAdvancement());
     }
 
     public static void init(Plugin plugin) {
