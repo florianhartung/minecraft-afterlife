@@ -9,7 +9,6 @@
     <packaging>pom</packaging>
     <version>1.0</version>
     <modules>
-        <module>plugin</module>
         <module>rest</module>
         <module>persistence</module>
     </modules>
@@ -35,5 +34,19 @@
         </dependencies>
     </dependencyManagement>
 
+    <profiles>
+        <profile>
+            <id>build-plugin</id>
+            <activation>
+                <property>
+                    <name>env.SKIP_PLUGIN_BUILD</name>
+                    <value>!true</value>
+                </property>
+            </activation>
+            <modules>
+                <module>plugin</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
