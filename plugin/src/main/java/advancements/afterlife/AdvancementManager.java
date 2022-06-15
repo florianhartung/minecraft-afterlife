@@ -25,6 +25,7 @@ public class AdvancementManager {
         advancementListeners.add(new PlayDiscAdvancement());
         advancementListeners.add(new RepairElytraAdvancement());
         advancementListeners.add(new ThrowEyeOfEnderAdvancement());
+        advancementListeners.add(new CraftNetheritePieceAdvancement());
     }
 
     public static void init(Plugin plugin) {

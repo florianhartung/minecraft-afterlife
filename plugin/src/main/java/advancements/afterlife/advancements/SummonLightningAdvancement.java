@@ -19,11 +19,11 @@ public class SummonLightningAdvancement extends AdvancementListener {
 
 
     @EventHandler
-    public void a(LightningStrikeEvent e) {
+    public void onLightning(LightningStrikeEvent e) {
         if (e.getCause() == LightningStrikeEvent.Cause.TRIDENT) {
             Location location = e.getLightning().getLocation();
             Optional.ofNullable(location.getWorld())
-                    .map(world -> world.getNearbyEntities(location, 2, 2, 2, entity -> entity instanceof Trident))
+                    .map(world -> world.getNearbyEntities(location, 3, 3, 3, entity -> entity instanceof Trident))
                     .flatMap(foundTridents -> foundTridents.stream().findFirst())
                     .map(tridentEntity -> (Trident) tridentEntity)
                     .flatMap(this::getOwnerOfTrident)
@@ -34,8 +34,8 @@ public class SummonLightningAdvancement extends AdvancementListener {
 
     public Optional<Player> getOwnerOfTrident(Trident trident) {
         Entity owner = ((CraftTrident) trident).getHandle().getOwner();
-        if (owner instanceof Player player) {
-            return Optional.ofNullable(Bukkit.getPlayer(player.getUniqueId()));
+        if (owner instanceof net.minecraft.world.entity.player.Player player) {
+            return Optional.ofNullable(Bukkit.getPlayer(player.getUUID()));
         }
         return Optional.empty();
     }

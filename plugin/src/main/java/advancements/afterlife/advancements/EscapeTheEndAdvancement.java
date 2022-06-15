@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 
 public class EscapeTheEndAdvancement extends AdvancementListener {
     public EscapeTheEndAdvancement() {
-        super("afterlife", "new_hope");
+        super("afterlife", "escape_end");
     }
 
     @EventHandler

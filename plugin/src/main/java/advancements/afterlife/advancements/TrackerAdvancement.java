@@ -83,6 +83,7 @@ public class TrackerAdvancement extends AdvancementListener {
         }
 
         skillBlockLocations.stream()
+                .filter(location -> Optional.ofNullable(location.getWorld()).map(w -> w.equals(playerLocation.getWorld())).orElse(false))
                 .min((o1, o2) -> {
                     double d1 = playerLocation.distanceSquared(o1);
                     double d2 = playerLocation.distanceSquared(o2);
