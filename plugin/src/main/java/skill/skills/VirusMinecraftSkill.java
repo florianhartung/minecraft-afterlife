@@ -1,4 +1,4 @@
-package skill.listener;
+package skill.skills;
 
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -11,7 +11,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import org.springframework.data.util.Pair;
-import skill.generic.PlayerMinecraftSkill;
+import skill.generic.MinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
 
@@ -19,27 +19,23 @@ import java.util.*;
 
 
 @Configurable("virus")
-public class VirusMinecraftSkill extends PlayerMinecraftSkill {
-
+public class VirusMinecraftSkill extends MinecraftSkill {
     /**
      * How many times the damage jumps to other entites
      */
     @ConfigValue("chain-jumps")
     private static int CHAIN_JUMPS;
-
     /**
      * The amount of damage falloff on each jump. In percent.<br>
      * A value of 0.5 would mean that the damage is halfed on every jump
      */
     @ConfigValue("damage-falloff")
     private static double DAMAGE_FALLOFF;
-
     /**
      * Maximum distance the virus can travel in one jump in blocks
      */
     @ConfigValue("max-jump-distance")
     private static double MAX_JUMP_DISTANCE;
-
     @ConfigValue("fire-per-level-of-fire-aspect")
     private static int FIRE_PER_LEVEL_OF_FIRE_ASPECT;
 
@@ -158,5 +154,4 @@ public class VirusMinecraftSkill extends PlayerMinecraftSkill {
         return enchantments.getOrDefault(Enchantment.FIRE_ASPECT, 0);
 
     }
-
 }

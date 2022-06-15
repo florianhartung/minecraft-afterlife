@@ -1,4 +1,4 @@
-package skill.listener;
+package skill.skills;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -6,7 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import skill.generic.PlayerMinecraftSkill;
+import skill.generic.MinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
 
@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Random;
 
 @Configurable("crystal-king")
-public class CrystalKingMinecraftSkill extends PlayerMinecraftSkill {
+public class CrystalKingMinecraftSkill extends MinecraftSkill {
     @ConfigValue(value = "materials", mapper = "mapMaterials")
     private List<Material> MATERIALS;
-
     @ConfigValue("stddev")
     private double STDDEV;
+
     private final Random random = new Random();
 
     @EventHandler(priority = EventPriority.HIGHEST)

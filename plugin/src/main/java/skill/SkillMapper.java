@@ -3,8 +3,8 @@ package skill;
 import data.Skill;
 import lombok.Getter;
 import skill.generic.MinecraftSkill;
-import skill.listener.*;
-import skill.listener.spiderqueen.SpiderQueenMinecraftSkill;
+import skill.skills.*;
+import skill.skills.spiderqueen.SpiderQueenMinecraftSkill;
 
 import java.util.HashMap;
 import java.util.Map;

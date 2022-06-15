@@ -2,7 +2,9 @@ package skill.injection;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import skill.generic.MinecraftSkillTimer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -24,6 +26,7 @@ public class SkillInjector {
     public void inject(Object instance) {
         injectConfiguration(instance);
         injectPlugin(instance);
+        injectTimer(instance);
     }
 
     private void injectConfiguration(Object instance) {
@@ -39,7 +42,7 @@ public class SkillInjector {
             throw new NullPointerException("Could not find configuration section \"" + sectionPath + "\"");
         }
 
-        List<Field> allFields = getAllFields(new ArrayList<>(), clazz);
+        List<Field> allFields = getAllFields(clazz);
         for (Field field : allFields) {
             ConfigValue annotation = field.getAnnotation(ConfigValue.class);
             if (annotation == null) {
@@ -89,7 +92,7 @@ public class SkillInjector {
     private void injectPlugin(Object instance) {
         Class<?> clazz = instance.getClass();
 
-        List<Field> allFields = getAllFields(new ArrayList<>(), clazz);
+        List<Field> allFields = getAllFields(clazz);
         for (Field field : allFields) {
             InjectPlugin injectPlugin = field.getAnnotation(InjectPlugin.class);
             if (injectPlugin != null) {
@@ -125,11 +128,71 @@ public class SkillInjector {
         }
     }
 
-    public static List<Field> getAllFields(List<Field> fields, Class<?> clazz) {
-        fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
+    private void injectTimer(Object instance) {
+        Class<?> clazz = instance.getClass();
+
+        List<Field> allFields = getAllFields(clazz);
+        for (Field field : allFields) {
+            InjectTimer injectTimer = field.getAnnotation(InjectTimer.class);
+            if (injectTimer == null) {
+                continue;
+            }
+
+            if (field.getType() != MinecraftSkillTimer.class) {
+                System.err.println(clazz.getName() + ": Annotation @InjectTimer can only be used on fields of type MinecraftSkillTimer!");
+                return;
+            }
+
+            MinecraftSkillTimer timer = new MinecraftSkillTimer(plugin);
+            int duration = injectTimer.duration();
+            if (!injectTimer.durationField().isEmpty()) {
+                if (duration > 0) {
+                    System.err.println(clazz.getName() + ": Only one duration source can be set for Annotation @InjectTimer");
+                    return;
+                }
+                try {
+                    Field durationField = clazz.getDeclaredField(injectTimer.durationField());
+                    durationField.setAccessible(true);
+                    duration = (int) durationField.get(instance);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+            if (duration > 0) {
+                timer.setDurationInTicks(duration);
+            }
+
+            if (!injectTimer.onTimerFinished().isEmpty()) {
+                try {
+                    Method onTimerFinishedMethod = clazz.getDeclaredMethod(injectTimer.onTimerFinished(), Player.class);
+                    onTimerFinishedMethod.setAccessible(true);
+                    timer.setOnTimerFinished(player -> {
+                        try {
+                            onTimerFinishedMethod.invoke(instance, player);
+                        } catch (IllegalAccessException | InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            field.setAccessible(true);
+            try {
+                field.set(instance, timer);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static List<Field> getAllFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<>(Arrays.asList(clazz.getDeclaredFields()));
 
         if (clazz.getSuperclass() != null) {
-            getAllFields(fields, clazz.getSuperclass());
+            fields.addAll(getAllFields(clazz.getSuperclass()));
         }
 
         return fields;

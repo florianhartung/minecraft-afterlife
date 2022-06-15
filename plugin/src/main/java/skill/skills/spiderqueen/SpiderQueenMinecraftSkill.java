@@ -1,4 +1,4 @@
-package skill.listener.spiderqueen;
+package skill.skills.spiderqueen;
 
 import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftSpider;
@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
-import skill.generic.PlayerMinecraftSkill;
+import skill.generic.MinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
 import skill.injection.InjectPlugin;
@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Configurable("spider-queen")
-public class SpiderQueenMinecraftSkill extends PlayerMinecraftSkill {
+public class SpiderQueenMinecraftSkill extends MinecraftSkill {
     @SuppressWarnings("deprecation")
     private static final NamespacedKey SPAWN_EGG_KEY = new NamespacedKey("afterlife", "spider_servant");
     // Random field prevents stacking of multiple items
@@ -41,7 +41,7 @@ public class SpiderQueenMinecraftSkill extends PlayerMinecraftSkill {
     @ConfigValue("drop-chance")
     private static double DROP_CHANCE;
     @ConfigValue("hatch-time")
-    private static int HATCH_TIME;
+    private static int HATCH_TIME; // in ticks
     @InjectPlugin
     private static Plugin plugin;
 
@@ -53,10 +53,6 @@ public class SpiderQueenMinecraftSkill extends PlayerMinecraftSkill {
         if (killer == null || !isActiveFor(killer)) {
             return;
         }
-        System.out.println(e.getEntity());
-        System.out.println(isSpiderServant(e.getEntity()));
-        System.out.println(e instanceof Spider);
-        System.out.println(e instanceof CaveSpider);
         if (e.getEntity() instanceof Spider killedSpider && !(killedSpider instanceof CaveSpider) && !isSpiderServant(e.getEntity())) {
             if (generateDrop()) {
                 ItemStack i = new ItemStack(Material.CONDUIT, 1);
@@ -114,7 +110,7 @@ public class SpiderQueenMinecraftSkill extends PlayerMinecraftSkill {
                 for (int j = 0; j < 3; j++) {
                     spawnShriekParticle(loc, j * shriekDelay);
                 }
-            }, HATCH_TIME * 20L - 10);
+            }, HATCH_TIME - 10);
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 loc.getBlock().setType(Material.AIR);
@@ -122,7 +118,7 @@ public class SpiderQueenMinecraftSkill extends PlayerMinecraftSkill {
                 SpiderServantEntity sse = new SpiderServantEntity(loc, owner, SLOW_STRENGTH, SLOW_DURATION, DAMAGE);
                 sse.getLevel().addFreshEntity(sse, CreatureSpawnEvent.SpawnReason.CUSTOM);
 
-            }, HATCH_TIME * 20L);
+            }, HATCH_TIME);
         }
     }
 

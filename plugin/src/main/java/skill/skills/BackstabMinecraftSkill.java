@@ -1,21 +1,20 @@
-package skill.listener;
+package skill.skills;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.util.Vector;
-import skill.generic.PlayerMinecraftSkill;
+import skill.generic.MinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
 
 @Configurable("backstab")
-public class BackstabMinecraftSkill extends PlayerMinecraftSkill {
+public class BackstabMinecraftSkill extends MinecraftSkill {
     @ConfigValue("max-angle")
     private double MAX_ANGLE;
     @ConfigValue("damage-amplification")
     private double DAMAGE_AMPLIFICATION;
-
 
     @EventHandler
     public void onDamageEntity(EntityDamageByEntityEvent e) {
@@ -23,11 +22,8 @@ public class BackstabMinecraftSkill extends PlayerMinecraftSkill {
             Location targetLocation = e.getEntity().getLocation();
             Location damagerLocation = e.getDamager().getLocation();
 
-            Vector damagerTarget = targetLocation.subtract(damagerLocation)
-                    .toVector()
-                    .setY(0);
-            Vector targetLookingDirection = targetLocation.getDirection()
-                    .setY(0);
+            Vector damagerTarget = targetLocation.subtract(damagerLocation).toVector().setY(0);
+            Vector targetLookingDirection = targetLocation.getDirection().setY(0);
 
             double angle = damagerTarget.angle(targetLookingDirection);
             double angleInDegrees = angle / Math.PI * 180;

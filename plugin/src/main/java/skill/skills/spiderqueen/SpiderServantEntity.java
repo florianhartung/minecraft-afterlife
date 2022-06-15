@@ -1,4 +1,4 @@
-package skill.listener.spiderqueen;
+package skill.skills.spiderqueen;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;

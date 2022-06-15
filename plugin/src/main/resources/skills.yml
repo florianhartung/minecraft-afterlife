@@ -1,16 +1,16 @@
 adrenaline:
-  cooldown: 20000
-  heal-duration: 20
+  cooldown: 600 # 30sec
+  heal-duration: 20 # 1sec
   heal-amplifier: 4
   activation-health: 3.0
 backstab:
   max-angle: 60.0
   damage-amplification: 2.0
 barrier:
-  charge-time: 60
+  charge-time: 1200 # 1min
   absorption-amount: 6.0
 bloodlust:
-  speed-duration: 60
+  speed-duration: 60 # 3sec
   speed-amplifier: 0
 crystal-king:
   materials:
@@ -21,15 +21,15 @@ crystal-king:
     - DEEPSLATE_EMERALD_ORE
   stddev: 0.5
 dimension-jumper:
-  invincibility-duration: 30000
+  invincibility-duration: 600 # 30sec
 ghost-soul:
-  cooldown: 180000
-  activation-duration: 60
+  cooldown: 36000 # 30min
+  activation-duration: 60 # 3sec
   activation-threshold: 6.0
-  step-interval: 10
+  step-interval: 10 # 0.5sec
 lifesteal:
-  heal-amount: 6.0
-  heal-chance: 0.125
+  heal-amount: 0.5
+  heal-chance: 0.5
 fast:
   speed-amount: 0.002
 ninja:
@@ -46,14 +46,15 @@ hitman:
   hunt-damage-multiplier: 1.3
   hunt-speed: 0.03
   hunt-slow: 0.02
-  sneak-duration: 40
+  sneak-duration: 40 # 2sec
 virus:
   chain-jumps: 3
-  damage-falloff: 0.5
-  max-jump-distance: 5
+  damage-falloff: 0.6
+  max-jump-distance: 4
+  fire-per-level-of-fire-aspect: 40
 spider-queen:
   damage: 4
   slow-duration: 120
   slow-strength: 2
   drop-chance: 0.2
-  hatch-time: 5
+  hatch-time: 100 # 5sec
