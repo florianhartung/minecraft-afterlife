@@ -4,6 +4,7 @@ import data.Skill;
 import lombok.Getter;
 import skill.generic.MinecraftSkill;
 import skill.listener.*;
+import skill.listener.spiderqueen.SpiderQueenMinecraftSkill;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class SkillMapper {
         put(Skill.HITMAN, HitmanSkill.class);
         put(Skill.LIFESTEAL, LifestealMinecraftSkill.class);
         put(Skill.VIRUS, VirusMinecraftSkill.class);
+        put(Skill.SPIDER_QUEEN, SpiderQueenMinecraftSkill.class);
     }
 
     private static void put(Skill skill, Class<? extends MinecraftSkill> minecraftSkillClass) {

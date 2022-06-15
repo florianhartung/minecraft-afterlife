@@ -51,3 +51,9 @@ virus:
   chain-jumps: 3
   damage-falloff: 0.5
   max-jump-distance: 5
+spider-queen:
+  damage: 4
+  slow-duration: 120
+  slow-strength: 2
+  drop-chance: 0.2
+  hatch-time: 5
