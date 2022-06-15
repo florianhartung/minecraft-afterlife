@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 public class ChatHelper {
 
-    private static final String PREFIX = "§f[§2Skills§f] §c";
+    private static final String PREFIX = "§f[§2Afterlife§f] §c";
 
     private static String skillPageUrl;
 
