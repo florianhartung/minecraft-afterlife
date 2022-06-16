@@ -7,6 +7,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.potion.PotionEffectType;
 import skill.generic.MinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
@@ -50,6 +51,10 @@ public class LifestealMinecraftSkill extends MinecraftSkill {
      * @return true if the player was healed, otherwise false
      */
     private boolean healPlayer(Player player) {
+        boolean hasNegativeEffect = player.getActivePotionEffects().stream().anyMatch(effect -> effect.getType() == PotionEffectType.POISON || effect.getType() == PotionEffectType.WITHER);
+        if (hasNegativeEffect) {
+            return false;
+        }
         double maxHealth = Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).getValue();
         if (player.getHealth() < maxHealth) {
             player.setHealth(Math.min(maxHealth, player.getHealth() + HEAL_AMOUNT));
