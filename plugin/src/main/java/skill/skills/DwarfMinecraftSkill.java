@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -47,23 +46,12 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
     @InjectPlugin
     private Plugin plugin;
 
-
-    private final Map<UUID, MiningProgress> minedBlocks = new HashMap<>();
-
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent e) {
-        if (e.getMessage().startsWith("zwerg ")) {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                addMinedBlocks(Bukkit.getPlayer(e.getMessage().split(" ")[1]), Integer.parseInt(e.getMessage().split(" ")[2]));
-            });
-            e.setCancelled(true);
-        }
-    }
+    private final Map<UUID, MiningProgress> playerProgresses = new HashMap<>();
 
     @EventHandler
     public void onDisable(PluginDisableEvent e) {
         if (e.getPlugin().getName().equals(plugin.getName())) {
-            exhaustionTimer.cancelAll().forEach(uuid -> Optional.ofNullable(Bukkit.getPlayer(uuid)).ifPresent(this::removeMiningFatigue));
+            exhaustionTimer.cancelAll().forEach(uuid -> Optional.ofNullable(Bukkit.getPlayer(uuid)).ifPresent(player -> resetMinedBlocks(player, false)));
         }
     }
 
@@ -83,13 +71,13 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
         if (isActiveFor(e.getPlayer())) {
-            resetMinedBlocks(e.getPlayer());
+            resetMinedBlocks(e.getPlayer(), true);
         }
     }
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-        Optional.ofNullable(minedBlocks.remove(e.getEntity().getUniqueId())).ifPresent(MiningProgress::reset);
+        Optional.ofNullable(playerProgresses.remove(e.getEntity().getUniqueId())).ifPresent(MiningProgress::reset);
     }
 
     @EventHandler
@@ -132,7 +120,7 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
     }
 
     private void addMinedBlock(Player player) {
-        MiningProgress miningProgress = minedBlocks.computeIfAbsent(player.getUniqueId(), id -> {
+        MiningProgress miningProgress = playerProgresses.computeIfAbsent(player.getUniqueId(), id -> {
             MiningProgress newMiningProgress = new MiningProgress(player);
             newMiningProgress.showBossBar(player);
             return newMiningProgress;
@@ -199,10 +187,16 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
     }
 
     private void resetMinedBlocks(Player player) {
-        Optional.ofNullable(minedBlocks.remove(player.getUniqueId())).ifPresent(miningProgress -> {
-            int exhaustionDuration = miningProgress.getStage() * EXHAUSTION_DURATION_PER_STAGE;
-            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, exhaustionDuration, 1, true, false, true));
-            exhaustionTimer.start(player, exhaustionDuration);
+        resetMinedBlocks(player, true);
+    }
+
+    private void resetMinedBlocks(Player player, boolean exhaustion) {
+        Optional.ofNullable(playerProgresses.remove(player.getUniqueId())).ifPresent(miningProgress -> {
+            if (exhaustion) {
+                int exhaustionDuration = miningProgress.getStage() * EXHAUSTION_DURATION_PER_STAGE;
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, exhaustionDuration, 1, true, false, true));
+                exhaustionTimer.start(player, exhaustionDuration);
+            }
             miningProgress.reset();
         });
     }
@@ -227,9 +221,9 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
             infoBossBar.setVisible(true);
         }
 
-        public MiningProgress advance() {
+        public void advance() {
             if (stage == STAGE_BLOCK_COUNTS.length - 1) {
-                return this;
+                return;
             }
 
             minedBlocks += 1;
@@ -264,8 +258,6 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
 
             float progress = (float) (minedBlocks - from) / (to - from);
             infoBossBar.setProgress(progress);
-
-            return this;
         }
 
         public void showBossBar(Player player) {
