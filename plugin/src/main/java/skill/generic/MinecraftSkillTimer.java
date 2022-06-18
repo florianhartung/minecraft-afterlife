@@ -5,10 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class MinecraftSkillTimer {
@@ -44,6 +41,14 @@ public class MinecraftSkillTimer {
     public void cancel(Player player) {
         Optional.ofNullable(taskIds.remove(player.getUniqueId()))
                 .ifPresent(Bukkit.getScheduler()::cancelTask);
+    }
+
+    public List<UUID> cancelAll() {
+        List<UUID> removedPlayers = taskIds.keySet().stream().toList();
+        taskIds.forEach((uuid, id) -> Bukkit.getScheduler().cancelTask(id));
+        taskIds.clear();
+
+        return removedPlayers;
     }
 
     public boolean isActive(Player player) {

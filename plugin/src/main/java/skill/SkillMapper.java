@@ -27,6 +27,7 @@ public class SkillMapper {
         put(Skill.LIFESTEAL, LifestealMinecraftSkill.class);
         put(Skill.VIRUS, VirusMinecraftSkill.class);
         put(Skill.SPIDER_QUEEN, SpiderQueenMinecraftSkill.class);
+        put(Skill.DWARF, DwarfMinecraftSkill.class);
     }
 
     private static void put(Skill skill, Class<? extends MinecraftSkill> minecraftSkillClass) {

@@ -58,3 +58,8 @@ spider-queen:
   slow-strength: 2
   drop-chance: 0.2
   hatch-time: 100 # 5sec
+dwarf:
+  effect-duration: 300 # 15sec
+  effect-duration-per-stage: 100 # 5sec
+  exhaustion-duration-per-stage: 600 # 30sec
+  exhaustion-mining-fatigue-amplifier: 1 # ingame: Mining Fatigue II
