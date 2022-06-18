@@ -5,10 +5,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import skill.generic.MinecraftSkill;
 import skill.injection.SkillInjector;
-import skill.listener.factory.FastFactory;
-import skill.listener.factory.NinjaFactory;
-import skill.listener.factory.StackableSkillFactory;
-import skill.listener.factory.TankFactory;
+import skill.skills.factory.FastFactory;
+import skill.skills.factory.NinjaFactory;
+import skill.skills.factory.StackableSkillFactory;
+import skill.skills.factory.TankFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

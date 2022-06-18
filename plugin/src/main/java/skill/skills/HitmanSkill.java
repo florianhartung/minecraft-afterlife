@@ -1,4 +1,4 @@
-package skill.listener;
+package skill.skills;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +25,7 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
-import skill.generic.PlayerMinecraftSkill;
+import skill.generic.MinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
 import skill.injection.InjectPlugin;
@@ -33,8 +33,7 @@ import skill.injection.InjectPlugin;
 import java.util.*;
 
 @Configurable("hitman")
-public class HitmanSkill extends PlayerMinecraftSkill {
-
+public class HitmanSkill extends MinecraftSkill {
     @ConfigValue("max-range")
     private static int MAX_RANGE; // in x,y,z directions (range is calculated as a rectangle around player)
     @ConfigValue("max-angle")
@@ -55,13 +54,11 @@ public class HitmanSkill extends PlayerMinecraftSkill {
     private static double HUNT_SLOW;
     @ConfigValue("sneak-duration")
     private static int SNEAK_DURATION; // time before player has to sneak for the stalking to begin in ticks
-
-    private final Map<UUID, BukkitTask> sneakTimers = new HashMap<>();
-    private final List<UUID> sneakingPlayers = new ArrayList<>();
-
     @InjectPlugin(postInject = "scheduleStalkTimer")
     private Plugin plugin;
 
+    private final Map<UUID, BukkitTask> sneakTimers = new HashMap<>();
+    private final List<UUID> sneakingPlayers = new ArrayList<>();
     private BukkitTask stalkProgressUpdater;
     private final HashMap<UUID, PlayerStalkInformation> stalkProgresses = new HashMap<>();
 

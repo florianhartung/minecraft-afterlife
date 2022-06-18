@@ -83,8 +83,6 @@ public class SkillsView extends VerticalLayout implements HasUrlParameter<String
     @Override
     protected void onDetach(DetachEvent detachEvent) {
         super.onDetach(detachEvent);
-
-        System.out.println(99);
     }
 
     @Override

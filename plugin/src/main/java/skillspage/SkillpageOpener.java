@@ -1,5 +1,7 @@
 package skillspage;
 
+import config.Config;
+import config.ConfigType;
 import main.ChatHelper;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,9 +14,10 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+
+import static main.Util.unsafeListCast;
 
 public class SkillpageOpener implements Listener {
 
@@ -26,18 +29,18 @@ public class SkillpageOpener implements Listener {
 
     private final List<Location> skillBlockLocations;
 
-    public SkillpageOpener(FileConfiguration skillBlocksConfig, BiConsumer<FileConfiguration, String> configSaver) {
-        this.skillBlocksConfig = skillBlocksConfig;
+    public SkillpageOpener(BiConsumer<FileConfiguration, String> configSaver) {
+        this.skillBlocksConfig = Config.get(ConfigType.SKILL_BLOCKS);
         this.configSaver = configSaver;
 
-        skillBlockLocations = castUnknownList(skillBlocksConfig.getList("blocks"));
+        skillBlockLocations = unsafeListCast(skillBlocksConfig.getList("blocks"));
     }
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent e) {
         if (e.getMessage().equals("skillblock")) {
             Location newSkillBlock = e.getPlayer().getTargetBlock(null, 6).getLocation();
-            List<Location> locations = castUnknownList(skillBlocksConfig.getList("blocks"));
+            List<Location> locations = unsafeListCast(skillBlocksConfig.getList("blocks"));
             locations.add(newSkillBlock);
 
             configSaver.accept(skillBlocksConfig, "skillblocks" + System.currentTimeMillis() + ".yml");
@@ -48,7 +51,7 @@ public class SkillpageOpener implements Listener {
     @EventHandler
     public void onClick(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK && e.getHand() == EquipmentSlot.HAND) {
-            List<Location> locations = castUnknownList(skillBlocksConfig.getList("blocks"));
+            List<Location> locations = unsafeListCast(skillBlocksConfig.getList("blocks"));
             if (locations.contains(e.getClickedBlock().getLocation())) {
                 String newToken = TokenManager.newToken(e.getPlayer());
                 ChatHelper.sendSkillsURL(e.getPlayer(), newToken);
@@ -92,14 +95,5 @@ public class SkillpageOpener implements Listener {
             }
         }
         return minIndex;
-    }
-
-    private <T> List<T> castUnknownList(List<?> list) {
-        if (list == null) {
-            return new ArrayList<>();
-        }
-        List<T> result = new ArrayList<>();
-        list.forEach(x -> result.add((T) x));
-        return result;
     }
 }

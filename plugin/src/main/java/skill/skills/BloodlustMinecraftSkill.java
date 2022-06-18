@@ -1,4 +1,4 @@
-package skill.listener;
+package skill.skills;
 
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -10,13 +10,12 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import skill.generic.PlayerMinecraftSkill;
+import skill.generic.MinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
 
 @Configurable("bloodlust")
-public class BloodlustMinecraftSkill extends PlayerMinecraftSkill {
-
+public class BloodlustMinecraftSkill extends MinecraftSkill {
     @ConfigValue("speed-duration")
     private static int SPEED_DURATION; // in ticks
     @ConfigValue("speed-amplifier")

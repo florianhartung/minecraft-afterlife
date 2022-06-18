@@ -1,4 +1,4 @@
-package skill.listener.factory;
+package skill.skills.factory;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;

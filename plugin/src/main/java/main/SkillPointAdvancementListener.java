@@ -1,5 +1,8 @@
 package main;
 
+import advancements.cancelable.AdvancementCompletedEvent;
+import config.Config;
+import config.ConfigType;
 import data.PlayerEntity;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -7,24 +10,34 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 import static main.ChatHelper.sendMessage;
+import static main.Util.unsafeListCast;
 
-public class AdvancementListener implements Listener {
+public class SkillPointAdvancementListener implements Listener {
 
-    private static final String ADVANCEMENT_NAMESPACE = "skills";
+    private final List<String> affectedAdvancementNamespaces;
 
-    @EventHandler
-    public void onAdvancement(PlayerAdvancementDoneEvent e) {
+    public SkillPointAdvancementListener() {
+        affectedAdvancementNamespaces = unsafeListCast(Config.get(ConfigType.DEFAULT).getList("skillpoints-advancement-namespaces"));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onAdvancement(AdvancementCompletedEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+
         UUID playerUUID = e.getPlayer().getUniqueId();
         NamespacedKey key = e.getAdvancement().getKey();
-        if (key.getNamespace().equalsIgnoreCase(ADVANCEMENT_NAMESPACE)) {
+        if (affectedAdvancementNamespaces.contains(key.getNamespace())) {
             ResponseEntity<PlayerEntity> response = RestService.addSkillpoint(playerUUID);
             if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
                 e.getPlayer().sendMessage("Es konnte dir kein Skillpunkt gegeben werden. Bitte kontaktiere einen Administrator.");

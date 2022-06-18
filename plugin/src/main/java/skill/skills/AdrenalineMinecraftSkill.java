@@ -1,4 +1,4 @@
-package skill.listener;
+package skill.skills;
 
 import main.ChatHelper;
 import org.bukkit.ChatColor;
@@ -8,12 +8,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import skill.generic.CooldownMinecraftSkill;
+import skill.generic.MinecraftSkill;
+import skill.generic.MinecraftSkillTimer;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
+import skill.injection.InjectTimer;
 
 @Configurable("adrenaline")
-public class AdrenalineMinecraftSkill extends CooldownMinecraftSkill {
+public class AdrenalineMinecraftSkill extends MinecraftSkill {
     @ConfigValue("cooldown")
     private int COOLDOWN;
     @ConfigValue("heal-duration")
@@ -22,24 +24,19 @@ public class AdrenalineMinecraftSkill extends CooldownMinecraftSkill {
     private int HEAL_AMPLIFIER;
     @ConfigValue("activation-health")
     private double ACTIVATION_HEALTH; // half hearts
-
+    @InjectTimer(durationField = "COOLDOWN")
+    private MinecraftSkillTimer cooldownTimer;
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player player && isActiveFor(player) && !isOnCooldown(player)) {
+        if (e.getEntity() instanceof Player player && isActiveFor(player) && !cooldownTimer.isActive(player)) {
             double finalHealth = player.getHealth() - e.getFinalDamage();
             if (finalHealth > 0 && finalHealth <= ACTIVATION_HEALTH) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, HEAL_DURATION, HEAL_AMPLIFIER, false, true));
                 player.getWorld().spawnParticle(Particle.HEART, player.getLocation(), 20, 1, 1, 1);
                 ChatHelper.sendMessage(player, ChatColor.LIGHT_PURPLE + "Du verspürst ganz plötzlich einen Adrenalinschub");
-                startCooldown(player);
+                cooldownTimer.start(player);
             }
         }
-    }
-
-    @Override
-    protected void startCooldown(Player player) {
-        setCooldown(COOLDOWN);
-        super.startCooldown(player);
     }
 }

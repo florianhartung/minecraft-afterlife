@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import repository.PlayerRepository;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @RestController
@@ -45,13 +44,12 @@ public class PlayerController {
 
     @GetMapping("/{uuid}/add")
     public ResponseEntity<PlayerEntity> addSkillpoint(@PathVariable("uuid") String uuid) {
-        Optional<PlayerEntity> optionalPlayer = playerRepository.findById(uuid);
-        if (optionalPlayer.isPresent()) {
-            PlayerEntity player = optionalPlayer.get();
-            player.setSkillPoints(player.getSkillPoints() + 1);
-            PlayerEntity saved = playerRepository.save(player);
-            return ResponseEntity.ok(saved);
-        }
-        return ResponseEntity.notFound().build();
+        return playerRepository.findById(uuid)
+                .map(player -> {
+                    player.setSkillPoints(player.getSkillPoints() + 1);
+                    return playerRepository.save(player);
+                })
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

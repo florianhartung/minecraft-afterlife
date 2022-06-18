@@ -1,5 +1,7 @@
 package skill;
 
+import config.Config;
+import config.ConfigType;
 import data.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,9 +19,9 @@ public class SkillManager {
     private static Plugin plugin;
     private static int updaterTaskId = -1;
 
-    public static void init(Plugin plugin, FileConfiguration skillsConfiguration) {
+    public static void init(Plugin plugin) {
         SkillManager.plugin = plugin;
-        populateSkillHolder(plugin, skillsConfiguration);
+        populateSkillHolder(plugin, Config.get(ConfigType.SKILLS));
 
         PluginManager pluginManager = plugin.getServer().getPluginManager();
         SkillHolder.getAllMinecraftSkills()
@@ -32,6 +34,7 @@ public class SkillManager {
             Map<Skill, ? extends MinecraftSkill> skillInstances = skillInitializer.initializeSkills(SkillMapper.getMinecraftSkillClasses());
 
             SkillHolder.addSkills(skillInstances);
+            Bukkit.getLogger().log(Level.INFO, "[Minecraft-Afterlife] Successfully loaded " + skillInstances.size() + " skills!");
         } catch (SkillInitializer.SkillInitializeException e) {
             Bukkit.getLogger().log(Level.SEVERE, "Could not initialize minecraft skills", e);
         }

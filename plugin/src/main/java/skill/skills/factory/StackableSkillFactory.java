@@ -1,4 +1,4 @@
-package skill.listener.factory;
+package skill.skills.factory;
 
 import skill.generic.MinecraftSkill;
 

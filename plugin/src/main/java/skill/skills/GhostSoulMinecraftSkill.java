@@ -1,4 +1,4 @@
-package skill.listener;
+package skill.skills;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -12,10 +12,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 import org.springframework.data.util.Pair;
-import skill.generic.CooldownMinecraftSkill;
+import skill.generic.MinecraftSkill;
+import skill.generic.MinecraftSkillTimer;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
 import skill.injection.InjectPlugin;
+import skill.injection.InjectTimer;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -23,35 +25,30 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Configurable("ghost-soul")
-public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill {
-
+public class GhostSoulMinecraftSkill extends MinecraftSkill {
     @ConfigValue("cooldown")
-    private static int COOLDOWN; // in milliseconds
+    private static int COOLDOWN; // in ticks
     @ConfigValue("activation-threshold")
     private static double ACTIVATION_THRESHOLD; // in half hearts
     @ConfigValue("activation-duration")
     private static int ACTIVATION_DURATION; // in ticks
-
     @ConfigValue("step-interval")
     private static int STEP_INTERVAL; // in ticks
-
-    private final HashMap<String, Pair<Integer, Integer>> activations;
     @InjectPlugin
     private Plugin plugin;
+    @InjectTimer(durationField = "COOLDOWN")
+    private MinecraftSkillTimer cooldownTimer;
 
-
-    public GhostSoulMinecraftSkill() {
-        activations = new HashMap<>();
-    }
+    private final HashMap<String, Pair<Integer, Integer>> activations = new HashMap<>();
 
     @EventHandler
     public void onDamage(EntityDamageEvent event) {
-        if (event.getEntity() instanceof Player player && isActiveFor(player) && !isOnCooldown(player)) {
+        if (event.getEntity() instanceof Player player && isActiveFor(player) && !cooldownTimer.isActive(player)) {
             if (!activations.containsKey(player.getUniqueId().toString())) {
                 double finalHealth = player.getHealth() - event.getFinalDamage();
                 if (finalHealth > 0 && finalHealth <= ACTIVATION_THRESHOLD) {
                     activateForPlayer(player);
-                    startCooldown(player);
+                    cooldownTimer.start(player);
                     event.setCancelled(false);
                 }
             }
@@ -122,7 +119,7 @@ public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill {
     }
 
     private void activateForPlayer(Player player) {
-        startCooldown(player);
+        cooldownTimer.start(player);
         int taskId = Bukkit.getScheduler()
                 .scheduleSyncDelayedTask(plugin, () -> deactivateForPlayer(player), ACTIVATION_DURATION);
         int taskIdEffects = Bukkit.getScheduler()
@@ -159,11 +156,5 @@ public class GhostSoulMinecraftSkill extends CooldownMinecraftSkill {
 
     private boolean isInGhostForm(Player player) {
         return isActiveFor(player) && activations.containsKey(player.getUniqueId().toString());
-    }
-
-    @Override
-    protected void startCooldown(Player player) {
-        setCooldown(COOLDOWN);
-        super.startCooldown(player);
     }
 }

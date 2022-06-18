@@ -3,7 +3,8 @@ package skill;
 import data.Skill;
 import lombok.Getter;
 import skill.generic.MinecraftSkill;
-import skill.listener.*;
+import skill.skills.*;
+import skill.skills.spiderqueen.SpiderQueenMinecraftSkill;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,9 @@ public class SkillMapper {
         put(Skill.GHOST_SOUL, GhostSoulMinecraftSkill.class);
         put(Skill.HITMAN, HitmanSkill.class);
         put(Skill.LIFESTEAL, LifestealMinecraftSkill.class);
+        put(Skill.VIRUS, VirusMinecraftSkill.class);
+        put(Skill.SPIDER_QUEEN, SpiderQueenMinecraftSkill.class);
+        put(Skill.DWARF, DwarfMinecraftSkill.class);
     }
 
     private static void put(Skill skill, Class<? extends MinecraftSkill> minecraftSkillClass) {
