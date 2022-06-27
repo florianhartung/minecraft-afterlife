@@ -28,14 +28,15 @@ public class CrystalKingMinecraftSkill extends MinecraftSkill {
             if (MATERIALS.contains(e.getBlock().getType())) {
                 ItemStack itemInMainHand = e.getPlayer().getInventory().getItemInMainHand();
                 if (!itemInMainHand.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
+                    double lootFactor = Math.abs(random.nextGaussian(0, STDDEV));
                     List<ItemStack> drops = e.getBlock()
                             .getDrops(itemInMainHand, e.getPlayer())
                             .stream()
-                            .filter(itemStack -> itemStack.getType() != Material.AIR)
+                            .filter(drop -> drop.getType() != Material.AIR)
+                            .peek(drop -> drop.setAmount((int) Math.round(drop.getAmount() * lootFactor)))
+                            .filter(drop -> drop.getAmount() > 0)
                             .toList();
-                    double lootFactor = Math.abs(random.nextGaussian(0, STDDEV));
 
-                    drops.forEach(drop -> drop.setAmount((int) Math.round(drop.getAmount() * lootFactor)));
                     drops.forEach(drop -> e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), drop));
                 }
             }
