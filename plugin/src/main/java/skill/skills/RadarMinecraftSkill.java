@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
@@ -62,9 +63,7 @@ public class RadarMinecraftSkill extends MinecraftSkill {
     }
 
     private void tick() {
-        activePlayers.stream().map(Bukkit::getPlayer)
-                .filter(Objects::nonNull)
-                .forEach(player -> player.getNearbyEntities(MAX_DISTANCE, MAX_DISTANCE, MAX_DISTANCE).forEach(entity -> sendUpdateEntityMetadataPacket(entity, player)));
+        activePlayers.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> player.getNearbyEntities(MAX_DISTANCE, MAX_DISTANCE, MAX_DISTANCE).forEach(entity -> sendUpdateEntityMetadataPacket(entity, player)));
 
     }
 
@@ -100,5 +99,20 @@ public class RadarMinecraftSkill extends MinecraftSkill {
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isTrackingEntity(Player observer, Player playerUsingRadar) {
+        Location l1 = observer.getLocation();
+        Location l2 = playerUsingRadar.getLocation();
+
+        if (l1.getWorld() == null || l2.getWorld() == null) {
+            return false;
+        }
+
+        if (!l1.getWorld().equals(l2.getWorld())) {
+            return false;
+        }
+
+        return l1.distanceSquared(l2) < MAX_DISTANCE * MAX_DISTANCE;
     }
 }
