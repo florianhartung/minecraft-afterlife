@@ -28,6 +28,7 @@ public class SkillMapper {
         put(Skill.VIRUS, VirusMinecraftSkill.class);
         put(Skill.SPIDER_QUEEN, SpiderQueenMinecraftSkill.class);
         put(Skill.DWARF, DwarfMinecraftSkill.class);
+        put(Skill.ENDURANCE, EnduranceMinecraftSkill.class);
         put(Skill.RADAR, RadarMinecraftSkill.class);
     }
 

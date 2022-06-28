@@ -63,5 +63,8 @@ dwarf:
   effect-duration-per-stage: 100 # 5sec
   exhaustion-duration-per-stage: 600 # 30sec
   exhaustion-mining-fatigue-amplifier: 1 # ingame: Mining Fatigue II
+endurance:
+  ticks-per-stage: 20
+  speed-per-stage: 0.01
 radar:
   max-distance: 10

@@ -19,13 +19,15 @@ public class AttributeMinecraftSkill extends MinecraftSkill {
     private final String name;
     private final AttributeModifier.Operation operation;
     private final double amount;
+    private final boolean autoApply;
 
-    public AttributeMinecraftSkill(Attribute attribute, UUID uuid, String name, double amount, AttributeModifier.Operation operation) {
+    public AttributeMinecraftSkill(Attribute attribute, UUID uuid, String name, double amount, AttributeModifier.Operation operation, boolean autoApply) {
         this.attribute = attribute;
         this.uuid = uuid;
         this.name = name;
         this.amount = amount;
         this.operation = operation;
+        this.autoApply = autoApply;
     }
 
     /**
@@ -103,7 +105,10 @@ public class AttributeMinecraftSkill extends MinecraftSkill {
 
     @Override
     public void apply(Player player) {
-        setAttributeAmount(player, amount);
+        super.apply(player);
+        if (autoApply) {
+            setAttributeAmount(player, amount);
+        }
     }
 
     @Override

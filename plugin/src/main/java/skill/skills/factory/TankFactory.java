@@ -28,6 +28,6 @@ public class TankFactory implements StackableSkillFactory {
     }
 
     private static AttributeMinecraftSkill of(String name, UUID uuid) {
-        return new AttributeMinecraftSkill(Attribute.GENERIC_MAX_HEALTH, uuid, name, AMOUNT, AttributeModifier.Operation.ADD_NUMBER);
+        return new AttributeMinecraftSkill(Attribute.GENERIC_MAX_HEALTH, uuid, name, AMOUNT, AttributeModifier.Operation.ADD_NUMBER, true);
     }
 }
