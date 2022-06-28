@@ -12,7 +12,7 @@ import java.util.UUID;
  * It is a Spigot Listener, which gets registered via the plugin, so all skills can interact with Spigot Events.
  */
 public abstract class MinecraftSkill implements Listener {
-    protected final List<UUID> activePlayers;
+    public final List<UUID> activePlayers;
 
     protected MinecraftSkill() {
         activePlayers = new ArrayList<>();

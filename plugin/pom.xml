@@ -17,9 +17,19 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>https://repo.dmulloy2.net/repository/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.8.0</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.github.florianhartung</groupId>
             <artifactId>persistence</artifactId>
@@ -35,7 +45,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-            <version>5.3.14</version>
+            <version>5.3.20</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -60,8 +70,6 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
-                    <!--suppress UnresolvedMavenProperty -->
-                    <skipAssembly>${env.SKIP_PLUGIN_BUILD}</skipAssembly>
                 </configuration>
                 <executions>
                     <execution>

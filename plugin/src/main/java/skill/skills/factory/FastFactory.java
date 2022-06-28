@@ -26,6 +26,6 @@ public class FastFactory implements StackableSkillFactory {
     }
 
     private static AttributeMinecraftSkill of(String name, UUID uuid) {
-        return new AttributeMinecraftSkill(Attribute.GENERIC_MOVEMENT_SPEED, uuid, name, AMOUNT, AttributeModifier.Operation.ADD_NUMBER);
+        return new AttributeMinecraftSkill(Attribute.GENERIC_MOVEMENT_SPEED, uuid, name, AMOUNT, AttributeModifier.Operation.ADD_NUMBER, true);
     }
 }

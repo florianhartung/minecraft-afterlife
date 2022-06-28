@@ -4,19 +4,19 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import skill.generic.MinecraftSkill;
 import skill.generic.MinecraftSkillTimer;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class SkillInjector {
 
     private final Plugin plugin;
     private final FileConfiguration skillsConfiguration;
+    private Collection<MinecraftSkill> skillInstances;
 
     public SkillInjector(Plugin plugin, FileConfiguration skillsConfiguration) {
         this.plugin = plugin;
@@ -27,6 +27,29 @@ public class SkillInjector {
         injectConfiguration(instance);
         injectPlugin(instance);
         injectTimer(instance);
+        injectSkillInstances(instance);
+    }
+
+    private void injectSkillInstances(Object instance) {
+        Class<?> clazz = instance.getClass();
+
+        List<Field> allFields = getAllFields(clazz);
+        for (Field field : allFields) {
+            InjectSkill injectSkill = field.getAnnotation(InjectSkill.class);
+            if (injectSkill != null) {
+                Class<?> skillClazz = field.getType();
+                Optional<?> optionalMinecraftSkillInstance = skillInstances.stream().filter(minecraftSkill -> minecraftSkill.getClass().equals(skillClazz)).findFirst();
+                optionalMinecraftSkillInstance.ifPresentOrElse(minecraftSkillInstance -> {
+                    try {
+                        field.setAccessible(true);
+                        field.set(instance, minecraftSkillInstance);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                }, () -> System.err.println(clazz.getName() + ": Annotation @InjectSkill can only be used on fields of a type that is a registered MinecraftSkill!"));
+            }
+        }
+
     }
 
     private void injectConfiguration(Object instance) {
@@ -196,5 +219,13 @@ public class SkillInjector {
         }
 
         return fields;
+    }
+
+    public void setSkillInstances(Collection<MinecraftSkill> skillInstances) {
+        this.skillInstances = skillInstances;
+    }
+
+    public Collection<MinecraftSkill> getSkillInstances() {
+        return skillInstances;
     }
 }

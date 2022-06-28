@@ -14,10 +14,7 @@ import org.bukkit.plugin.Plugin;
 import org.springframework.data.util.Pair;
 import skill.generic.MinecraftSkill;
 import skill.generic.MinecraftSkillTimer;
-import skill.injection.ConfigValue;
-import skill.injection.Configurable;
-import skill.injection.InjectPlugin;
-import skill.injection.InjectTimer;
+import skill.injection.*;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -38,6 +35,8 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
     private Plugin plugin;
     @InjectTimer(durationField = "COOLDOWN")
     private MinecraftSkillTimer cooldownTimer;
+    @InjectSkill
+    private RadarMinecraftSkill radarSkill;
 
     private final HashMap<String, Pair<Integer, Integer>> activations = new HashMap<>();
 
@@ -95,7 +94,7 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
                 .stream()
                 .map(uuid -> Bukkit.getPlayer(UUID.fromString(uuid)))
                 .filter(Objects::nonNull)
-                .forEach(p -> player.hidePlayer(plugin, p));
+                .forEach(p -> hidePlayer(p, player));
     }
 
     @EventHandler
@@ -105,7 +104,7 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
                 .stream()
                 .map(uuid -> Bukkit.getPlayer(UUID.fromString(uuid)))
                 .filter(Objects::nonNull)
-                .forEach(p -> player.showPlayer(plugin, p));
+                .forEach(p -> showPlayer(p, player));
     }
 
     @EventHandler
@@ -131,7 +130,7 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
         activations.put(player.getUniqueId().toString(), Pair.of(taskId, taskIdEffects));
 
         Bukkit.getOnlinePlayers()
-                .forEach(p -> p.hidePlayer(plugin, player));
+                .forEach(p -> hidePlayer(player, p));
 
 
         Location location = player.getLocation();
@@ -146,7 +145,7 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
         Bukkit.getScheduler().cancelTask(activations.get(player.getUniqueId().toString()).getSecond());
         activations.remove(player.getUniqueId().toString());
         Bukkit.getOnlinePlayers()
-                .forEach(p -> p.showPlayer(plugin, player));
+                .forEach(p -> showPlayer(player, p));
 
         Location location = player.getLocation();
         World world = player.getWorld();
@@ -156,5 +155,17 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
 
     private boolean isInGhostForm(Player player) {
         return isActiveFor(player) && activations.containsKey(player.getUniqueId().toString());
+    }
+
+    private void hidePlayer(Player playerInGhostSoul, Player observer) {
+        if (radarSkill.isTrackingEntity(observer, playerInGhostSoul)) {
+            return;
+        }
+
+        observer.hidePlayer(plugin, playerInGhostSoul);
+    }
+
+    private void showPlayer(Player playerInGhostSoul, Player observer) {
+        observer.showPlayer(plugin, playerInGhostSoul);
     }
 }

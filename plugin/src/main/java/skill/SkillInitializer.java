@@ -31,8 +31,13 @@ public class SkillInitializer {
             Class<? extends MinecraftSkill> minecraftSkillClass = entry.getValue();
 
             MinecraftSkill instance = getInstanceFromClass(minecraftSkillClass);
-            skillInjector.inject(instance);
             instances.put(skill, instance);
+        }
+
+        skillInjector.setSkillInstances(instances.values());
+
+        for (MinecraftSkill instance : instances.values()) {
+            skillInjector.inject(instance);
         }
 
         instances.putAll(getAllStackableSkills());
