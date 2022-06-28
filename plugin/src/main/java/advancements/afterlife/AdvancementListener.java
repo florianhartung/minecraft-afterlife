@@ -13,6 +13,7 @@ public class AdvancementListener implements Listener {
     protected Plugin plugin;
     protected Advancement advancement;
 
+    @SuppressWarnings("deprecation")
     public AdvancementListener(String advancementNamespace, String advancementKey) {
         NamespacedKey namespacedKey = new NamespacedKey(advancementNamespace, advancementKey);
         this.advancement = Bukkit.getAdvancement(namespacedKey);

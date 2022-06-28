@@ -64,7 +64,6 @@ public class RadarMinecraftSkill extends MinecraftSkill {
 
     private void tick() {
         activePlayers.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> player.getNearbyEntities(MAX_DISTANCE, MAX_DISTANCE, MAX_DISTANCE).forEach(entity -> sendUpdateEntityMetadataPacket(entity, player)));
-
     }
 
     private void sendUpdateEntityMetadataPacket(Entity target, Player observer) {
@@ -85,9 +84,8 @@ public class RadarMinecraftSkill extends MinecraftSkill {
 
     /**
      * DO NOT OPEN
-     *
-     * @param packet
      */
+    @SuppressWarnings("unchecked")
     private void setGlowing(ClientboundSetEntityDataPacket packet) {
         Class<?> clazz = packet.getClass();
         try {

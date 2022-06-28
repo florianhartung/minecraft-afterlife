@@ -22,6 +22,7 @@ public class BloodlustMinecraftSkill extends MinecraftSkill {
     private static int SPEED_AMPLIFIER;
 
     @EventHandler
+    @SuppressWarnings("deprecation")
     public void onKill(EntityDeathEvent e) {
         EntityDamageEvent lastDamage = e.getEntity().getLastDamageCause();
         if (lastDamage instanceof EntityDamageByEntityEvent lastDamageByEntity) {
