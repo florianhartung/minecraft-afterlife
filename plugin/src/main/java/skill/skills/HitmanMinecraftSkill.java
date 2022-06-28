@@ -19,6 +19,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -33,7 +34,7 @@ import skill.injection.InjectPlugin;
 import java.util.*;
 
 @Configurable("hitman")
-public class HitmanSkill extends MinecraftSkill {
+public class HitmanMinecraftSkill extends MinecraftSkill {
     @ConfigValue("max-range")
     private static int MAX_RANGE; // in x,y,z directions (range is calculated as a rectangle around player)
     @ConfigValue("max-angle")
@@ -113,6 +114,18 @@ public class HitmanSkill extends MinecraftSkill {
         }
     }
 
+    @EventHandler
+    public void onTargetDeath(PlayerDeathEvent e) {
+        Optional<Map.Entry<UUID, PlayerStalkInformation>> o = stalkProgresses.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().getTarget().getUniqueId().equals(e.getEntity().getUniqueId()))
+                .findFirst();
+        o.ifPresent(entry -> {
+            stalkProgresses.remove(entry.getKey());
+            removeBossBar(entry.getValue());
+        });
+    }
+
 
     public void updateStalkProgress() {
         activePlayers.forEach(playerUUID -> {
@@ -137,7 +150,7 @@ public class HitmanSkill extends MinecraftSkill {
 
     public void updateStalkProgressForPlayer(Player player) {
         PlayerStalkInformation stalkInfo = stalkProgresses.get(player.getUniqueId());
-        if ((stalkInfo != null && stalkInfo.isInHunt()) || !sneakingPlayers.contains(player.getUniqueId())) {
+        if ((stalkInfo != null && stalkInfo.isInHunt())) {
             return;
         }
 
@@ -153,7 +166,9 @@ public class HitmanSkill extends MinecraftSkill {
                 angleInDegrees *= player.getLocation().distance(targetPlayer.getLocation()); // multiply with distance for better results with a large distance
 
                 if (angleInDegrees < MAX_ANGLE && player.hasLineOfSight(targetPlayer)) {
-                    increaseStalkProgress(player, targetPlayer);
+                    if (sneakingPlayers.contains(player.getUniqueId())) {
+                        increaseStalkProgress(player, targetPlayer);
+                    }
                 } else {
                     decreaseStalkProgress(player, targetPlayer);
                 }

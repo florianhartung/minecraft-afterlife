@@ -23,7 +23,7 @@ public class SkillMapper {
         put(Skill.CRYSTAL_KING, CrystalKingMinecraftSkill.class);
         put(Skill.DIMENSION_JUMPER, DimensionJumperMinecraftSkill.class);
         put(Skill.GHOST_SOUL, GhostSoulMinecraftSkill.class);
-        put(Skill.HITMAN, HitmanSkill.class);
+        put(Skill.HITMAN, HitmanMinecraftSkill.class);
         put(Skill.LIFESTEAL, LifestealMinecraftSkill.class);
         put(Skill.VIRUS, VirusMinecraftSkill.class);
         put(Skill.SPIDER_QUEEN, SpiderQueenMinecraftSkill.class);
