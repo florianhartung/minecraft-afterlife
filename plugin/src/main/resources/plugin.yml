@@ -7,3 +7,4 @@ api-version: 1.18
 commands:
   skills:
     description: Redirects to the skill tree
+depend: [ ProtocolLib ]
