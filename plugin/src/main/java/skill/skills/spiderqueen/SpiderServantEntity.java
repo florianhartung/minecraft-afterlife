@@ -1,6 +1,7 @@
 package skill.skills.spiderqueen;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -11,12 +12,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
@@ -47,6 +48,8 @@ public class SpiderServantEntity extends Spider {
         getAttributes().getInstance(Attributes.ATTACK_DAMAGE).setBaseValue(damage);
         setPos(location.getX(), location.getY(), location.getZ());
         setHealth(getMaxHealth());
+        setCustomName(Component.literal("Spinne von " + ChatColor.GOLD + owner.getDisplayName() + ChatColor.RESET));
+        setCustomNameVisible(false);
         this.persist = false;
 
         this.goalSelector.removeAllGoals();
@@ -61,10 +64,10 @@ public class SpiderServantEntity extends Spider {
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
 
 
-        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, SpiderServantEntity.class, true, livingEntity -> !((SpiderServantEntity) livingEntity).owner.getUUID().equals(owner.getUniqueId())));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, net.minecraft.world.entity.player.Player.class, true, livingEntity -> !livingEntity.getUUID().equals(owner.getUniqueId())));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, livingEntity -> !(livingEntity instanceof SpiderServantEntity)));
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Animal.class, true));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoalWithRange<>(this, SpiderServantEntity.class, true, livingEntity -> !((SpiderServantEntity) livingEntity).owner.getUUID().equals(owner.getUniqueId()), 15));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoalWithRange<>(this, net.minecraft.world.entity.player.Player.class, true, livingEntity -> !livingEntity.getUUID().equals(owner.getUniqueId()), 50));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoalWithRange<>(this, Monster.class, true, livingEntity -> !(livingEntity instanceof SpiderServantEntity), 15));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoalWithRange<>(this, Animal.class, true, 10));
     }
 
     @Override
