@@ -30,6 +30,7 @@ public class SkillMapper {
         put(Skill.DWARF, DwarfMinecraftSkill.class);
         put(Skill.ENDURANCE, EnduranceMinecraftSkill.class);
         put(Skill.RADAR, RadarMinecraftSkill.class);
+        put(Skill.ENERGY_COOKIES, EnergyCookieMinecraftSkill.class);
     }
 
     private static void put(Skill skill, Class<? extends MinecraftSkill> minecraftSkillClass) {

@@ -68,3 +68,8 @@ endurance:
   speed-per-stage: 0.01
 radar:
   max-distance: 10
+energy-cookie:
+  speed-amplifier: 1 # ingame: Speed II
+  speed-duration: 600 # 30sec
+  jump-boost-amplifier: 1 # ingame: Jump Boost II
+  jump-boost-duration: 600 # 30sec
