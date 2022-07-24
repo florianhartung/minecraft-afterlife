@@ -6,6 +6,7 @@ import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -30,6 +31,7 @@ import java.util.stream.Stream;
 public class DwarfMinecraftSkill extends MinecraftSkill {
     private static final int TOTAL_MULTIPLIER = 3;
     private static final Integer[] STAGE_BLOCK_COUNTS = Stream.of(0, 30, 180, 580, 1000, 2000, 3000).map(i -> i * TOTAL_MULTIPLIER).toArray(Integer[]::new);
+    private static final List<Material> FAKE_BLOCKS = List.of(Material.DIAMOND_ORE, Material.GOLD_ORE, Material.EMERALD_ORE, Material.DEEPSLATE_DIAMOND_ORE, Material.DEEPSLATE_GOLD_ORE, Material.DEEPSLATE_EMERALD_ORE, Material.ANCIENT_DEBRIS);
 
     @ConfigValue("effect-duration")
     private int EFFECT_DURATION; // in ticks
@@ -46,6 +48,7 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
     @InjectPlugin
     private Plugin plugin;
 
+    private final Random random = new Random();
     private final Map<UUID, MiningProgress> playerProgresses = new HashMap<>();
 
     @EventHandler
@@ -58,7 +61,7 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         Player player = e.getPlayer();
-        if (isActiveFor(player) && !exhaustionTimer.isActive(player)) {
+        if (isActiveFor(player) && !exhaustionTimer.isActive(player) && !isUsingSilkTouch(player)) {
             int blockValue = getBlockValue(e.getBlock().getType());
             if (blockValue == 1) {
                 addMinedBlock(player);
@@ -66,6 +69,13 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
                 addMinedBlocks(player, blockValue);
             }
         }
+    }
+
+    private boolean isUsingSilkTouch(Player player) {
+        return Optional.of(player.getInventory().getItemInMainHand())
+                .filter(item -> item.getType() != Material.AIR)
+                .map(item -> item.getEnchantments().containsKey(Enchantment.SILK_TOUCH))
+                .orElse(false);
     }
 
     @EventHandler
@@ -165,6 +175,13 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
             player.addPotionEffect(new PotionEffect(entry.getKey(), effectDuration, entry.getValue(), true, false, true));
 
         });
+
+        if (stage == STAGE_BLOCK_COUNTS.length - 1) {
+            if (Math.random() < 0.01) {
+                spawnFakeBlock(player);
+            }
+        }
+
         double threshold = 0.0d;
         if (stage == STAGE_BLOCK_COUNTS.length - 1) {
             threshold = 0.01d;
@@ -178,12 +195,21 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
         }
     }
 
-    private void playRandomCaveSound(Player player) {
-        int dx = (int) (Math.random() - 0.5d) * 10;
-        int dy = (int) (Math.random() - 0.5d) * 5;
-        int dz = (int) (Math.random() - 0.5d) * 10;
+    private void spawnFakeBlock(Player player) {
+        Material randomMaterial = FAKE_BLOCKS.get(random.nextInt(FAKE_BLOCKS.size()));
+        player.spawnParticle(Particle.BLOCK_MARKER, player.getLocation(), 2, 6, 4, 6, randomMaterial.createBlockData());
+    }
 
-        player.playSound(player.getLocation().add(dx, dy, dz), Sound.AMBIENT_CAVE, SoundCategory.AMBIENT, 0.3f, 1.0f);
+    private void playRandomCaveSound(Player player) {
+        player.playSound(randomOffset(player.getLocation(), new Location(null, 10, 5, 10)), Sound.AMBIENT_CAVE, SoundCategory.AMBIENT, 0.3f, 1.0f);
+    }
+
+    private Location randomOffset(Location from, Location maximumOffset) {
+        double dx = (Math.random() - 0.5d) * maximumOffset.getX();
+        double dy = (Math.random() - 0.5d) * maximumOffset.getY();
+        double dz = (Math.random() - 0.5d) * maximumOffset.getZ();
+
+        return from.add(dx, dy, dz);
     }
 
     private void resetMinedBlocks(Player player) {

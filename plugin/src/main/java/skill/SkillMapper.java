@@ -31,6 +31,17 @@ public class SkillMapper {
         put(Skill.ENDURANCE, EnduranceMinecraftSkill.class);
         put(Skill.RADAR, RadarMinecraftSkill.class);
         put(Skill.ENERGY_COOKIES, EnergyCookieMinecraftSkill.class);
+        put(Skill.SATURATED, SaturatedMinecraftSkill.class);
+        put(Skill.INDIAN, SnailMinecraftSkill.class);
+        put(Skill.CARPENTER, CarpenterMinecraftSkill.class);
+        put(Skill.SPRINT_BURST, SprintBurstMinecraftSkill.class);
+        put(Skill.LIEUTENANT, LieutenantMinecraftSkill.class);
+        put(Skill.POISON, PoisonMinecraftSkill.class);
+        put(Skill.FOOL, FoolMinecraftSkill.class);
+        put(Skill.INSECT, InsectMinecraftSkill.class);
+        put(Skill.KARMA, KarmaMinecraftSkill.class);
+        put(Skill.NO_MERCY, NoMercyMinecraftSkill.class);
+        put(Skill.VIBING_CAT, VibingCatMinecraftSkill.class);
     }
 
     private static void put(Skill skill, Class<? extends MinecraftSkill> minecraftSkillClass) {

@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
@@ -58,7 +59,7 @@ public class SpiderServantEntity extends Spider {
         this.goalSelector.addGoal(1, new ClimbOnTopOfPowderSnowGoal(this, this.level));
         this.goalSelector.addGoal(2, new LeapAtTargetGoal(this, 0.5F));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.7D, true));
-        this.goalSelector.addGoal(4, new GenericFollowOwnerGoal(this, this.owner, 1.7D, 4.0F, 10.0F));
+        this.goalSelector.addGoal(4, new GenericFollowOwnerGoal(this, this.owner, 1.7D, 4.0F, 10.0F, 25.0F));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, net.minecraft.world.entity.player.Player.class, 8.0F));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 1.3D));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -114,8 +115,9 @@ public class SpiderServantEntity extends Spider {
             if (super.doHurtTarget(entity)) {
                 LivingEntity target = (LivingEntity) entity;
                 target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, slownessDuration, slownessStrength, false, false), this, EntityPotionEffectEvent.Cause.ATTACK);
-                target.addEffect(new MobEffectInstance(MobEffects.DARKNESS, (slownessDuration - 10 <= 0) ? slownessDuration : (slownessDuration - 10), 0, false, false), this, EntityPotionEffectEvent.Cause.ATTACK);
-                target.addEffect(new MobEffectInstance(MobEffects.JUMP, slownessDuration, 100, false, false), this, EntityPotionEffectEvent.Cause.ATTACK);
+                target.addEffect(new MobEffectInstance(MobEffects.DARKNESS, (slownessDuration <= 10) ? slownessDuration : (slownessDuration - 10), 0, false, false), this, EntityPotionEffectEvent.Cause.ATTACK);
+                target.addEffect(new MobEffectInstance(MobEffects.JUMP, slownessDuration, 250, false, false), this, EntityPotionEffectEvent.Cause.ATTACK);
+                bukkitEntity.getWorld().spawnParticle(Particle.BLOCK_MARKER, target.getBukkitEntity().getLocation().add(0, 1, 0), 8, 1.0, 0.5, 1.0, Material.COBWEB.createBlockData());
                 dead = true;
                 this.discard();
                 return true;
