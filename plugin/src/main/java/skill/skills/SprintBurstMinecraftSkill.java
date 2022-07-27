@@ -1,5 +1,6 @@
 package skill.skills;
 
+import hud.HudManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Particle;
@@ -32,7 +33,7 @@ public class SprintBurstMinecraftSkill extends MinecraftSkill {
     private static int SPRINT_COOLDOWN;
     @InjectPlugin
     private Plugin plugin;
-    @InjectTimer(durationField = "SPRINT_COOLDOWN")
+    @InjectTimer(durationField = "SPRINT_COOLDOWN", hudEntry = HudManager.HudEntry.SPRINT_BURST)
     private MinecraftSkillTimer cooldownTimer;
     @InjectTimer(durationField = "SPRINT_DURATION", onTimerFinished = "cancelParticleTimer")
     private MinecraftSkillTimer particleTimer;
@@ -52,6 +53,8 @@ public class SprintBurstMinecraftSkill extends MinecraftSkill {
 
         if (!cooldownTimer.isActive(e.getPlayer())) {
             startSprintEffect(e.getPlayer());
+        } else {
+            cooldownTimer.cancel(e.getPlayer());
         }
     }
 
@@ -88,9 +91,25 @@ public class SprintBurstMinecraftSkill extends MinecraftSkill {
     }
 
     public void cancelParticleTimer(Player player) {
-        if (sprintParticleTasks.containsKey(player.getUniqueId())) {
-            Bukkit.getScheduler().cancelTask(sprintParticleTasks.get(player.getUniqueId()));
-            sprintParticleTasks.remove(player.getUniqueId());
+        HudManager.set(player, HudManager.HudEntry.SPRINT_BURST, 0);
+        UUID uuid = player.getUniqueId();
+        if (sprintParticleTasks.containsKey(uuid)) {
+            Bukkit.getScheduler().cancelTask(sprintParticleTasks.get(uuid));
+            sprintParticleTasks.remove(uuid);
         }
+    }
+
+    @Override
+    public void apply(Player player) {
+        super.apply(player);
+
+        HudManager.set(player, HudManager.HudEntry.SPRINT_BURST, 7);
+    }
+
+    @Override
+    public void remove(Player player) {
+        super.remove(player);
+        cooldownTimer.cancel(player);
+        HudManager.remove(player, HudManager.HudEntry.SPRINT_BURST);
     }
 }

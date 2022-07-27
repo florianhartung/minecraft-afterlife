@@ -25,4 +25,8 @@ public class Util {
         Vector direction = new Vector(0, 0, 0);
         return l1.clone().setDirection(direction).equals(l2.clone().setDirection(direction));
     }
+
+    public static boolean isNighttime(long time) {
+        return time < 23658 && time > 12542;
+    }
 }

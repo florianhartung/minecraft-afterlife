@@ -1,5 +1,6 @@
 package skill.skills;
 
+import hud.HudManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,7 +34,7 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
     private static int STEP_INTERVAL; // in ticks
     @InjectPlugin
     private Plugin plugin;
-    @InjectTimer(durationField = "COOLDOWN")
+    @InjectTimer(durationField = "COOLDOWN", hudEntry = HudManager.HudEntry.GHOST_SOUL)
     private MinecraftSkillTimer cooldownTimer;
     @InjectSkill
     private RadarMinecraftSkill radarSkill;
@@ -167,5 +168,19 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
 
     private void showPlayer(Player playerInGhostSoul, Player observer) {
         observer.showPlayer(plugin, playerInGhostSoul);
+    }
+
+    @Override
+    public void apply(Player player) {
+        super.apply(player);
+
+        HudManager.set(player, HudManager.HudEntry.GHOST_SOUL, 7);
+    }
+
+    @Override
+    public void remove(Player player) {
+        super.remove(player);
+        cooldownTimer.cancel(player);
+        HudManager.remove(player, HudManager.HudEntry.GHOST_SOUL);
     }
 }

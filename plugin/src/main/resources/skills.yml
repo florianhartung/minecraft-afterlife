@@ -1,3 +1,8 @@
+global:
+  regeneration:
+    regen-chance:
+      day: 0.5
+      night: 0.2
 adrenaline:
   cooldown: 600 # 30sec
   heal-duration: 20 # 1sec
@@ -23,7 +28,7 @@ crystal-king:
 dimension-jumper:
   invincibility-duration: 600 # 30sec
 ghost-soul:
-  cooldown: 36000 # 30min
+  cooldown: 18000 # 15min
   activation-duration: 60 # 3sec
   activation-threshold: 6.0
   step-interval: 10 # 0.5sec
@@ -102,6 +107,12 @@ insect:
 karma:
   damage-reflection-chance: 0.33
 no-mercy:
-  execution-threshold: 10 #  5 hearts
+  execution-threshold: 2 #  1 heart
 vibing-cat:
   regeneration-amplifier: 0
+werewolf:
+  speed-amount: 0.03
+  additional-damage: 3
+  default-world-name: world
+  weakness-aura-amplifier: 0 # ingame: Weakness I
+  weakness-aura-range: 20.0

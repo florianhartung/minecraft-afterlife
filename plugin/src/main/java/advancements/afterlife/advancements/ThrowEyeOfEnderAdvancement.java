@@ -15,6 +15,9 @@ public class ThrowEyeOfEnderAdvancement extends AdvancementListener {
     public void onThrow(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (e.getItem() != null && e.getItem().getType() == Material.ENDER_EYE) {
+                if (e.getClickedBlock() != null && e.getClickedBlock().getType() == Material.END_PORTAL_FRAME) {
+                    return;
+                }
                 grantAdvancement(e.getPlayer());
             }
         }

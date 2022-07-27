@@ -1,5 +1,6 @@
 package skill.skills;
 
+import hud.HudManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -18,7 +19,7 @@ public class BarrierMinecraftSkill extends MinecraftSkill {
     private double ABSORPTION_AMOUNT;
     @ConfigValue("charge-time")
     private int CHARGE_TIME;
-    @InjectTimer(durationField = "CHARGE_TIME", onTimerFinished = "onChargingFinished")
+    @InjectTimer(durationField = "CHARGE_TIME", onTimerFinished = "onChargingFinished", hudEntry = HudManager.HudEntry.BARRIER)
     private MinecraftSkillTimer chargingTimer;
 
     @Override
@@ -26,6 +27,13 @@ public class BarrierMinecraftSkill extends MinecraftSkill {
         super.apply(player);
 
         chargingTimer.start(player);
+    }
+
+    @Override
+    public void remove(Player player) {
+        super.remove(player);
+        chargingTimer.cancel(player);
+        HudManager.remove(player, HudManager.HudEntry.BARRIER);
     }
 
     @EventHandler

@@ -1,6 +1,7 @@
 package skill;
 
 import data.Skill;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import skill.generic.MinecraftSkill;
@@ -11,6 +12,7 @@ import skill.skills.factory.StackableSkillFactory;
 import skill.skills.factory.TankFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +25,9 @@ public class SkillInitializer {
         this.skillInjector = new SkillInjector(plugin, skillsConfiguration);
     }
 
-    public Map<Skill, ? extends MinecraftSkill> initializeSkills(Map<Skill, Class<? extends MinecraftSkill>> minecraftSkillClasses) throws SkillInitializeException {
+    public Pair<Map<Skill, ? extends MinecraftSkill>, List<? extends MinecraftSkill>> initializeSkills(Map<Skill, Class<? extends MinecraftSkill>> minecraftSkillClasses, List<Class<? extends MinecraftSkill>> globalModifierClasses) throws SkillInitializeException {
         Map<Skill, MinecraftSkill> instances = new HashMap<>();
+        List<MinecraftSkill> globalModifiers = new ArrayList<>();
 
         for (Map.Entry<Skill, Class<? extends MinecraftSkill>> entry : minecraftSkillClasses.entrySet()) {
             Skill skill = entry.getKey();
@@ -34,15 +37,20 @@ public class SkillInitializer {
             instances.put(skill, instance);
         }
 
-        skillInjector.setSkillInstances(instances.values());
-
-        for (MinecraftSkill instance : instances.values()) {
-            skillInjector.inject(instance);
+        for (Class<? extends MinecraftSkill> clazz : globalModifierClasses) {
+            MinecraftSkill instance = getInstanceFromClass(clazz);
+            globalModifiers.add(instance);
         }
+
+        List<MinecraftSkill> allInstances = new ArrayList<>(globalModifiers);
+        allInstances.addAll(instances.values());
+        skillInjector.setSkillInstances(allInstances);
+
+        allInstances.forEach(skillInjector::inject);
 
         instances.putAll(getAllStackableSkills());
 
-        return instances;
+        return Pair.of(instances, globalModifiers);
     }
 
     private Map<Skill, MinecraftSkill> getAllStackableSkills() {

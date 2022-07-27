@@ -8,3 +8,4 @@ parent-required-advancement-namespaces:
 skillpoints-advancement-namespaces:
   - afterlife
   - afterlifetest
+end-blocked: true

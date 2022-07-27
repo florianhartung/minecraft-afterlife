@@ -1,5 +1,6 @@
 package skill.injection;
 
+import hud.HudManager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -200,6 +201,10 @@ public class SkillInjector {
                 } catch (NoSuchMethodException e) {
                     e.printStackTrace();
                 }
+            }
+
+            if (injectTimer.hudEntry() != HudManager.HudEntry.NONE) {
+                timer.setHudEntry(injectTimer.hudEntry());
             }
 
             field.setAccessible(true);

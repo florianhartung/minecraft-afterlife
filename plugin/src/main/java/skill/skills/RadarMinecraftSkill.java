@@ -4,6 +4,8 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import config.PlayerDataConfig;
+import main.ChatHelper;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
@@ -11,6 +13,8 @@ import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
@@ -18,20 +22,23 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import skill.generic.MinecraftSkill;
+import skill.injection.Command;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
 import skill.injection.InjectPlugin;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Configurable("radar")
-public class RadarMinecraftSkill extends MinecraftSkill {
+@Command("radar")
+public class RadarMinecraftSkill extends MinecraftSkill implements CommandExecutor {
     @ConfigValue("max-distance")
     private static double MAX_DISTANCE;
     @InjectPlugin(postInject = "startTickTimer")
     private static Plugin plugin;
+
+    private final Set<UUID> activeForPlayers = new HashSet<>();
 
     @SuppressWarnings("unused")
     public void startTickTimer() {
@@ -40,7 +47,7 @@ public class RadarMinecraftSkill extends MinecraftSkill {
             @Override
             public void onPacketSending(PacketEvent event) {
                 Player player = event.getPlayer();
-                if (!isActiveFor(player)) {
+                if (!isActiveFor(player) || !isRadarEnabled(player)) {
                     return;
                 }
 
@@ -111,6 +118,44 @@ public class RadarMinecraftSkill extends MinecraftSkill {
             return false;
         }
 
-        return l1.distanceSquared(l2) < MAX_DISTANCE * MAX_DISTANCE;
+        return l1.distanceSquared(l2) < MAX_DISTANCE * MAX_DISTANCE && isActiveFor(observer);
+    }
+
+    @Override
+    public boolean onCommand(CommandSender commandSender, org.bukkit.command.Command command, String s, String[] strings) {
+        if (!(commandSender instanceof Player player)) {
+            return false;
+        }
+
+        if (!command.getName().equalsIgnoreCase("radar")) {
+            return false;
+        }
+
+        if (!isActiveFor(player)) {
+            ChatHelper.sendMessage(player, "Hierfür musst die Fähigkeit Radar besitzen");
+            return true;
+        }
+
+        PlayerDataConfig.PlayerData data = PlayerDataConfig.get(player);
+        data.setRadarEnabled(!data.isRadarEnabled());
+        PlayerDataConfig.set(player, data);
+        if (data.isRadarEnabled()) {
+            activeForPlayers.add(player.getUniqueId());
+        } else {
+            activeForPlayers.remove(player.getUniqueId());
+        }
+
+        return true;
+    }
+
+    private boolean isRadarEnabled(Player player) {
+        if (!activeForPlayers.contains(player.getUniqueId())) {
+            if (PlayerDataConfig.get(player).isRadarEnabled()) {
+                activeForPlayers.add(player.getUniqueId());
+            }
+            return activeForPlayers.contains(player.getUniqueId());
+        } else {
+            return true;
+        }
     }
 }

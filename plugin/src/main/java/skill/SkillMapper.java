@@ -3,18 +3,25 @@ package skill;
 import data.Skill;
 import lombok.Getter;
 import skill.generic.MinecraftSkill;
+import skill.globalmodifiers.BlockedEnd;
+import skill.globalmodifiers.NaturalRegeneration;
 import skill.skills.*;
 import skill.skills.spiderqueen.SpiderQueenMinecraftSkill;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SkillMapper {
     @Getter
     private static final Map<Skill, Class<? extends MinecraftSkill>> minecraftSkillClasses;
+    @Getter
+    private static final List<Class<? extends MinecraftSkill>> globalModifiers;
 
     static {
         minecraftSkillClasses = new HashMap<>();
+        globalModifiers = new ArrayList<>();
 
         put(Skill.ADRENALINE, AdrenalineMinecraftSkill.class);
         put(Skill.BACKSTAB, BackstabMinecraftSkill.class);
@@ -42,6 +49,10 @@ public class SkillMapper {
         put(Skill.KARMA, KarmaMinecraftSkill.class);
         put(Skill.NO_MERCY, NoMercyMinecraftSkill.class);
         put(Skill.VIBING_CAT, VibingCatMinecraftSkill.class);
+        put(Skill.WEREWOLF, WerewolfMinecraftSkill.class);
+
+        globalModifiers.add(NaturalRegeneration.class);
+        globalModifiers.add(BlockedEnd.class);
     }
 
     private static void put(Skill skill, Class<? extends MinecraftSkill> minecraftSkillClass) {
