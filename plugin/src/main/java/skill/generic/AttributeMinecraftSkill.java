@@ -113,6 +113,8 @@ public class AttributeMinecraftSkill extends MinecraftSkill {
 
     @Override
     public void remove(Player player) {
+        super.remove(player);
+
         removeAttribute(player);
     }
 }

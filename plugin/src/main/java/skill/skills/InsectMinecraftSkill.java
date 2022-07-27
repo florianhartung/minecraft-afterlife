@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffectType;
 import skill.generic.AttributeMinecraftSkill;
 import skill.generic.MinecraftSkillTimer;
 import skill.injection.ConfigValue;
@@ -63,7 +62,8 @@ public class InsectMinecraftSkill extends AttributeMinecraftSkill {
 
     @EventHandler
     public void onRunOnGrass(PlayerMoveEvent e) {
-        if (!isActiveFor(e.getPlayer())) {
+        Player player = e.getPlayer();
+        if (!isActiveFor(player)) {
             return;
         }
 
@@ -71,19 +71,22 @@ public class InsectMinecraftSkill extends AttributeMinecraftSkill {
             return;
         }
 
-        Material blockBelow = e.getPlayer().getLocation().add(0, -1, 0).getBlock().getType();
-        if (!INSECT_GROUND_MATERIALS.contains(blockBelow)) {
+        Material blockBelow = player.getLocation().add(0, -1, 0).getBlock().getType();
+        if (blockBelow == Material.AIR || !blockBelow.isSolid()) {
             return;
         }
 
-        e.getPlayer().getWorld().spawnParticle(Particle.REDSTONE, e.getTo(), 3, 0.2, 0.05, 0.2, new Particle.DustOptions(Color.fromRGB(20, 100, 0), 0.75f));
-        setAttributeAmount(e.getPlayer(), MOVEMENT_SPEED);
-
-        if (e.getPlayer().getPotionEffect(PotionEffectType.SLOW_FALLING) != null) {
-            speedRemoveTimer.start(e.getPlayer(), 40);
-        } else {
-            speedRemoveTimer.start(e.getPlayer());
+        if (!INSECT_GROUND_MATERIALS.contains(blockBelow)) {
+            if (!speedRemoveTimer.isActive(player)) {
+                speedRemoveTimer.start(player, 40);
+            }
+            return;
         }
+
+        speedRemoveTimer.cancel(player);
+
+        player.getWorld().spawnParticle(Particle.REDSTONE, e.getTo(), 3, 0.2, 0.05, 0.2, new Particle.DustOptions(Color.fromRGB(20, 100, 0), 0.75f));
+        setAttributeAmount(player, MOVEMENT_SPEED);
     }
 
     @SuppressWarnings("unused")
