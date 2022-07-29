@@ -50,6 +50,7 @@ public class SkillMapper {
         put(Skill.NO_MERCY, NoMercyMinecraftSkill.class);
         put(Skill.VIBING_CAT, VibingCatMinecraftSkill.class);
         put(Skill.WEREWOLF, WerewolfMinecraftSkill.class);
+        put(Skill.DUSKBLADE, DuskbladeMinecraftSkill.class);
 
         globalModifiers.add(NaturalRegeneration.class);
         globalModifiers.add(BlockedEnd.class);

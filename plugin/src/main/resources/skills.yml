@@ -116,3 +116,6 @@ werewolf:
   default-world-name: world
   weakness-aura-amplifier: 0 # ingame: Weakness I
   weakness-aura-range: 20.0
+duskblade:
+  invisibility-duration: 60 # 2sec
+  effects-delay: 5 #0.5sec
