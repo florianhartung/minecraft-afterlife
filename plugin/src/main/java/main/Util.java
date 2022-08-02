@@ -1,6 +1,8 @@
 package main;
 
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -24,6 +26,10 @@ public class Util {
 
         Vector direction = new Vector(0, 0, 0);
         return l1.clone().setDirection(direction).equals(l2.clone().setDirection(direction));
+    }
+
+    public static double healthPercentage(Player player) {
+        return player.getHealth() / player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
     }
 
     public static boolean isNighttime(long time) {

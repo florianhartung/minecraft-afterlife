@@ -24,7 +24,7 @@ public class EnergyCookieMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onConsumeCookie(PlayerItemConsumeEvent e) {
-        if (!isActiveFor(e.getPlayer())) {
+        if (!isActiveFor(e.getPlayer()) || e.isCancelled()) {
             return;
         }
 

@@ -21,7 +21,7 @@ public class SaturatedMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onConsume(PlayerItemConsumeEvent e) {
-        if (!isActiveFor(e.getPlayer())) {
+        if (!isActiveFor(e.getPlayer()) || e.isCancelled()) {
             return;
         }
 

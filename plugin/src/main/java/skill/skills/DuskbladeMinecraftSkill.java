@@ -6,6 +6,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -70,14 +71,14 @@ public class DuskbladeMinecraftSkill extends MinecraftSkill {
         invisibilityTasks.keySet().stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> e.getPlayer().hidePlayer(plugin, player));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onDamage(EntityDamageEvent e) {
         if (e instanceof Player player && isInvisible(player)) {
             e.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onDealDamage(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Player player && isInvisible(player)) {
             e.setCancelled(true);
@@ -97,14 +98,14 @@ public class DuskbladeMinecraftSkill extends MinecraftSkill {
         stopInvisibility(player);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onBlockBreak(BlockBreakEvent e) {
         if (isInvisible(e.getPlayer())) {
             e.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onBlockPlace(BlockPlaceEvent e) {
         if (isInvisible(e.getPlayer())) {
             e.setCancelled(true);
@@ -133,7 +134,7 @@ public class DuskbladeMinecraftSkill extends MinecraftSkill {
     }
 
     private void stopInvisibility(Player player) {
-        Bukkit.getScheduler().cancelTask(invisibilityTasks.remove(player.getUniqueId()));
+        Optional.ofNullable(invisibilityTasks.remove(player.getUniqueId())).ifPresent(Bukkit.getScheduler()::cancelTask);
         showPlayer(player);
     }
 

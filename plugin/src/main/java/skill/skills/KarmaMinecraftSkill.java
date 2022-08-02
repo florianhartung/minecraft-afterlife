@@ -23,7 +23,7 @@ public class KarmaMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onBlockDamage(EntityDamageByEntityEvent e) {
-        if (!(e.getEntity() instanceof Player player) || !(e.getDamager() instanceof LivingEntity damager)) {
+        if (!(e.getEntity() instanceof Player player) || !(e.getDamager() instanceof LivingEntity damager) || e.isCancelled()) {
             return;
         }
 

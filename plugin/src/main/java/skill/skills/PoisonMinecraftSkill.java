@@ -30,7 +30,7 @@ public class PoisonMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent e) {
-        if (!(e.getDamager() instanceof Player player)) {
+        if (!(e.getDamager() instanceof Player player) || e.isCancelled()) {
             return;
         }
 

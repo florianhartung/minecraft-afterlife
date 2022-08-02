@@ -22,7 +22,7 @@ public class CrystalKingMinecraftSkill extends MinecraftSkill {
 
     private final Random random = new Random();
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent e) {
         if (isActiveFor(e.getPlayer()) && !e.isCancelled()) {
             if (MATERIALS.contains(e.getBlock().getType())) {

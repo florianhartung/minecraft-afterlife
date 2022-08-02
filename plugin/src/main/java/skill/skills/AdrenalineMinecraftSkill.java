@@ -30,7 +30,7 @@ public class AdrenalineMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player player && isActiveFor(player) && !cooldownTimer.isActive(player)) {
+        if (e.getEntity() instanceof Player player && isActiveFor(player) && !cooldownTimer.isActive(player) && !e.isCancelled()) {
             double finalHealth = player.getHealth() - e.getFinalDamage();
             if (finalHealth > 0 && finalHealth <= ACTIVATION_HEALTH) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, HEAL_DURATION, HEAL_AMPLIFIER, false, true));

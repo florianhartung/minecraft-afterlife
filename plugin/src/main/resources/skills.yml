@@ -119,3 +119,20 @@ werewolf:
 duskblade:
   invisibility-duration: 60 # 2sec
   effects-delay: 5 #0.5sec
+lindworm:
+  lava-damage-modifier: 0.5
+  water-damage-tick: 2.0 # 1 heart per second
+  damage-amplifiers:
+    nether: 0.5
+    burning: 0.25
+    rain: -0.25
+    water: -0.5
+    minimum-damage: 0.25
+reaper:
+  stun-duration: 40 # 5sec
+  health-stun-threshold: 0.3 # 30% of maximum health
+nazgul:
+  health-percentage-disable-threshold: 0.7
+  maximum-effect-duration: 200 # 10sec
+  wither-amplifier: 1 # ingame: Wither I
+  mining-fatigue-amplifier: 1 # ingame: Mining Fatigue II

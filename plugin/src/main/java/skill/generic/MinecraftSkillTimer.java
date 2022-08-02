@@ -80,6 +80,10 @@ public class MinecraftSkillTimer {
         return removedPlayers;
     }
 
+    public Set<UUID> players() {
+        return taskIds.keySet();
+    }
+
     public boolean isActive(Player player) {
         return taskIds.containsKey(player.getUniqueId());
     }

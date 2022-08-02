@@ -22,7 +22,7 @@ public class NoMercyMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
-        if (!(e.getDamager() instanceof Player player) || !(e.getEntity() instanceof LivingEntity target)) {
+        if (!(e.getDamager() instanceof Player player) || !(e.getEntity() instanceof LivingEntity target) || e.isCancelled()) {
             return;
         }
 

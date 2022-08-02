@@ -34,7 +34,7 @@ public class CarpenterMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onSaplingPlace(BlockPlaceEvent e) {
-        if (!isActiveFor(e.getPlayer())) {
+        if (!isActiveFor(e.getPlayer()) || e.isAsynchronous()) {
             return;
         }
 

@@ -59,7 +59,7 @@ public class WerewolfMinecraftSkill extends AttributeMinecraftSkill {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onDamage(EntityDamageByEntityEvent e) {
-        if (!(e.getDamager() instanceof Player player) || !(e.getEntity() instanceof LivingEntity target)) {
+        if (!(e.getDamager() instanceof Player player) || !(e.getEntity() instanceof LivingEntity target) || e.isCancelled()) {
             return;
         }
 

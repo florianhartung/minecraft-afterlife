@@ -26,7 +26,7 @@ public class DimensionJumperMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
-        if (!(e.getEntity() instanceof Player player) || !isActiveFor(player)) {
+        if (!(e.getEntity() instanceof Player player) || !isActiveFor(player) || e.isCancelled()) {
             return;
         }
 

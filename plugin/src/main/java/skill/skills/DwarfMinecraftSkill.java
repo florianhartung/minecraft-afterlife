@@ -60,6 +60,10 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+
         Player player = e.getPlayer();
         if (isActiveFor(player) && !exhaustionTimer.isActive(player) && !isUsingSilkTouch(player)) {
             int blockValue = getBlockValue(e.getBlock().getType());
@@ -92,6 +96,10 @@ public class DwarfMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onMilkConsume(PlayerItemConsumeEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+
         if (e.getItem().getType() != Material.MILK_BUCKET) {
             return;
         }

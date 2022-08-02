@@ -8,6 +8,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import skill.generic.AttributeMinecraftSkill;
@@ -37,9 +38,9 @@ public class InsectMinecraftSkill extends AttributeMinecraftSkill {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onFall(EntityDamageEvent e) {
-        if (!(e.getEntity() instanceof Player player)) {
+        if (!(e.getEntity() instanceof Player player) || e.isCancelled()) {
             return;
         }
 

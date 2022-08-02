@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import skill.generic.MinecraftSkill;
@@ -28,7 +27,7 @@ public class BloodlustMinecraftSkill extends MinecraftSkill {
         if (lastDamage instanceof EntityDamageByEntityEvent lastDamageByEntity) {
             if (lastDamageByEntity.getDamager() instanceof Player player && isActiveFor(player)) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, SPEED_DURATION, SPEED_AMPLIFIER, true));
-                e.getEntity().getWorld().spawnParticle(Particle.BLOCK_CRACK, e.getEntity().getLocation().add(0, 1, 0), 10, 0.3, 0.5, 0.3, new MaterialData(Material.REDSTONE_BLOCK));
+                e.getEntity().getWorld().spawnParticle(Particle.BLOCK_CRACK, e.getEntity().getLocation().add(0, 1, 0), 10, 0.3, 0.5, 0.3, Material.REDSTONE_BLOCK.createBlockData());
             }
         }
     }

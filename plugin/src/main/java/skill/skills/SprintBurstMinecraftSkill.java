@@ -42,7 +42,7 @@ public class SprintBurstMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onMove(PlayerToggleSprintEvent e) {
-        if (!isActiveFor(e.getPlayer())) {
+        if (!isActiveFor(e.getPlayer()) || e.isCancelled()) {
             return;
         }
 

@@ -33,7 +33,7 @@ public class SnailMinecraftSkill extends AttributeMinecraftSkill {
 
     @EventHandler
     public void onToggleSneak(PlayerToggleSneakEvent e) {
-        if (!isActiveFor(e.getPlayer())) {
+        if (!isActiveFor(e.getPlayer()) || e.isCancelled()) {
             return;
         }
 
@@ -53,18 +53,17 @@ public class SnailMinecraftSkill extends AttributeMinecraftSkill {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
-        if (!isActiveFor(e.getPlayer())) {
+        if (!isActiveFor(e.getPlayer()) || e.isCancelled()) {
             return;
         }
 
-        if (e.getTo() == null || !Util.isTheSameLocation(e.getFrom(), e.getTo())) {
+        if (e.getTo() == null || Util.isTheSameLocation(e.getFrom(), e.getTo())) {
             return;
         }
 
-        if (Math.random() > 0.02) {
-            e.getTo().getWorld().spawnParticle(Particle.WAX_OFF, e.getTo(), 2, 2, 0.1d, 0.05d, 0.1d);
+        if (e.getPlayer().isSneaking() && Math.random() < 0.02) {
+            e.getTo().getWorld().spawnParticle(Particle.WAX_OFF, e.getTo(), 2, 0.1d, 0.05d, 0.1d);
         }
-
     }
 
 }

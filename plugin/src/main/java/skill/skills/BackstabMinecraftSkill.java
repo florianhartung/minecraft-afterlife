@@ -18,6 +18,10 @@ public class BackstabMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onDamageEntity(EntityDamageByEntityEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+
         if (e.getDamager() instanceof Player player && isActiveFor(player)) {
             Location targetLocation = e.getEntity().getLocation();
             Location damagerLocation = e.getDamager().getLocation();
