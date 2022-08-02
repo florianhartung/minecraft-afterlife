@@ -39,7 +39,7 @@ public class SkillMapper {
         put(Skill.RADAR, RadarMinecraftSkill.class);
         put(Skill.ENERGY_COOKIES, EnergyCookieMinecraftSkill.class);
         put(Skill.SATURATED, SaturatedMinecraftSkill.class);
-        put(Skill.INDIAN, SnailMinecraftSkill.class);
+        put(Skill.SNAIL, SnailMinecraftSkill.class);
         put(Skill.CARPENTER, CarpenterMinecraftSkill.class);
         put(Skill.SPRINT_BURST, SprintBurstMinecraftSkill.class);
         put(Skill.LIEUTENANT, LieutenantMinecraftSkill.class);
@@ -55,6 +55,7 @@ public class SkillMapper {
         put(Skill.REAPER, ReaperMinecraftSkill.class);
         put(Skill.MASOCHISTIC, MasochisticMinecraftSkill.class);
         put(Skill.NAZGUL, NazgulMinecraftSkill.class);
+        put(Skill.HEAVY_METAL, HeavyMetalMinecraftSkill.class);
 
         globalModifiers.add(NaturalRegeneration.class);
         globalModifiers.add(BlockedEnd.class);

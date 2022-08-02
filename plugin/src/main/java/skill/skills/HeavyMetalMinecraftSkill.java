@@ -13,10 +13,8 @@ import skill.injection.Configurable;
 import java.util.List;
 import java.util.Random;
 
-import static skill.skills.HeavyMetalMinecraftSkill.duplicateBlockBreakDrops;
-
-@Configurable("crystal-king")
-public class CrystalKingMinecraftSkill extends MinecraftSkill {
+@Configurable("heavy-metal")
+public class HeavyMetalMinecraftSkill extends MinecraftSkill {
     @ConfigValue(value = "materials", mapper = "mapMaterials")
     private List<Material> MATERIALS;
     @ConfigValue("stddev")
@@ -35,6 +33,18 @@ public class CrystalKingMinecraftSkill extends MinecraftSkill {
                 }
             }
         }
+    }
+
+    public static void duplicateBlockBreakDrops(BlockBreakEvent e, ItemStack tool, double factor) {
+        List<ItemStack> drops = e.getBlock()
+                .getDrops(tool, e.getPlayer())
+                .stream()
+                .filter(drop -> drop.getType() != Material.AIR)
+                .peek(drop -> drop.setAmount((int) Math.round(drop.getAmount() * factor)))
+                .filter(drop -> drop.getAmount() > 0)
+                .toList();
+
+        drops.forEach(drop -> e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), drop));
     }
 
     @SuppressWarnings("unused")

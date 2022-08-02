@@ -1,6 +1,7 @@
 package ui.view;
 
 import com.vaadin.flow.component.DetachEvent;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -179,7 +180,7 @@ public class SkillsView extends VerticalLayout implements HasUrlParameter<String
     public void checkTokenValidity() {
         if (currentToken != null) {
             if (tokenController.getToken(currentToken.getTokenCode()).getBody() == null) {
-                error("Du musst dich ingame in der Nähe eines Commandblocks aufhalten, um diese Seite weiter nutzen zu können");
+                UI.getCurrent().getPage().executeJs("close();");
             }
         }
     }
