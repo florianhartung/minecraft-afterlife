@@ -344,7 +344,7 @@
       "label": "Radar",
       "x": 517,
       "y": 305,
-      "description": "Spieler und Mobs in deiner Umgebung werden aufgedeckt (Umschalten mit /radar).",
+      "description": "Spieler und Mobs in deiner Umgebung werden aufgedeckt (Umschaltbar mit /radar).",
       "skillName": "RADAR",
       "color": "#c4af70",
       "icon": "icons/Radar.webp"

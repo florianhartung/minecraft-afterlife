@@ -2,7 +2,6 @@ package ui.view;
 
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.*;
@@ -38,7 +37,7 @@ public class SkillsView extends VerticalLayout implements HasUrlParameter<String
     private final TokenController tokenController;
 
     private final SkillTree skillTree;
-    private Button resetSkillsButton;
+//    private Button resetSkillsButton;
 
     private PlayerEntity currentPlayer;
 
@@ -57,7 +56,7 @@ public class SkillsView extends VerticalLayout implements HasUrlParameter<String
 
         init();
 
-        add(skillTree, resetSkillsButton);
+        add(skillTree /* , resetSkillsButton*/);
     }
 
 
@@ -107,6 +106,11 @@ public class SkillsView extends VerticalLayout implements HasUrlParameter<String
         }
         currentToken = optionalTokenEntity.get();
 
+
+        UI.getCurrent().getLoadingIndicatorConfiguration().setFirstDelay(3000);
+        UI.getCurrent().getLoadingIndicatorConfiguration().setSecondDelay(4000);
+        UI.getCurrent().getLoadingIndicatorConfiguration().setThirdDelay(10000);
+
         reloadData();
     }
 
@@ -135,7 +139,7 @@ public class SkillsView extends VerticalLayout implements HasUrlParameter<String
         setPadding(false);
         setMargin(false);
 
-        resetSkillsButton = new Button("Reset skills");
+        /* resetSkillsButton = new Button("Reset skills");
         resetSkillsButton.getStyle()
                 .set("position", "absolute")
                 .set("top", "0")
@@ -143,7 +147,7 @@ public class SkillsView extends VerticalLayout implements HasUrlParameter<String
                 .set("color", "white")
                 .set("font-size", "1.5em")
                 .set("background-color", "#fff9");
-        resetSkillsButton.addClickListener(event -> resetSkills());
+        resetSkillsButton.addClickListener(event -> resetSkills()); */
     }
 
     private void loadSkillTree() {
