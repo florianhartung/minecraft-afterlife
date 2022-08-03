@@ -75,7 +75,7 @@ public class HitmanMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onToggleSneak(PlayerToggleSneakEvent e) {
-        if (!isActiveFor(e.getPlayer())) {
+        if (!isActiveFor(e.getPlayer()) || e.isCancelled()) {
             return;
         }
 
@@ -104,6 +104,10 @@ public class HitmanMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+
         if (e.getDamager() instanceof Player damager) {
             if (e.getEntity() instanceof Player target) {
                 PlayerStalkInformation stalkInfo = stalkProgresses.get(damager.getUniqueId());

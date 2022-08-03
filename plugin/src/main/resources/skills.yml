@@ -1,3 +1,8 @@
+global:
+  regeneration:
+    regen-chance:
+      day: 0.5
+      night: 0.2
 adrenaline:
   cooldown: 600 # 30sec
   heal-duration: 20 # 1sec
@@ -23,7 +28,7 @@ crystal-king:
 dimension-jumper:
   invincibility-duration: 600 # 30sec
 ghost-soul:
-  cooldown: 36000 # 30min
+  cooldown: 18000 # 15min
   activation-duration: 60 # 3sec
   activation-threshold: 6.0
   step-interval: 10 # 0.5sec
@@ -64,7 +69,70 @@ dwarf:
   exhaustion-duration-per-stage: 600 # 30sec
   exhaustion-mining-fatigue-amplifier: 1 # ingame: Mining Fatigue II
 endurance:
-  ticks-per-stage: 20
-  speed-per-stage: 0.01
+  ticks-per-stage: 3 # 1 sec
+  speed-per-stage: 0.00003
 radar:
-  max-distance: 10
+  max-distance: 40
+energy-cookie:
+  speed-amplifier: 1 # ingame: Speed II
+  speed-duration: 600 # 30sec
+  jump-boost-amplifier: 1 # ingame: Jump Boost II
+  jump-boost-duration: 600 # 30sec
+saturated:
+  effect-duration: 3 # 3sec
+snail:
+  speed-amount: 0.04
+carpenter:
+  axe-durability-ignored-chance: 0.75
+  sapling-grow-delay-min: 20 # 1sec
+  sapling-grow-delay-max: 60 # 7sec
+sprint-burst:
+  sprint-duration: 80 # 3sec
+  sprint-amplifier: 1 # ingame: Speed II
+  sprint-cooldown: 600 # 30sec
+lieutenant:
+  health-per-player: 2 # 1 heart
+  max-range: 20
+poison:
+  effect-duration: 120 # 6sec
+  effect-amplifier: 0 # ingame: Poison I
+  chance: 0.25
+fool:
+  duration: 6000 # 5min
+  speed-amplifier: 1 # ingame: Speed II
+  jump-boost-amplifier: 1 # ingame: Jump Boost II
+insect:
+  damage-absorption: 0.5
+  movement-speed: 0.01
+karma:
+  damage-reflection-chance: 0.33
+no-mercy:
+  execution-threshold: 2 #  1 heart
+vibing-cat:
+  regeneration-amplifier: 0
+werewolf:
+  speed-amount: 0.03
+  additional-damage: 3
+  default-world-name: world
+  weakness-aura-amplifier: 0 # ingame: Weakness I
+  weakness-aura-range: 20.0
+duskblade:
+  invisibility-duration: 60 # 2sec
+  effects-delay: 5 #0.5sec
+lindworm:
+  lava-damage-modifier: 0.5
+  water-damage-tick: 2.0 # 1 heart per second
+  damage-amplifiers:
+    nether: 0.5
+    burning: 0.25
+    rain: -0.25
+    water: -0.5
+    minimum-damage: 0.25
+reaper:
+  stun-duration: 40 # 5sec
+  health-stun-threshold: 0.3 # 30% of maximum health
+nazgul:
+  health-percentage-disable-threshold: 0.7
+  maximum-effect-duration: 200 # 10sec
+  wither-amplifier: 1 # ingame: Wither I
+  mining-fatigue-amplifier: 1 # ingame: Mining Fatigue II

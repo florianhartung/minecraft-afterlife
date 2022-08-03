@@ -13,6 +13,8 @@ import skill.injection.Configurable;
 import java.util.List;
 import java.util.Random;
 
+import static skill.skills.HeavyMetalMinecraftSkill.duplicateBlockBreakDrops;
+
 @Configurable("crystal-king")
 public class CrystalKingMinecraftSkill extends MinecraftSkill {
     @ConfigValue(value = "materials", mapper = "mapMaterials")
@@ -22,27 +24,20 @@ public class CrystalKingMinecraftSkill extends MinecraftSkill {
 
     private final Random random = new Random();
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent e) {
         if (isActiveFor(e.getPlayer()) && !e.isCancelled()) {
             if (MATERIALS.contains(e.getBlock().getType())) {
                 ItemStack itemInMainHand = e.getPlayer().getInventory().getItemInMainHand();
                 if (!itemInMainHand.getEnchantments().containsKey(Enchantment.SILK_TOUCH)) {
                     double lootFactor = Math.abs(random.nextGaussian(0, STDDEV));
-                    List<ItemStack> drops = e.getBlock()
-                            .getDrops(itemInMainHand, e.getPlayer())
-                            .stream()
-                            .filter(drop -> drop.getType() != Material.AIR)
-                            .peek(drop -> drop.setAmount((int) Math.round(drop.getAmount() * lootFactor)))
-                            .filter(drop -> drop.getAmount() > 0)
-                            .toList();
-
-                    drops.forEach(drop -> e.getBlock().getWorld().dropItemNaturally(e.getBlock().getLocation(), drop));
+                    duplicateBlockBreakDrops(e, e.getPlayer().getInventory().getItemInMainHand(), lootFactor);
                 }
             }
         }
     }
 
+    @SuppressWarnings("unused")
     private List<Material> mapMaterials(List<String> materials) {
         return materials.stream()
                 .map(Material::valueOf)

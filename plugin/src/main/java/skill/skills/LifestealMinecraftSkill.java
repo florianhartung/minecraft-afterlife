@@ -33,6 +33,10 @@ public class LifestealMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onHit(EntityDamageByEntityEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+
         if (e.getDamager() instanceof Player player && isActiveFor(player)) {
             double rand = Math.random();
             if (rand < HEAL_CHANCE) {

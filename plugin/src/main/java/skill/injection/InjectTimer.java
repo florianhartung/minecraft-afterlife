@@ -1,5 +1,7 @@
 package skill.injection;
 
+import hud.HudManager;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -13,4 +15,6 @@ public @interface InjectTimer {
     String durationField() default "";
 
     String onTimerFinished() default "";
+
+    HudManager.HudEntry hudEntry() default HudManager.HudEntry.NONE;
 }

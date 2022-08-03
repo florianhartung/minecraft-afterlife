@@ -49,6 +49,10 @@ public class EnduranceMinecraftSkill extends AttributeMinecraftSkill {
 
     @EventHandler
     public void onToggleSprint(PlayerToggleSprintEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+
         if (!isActiveFor(e.getPlayer()) || e.getPlayer().isSwimming()) {
             return;
         }

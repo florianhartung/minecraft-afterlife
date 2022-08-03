@@ -27,8 +27,9 @@ public class GenericFollowOwnerGoal extends Goal {
     private final float stopDistance;
     private final float startDistance;
     private float oldWaterCost;
+    private final float teleportDistanceSqr;
 
-    public GenericFollowOwnerGoal(Mob mob, Player player, double speedModifier, float startDistance, float stopDistance) {
+    public GenericFollowOwnerGoal(Mob mob, Player player, double speedModifier, float startDistance, float stopDistance, float teleportDistance) {
         this.mob = mob;
         this.owner = player;
         this.level = mob.level;
@@ -36,6 +37,7 @@ public class GenericFollowOwnerGoal extends Goal {
         this.navigation = mob.getNavigation();
         this.startDistance = startDistance;
         this.stopDistance = stopDistance;
+        this.teleportDistanceSqr = teleportDistance * teleportDistance;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
     }
 
@@ -71,7 +73,7 @@ public class GenericFollowOwnerGoal extends Goal {
         if (--this.timeToRecalcPath <= 0) {
             this.timeToRecalcPath = this.adjustedTickDelay(10);
             if (!this.mob.isLeashed() && !this.mob.isPassenger()) {
-                if (this.mob.distanceToSqr(this.owner) >= 144.0D) {
+                if (this.mob.distanceToSqr(this.owner) >= teleportDistanceSqr) {
                     this.teleportToOwner();
                 } else {
                     this.navigation.moveTo(this.owner, this.speedModifier);

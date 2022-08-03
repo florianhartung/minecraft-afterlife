@@ -80,11 +80,6 @@ public class SpiderQueenMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onEggPlace(BlockPlaceEvent e) {
-        if (!isActiveFor(e.getPlayer())) {
-            return;
-        }
-
-
         ItemStack placedItem = e.getItemInHand();
         if (placedItem.getType() != Material.CONDUIT) {
             return;
@@ -97,6 +92,10 @@ public class SpiderQueenMinecraftSkill extends MinecraftSkill {
 
         Integer i = meta.getPersistentDataContainer().get(SPAWN_EGG_KEY, PersistentDataType.INTEGER);
         if (i != null && i == 1) {
+            if (!isActiveFor(e.getPlayer())) {
+                e.setCancelled(true);
+                return;
+            }
             Location loc = e.getBlockPlaced().getLocation().add(0.5, 0.5, 0.5);
             Player owner = e.getPlayer();
 

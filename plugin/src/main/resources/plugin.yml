@@ -2,9 +2,20 @@ name: Minecraft-Afterlife
 version: 1.0
 author: florianhartung
 main: main.Main
-description: desc
+description: ;)
 api-version: 1.18
 commands:
-  skills:
-    description: Redirects to the skill tree
+  afterlife:
+    description: Minecraft Afterlife
+  toggleend:
+    description: Enables/Disables the placement of ender eyes into end portal frames
+    permission: op
+  skillblock:
+    description: Add/Delete skillblocks
+    permission: op
+    usage: /skillblock <add,delete>
+  hud:
+    description: Toggles the visibility of the skills HUD
+  radar:
+    description: Togggles the radar skill
 depend: [ ProtocolLib ]

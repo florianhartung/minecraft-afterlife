@@ -9,7 +9,7 @@ class SkillTree extends PolymerElement {
             <style>
                 :host {
                     --skill-tree-button-background: #1A469D;
-                    --skill-tree-button-background-skilled: #DE372B;
+                    --skill-tree-button-background-skilled: #24003d;
                     --skill-tree-button-border: #F0EFF4;
                     --skill-tree-text: #F0EFF4;
                     --skill-tree-background: #0E2958;
@@ -153,30 +153,34 @@ class SkillTree extends PolymerElement {
 
                 .skill-tree-connection[unlocked] {
                     stroke: var(--skill-tree-button-background-skilled);
-                    stroke-width: 5;
+                    stroke-width: 8;
                 }
 
                 .skill-tree-connection[skillable] {
-                    stroke: #de2b96;
-                    stroke-width: 2;
+                    stroke: rgba(115, 32, 178, 0.8);
+                    stroke-width: 4;
                 }
 
                 .skill-tree-skill-tooltip {
                     visibility: hidden;
+                    opacity: 0.0;
                     position: relative;
                     display: inline-block;
                     width: 350px;
                     color: var(--skill-tree-text);
                     /*noinspection CssUnknownTarget*/
-                    background-image: url("./assets/signtexture.png");
+                    background-image: url("./assets/skilldescription_background.webp");
                     background-size: 500px;
-                    font-size: 1.35em;
+                    font-size: 1.1em;
                     padding: 20px;
                     user-select: none;
                     filter: saturate(1.2);
+                    box-shadow: inset 0 0 50px 5px #000a, 4px 4px 15px 2px #200a;
+                    transition: visibility 0s linear 0.04s, opacity 0.04s ease-in-out;
                 }
 
                 .skill-tree-button .skill-tree-skill-tooltip {
+                    opacity: 0.0;
                     visibility: hidden;
                     position: absolute;
                     top: calc(30px - 25%);
@@ -184,13 +188,15 @@ class SkillTree extends PolymerElement {
                 }
 
 
-                .skill-tree-button:hover .skill-tree-skill-tooltip {
+                .skill-tree-button:not([start]):hover .skill-tree-skill-tooltip {
                     visibility: visible;
+                    opacity: 1.0;
+                    transition-delay: 0s;
                     z-index: 1;
                 }
 
                 .skill-tree-skill-tooltip-header {
-                    font-size: 1.5em;
+                    font-size: 1.2em;
                     text-align: left;
                 }
 
@@ -204,12 +210,13 @@ class SkillTree extends PolymerElement {
                     image-rendering: pixelated;
                     background-repeat: repeat;
                     overflow: hidden;
+                    box-shadow: inset 0 0 100px 0 #000a;
                 }
 
                 .skill-tree-skillpoints {
                     position: absolute;
                     top: 10px;
-                    left: 10px;
+                    left: 30px;
                     color: white;
                     font-size: 2.5em;
                     font-family: minecraft-regular, sans-serif;

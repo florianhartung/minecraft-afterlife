@@ -1,5 +1,5 @@
 {
-  "skills":[
+  "skills": [
     {
       "id": 0,
       "label": "",
@@ -14,7 +14,7 @@
       "label": "Adrenalin",
       "x": 262,
       "y": -725,
-      "description": "\"Adrenalin hat mir bisher immer in brenzligen Situationen mein Leben gerettet.\"",
+      "description": "Kurz bevor du stirbst, bekommst du einen plötzlichen Adrenalinschub.",
       "skillName": "ADRENALINE",
       "color": "#0f8514",
       "icon": "icons/Adrenalin.webp"
@@ -24,7 +24,7 @@
       "label": "Meuchelmord",
       "x": 800,
       "y": -32,
-      "description": "\"Um einen Vorteil zu haben, greife ich aus dem Schatten an. Es hilft, nie direkt in die Augen der Opfer zu schauen.\"",
+      "description": "Wenn du deine Gegner angreift, ohne dass sie dich sehen, machst du mehr Schaden.",
       "skillName": "BACKSTAB",
       "color": "#22553e",
       "icon": "icons/Meuchelmord.webp"
@@ -34,7 +34,7 @@
       "label": "Barriere",
       "x": 385,
       "y": 559,
-      "description": "\"Auch im Kampf ist Vorbereitung essentiell, weshalb ich immer für den nächsten Ansturm bereit bin.\"",
+      "description": "Nimmst du für eine kurze Zeit keinen Schaden, so erhältst du mehrere Absorptionsherzen.",
       "skillName": "BARRIER",
       "color": "#bfb69b",
       "icon": "icons/Barriere.webp"
@@ -44,7 +44,7 @@
       "label": "Blutdurst",
       "x": -234,
       "y": 518,
-      "description": "\"Nach einem frischen Mord fühlt sich Leben direkt viel schneller an.\"",
+      "description": "Leben fühlt sich nach einem frischen Mord direkt viel schneller an.",
       "skillName": "BLOODLUST",
       "color": "#811120",
       "icon": "icons/Blutrausch.webp"
@@ -54,7 +54,7 @@
       "label": "Sägewerker",
       "x": -498,
       "y": -46,
-      "description": "\"Zeit ist Geld. Das gilt auch für meine Zeit im Wald.\"",
+      "description": "Setzlinge fühlen sich bei dir viel wohler und Äxte verlieren weniger Haltbarkeit.",
       "skillName": "CARPENTER",
       "color": "#0f8f00",
       "icon": "icons/Sägewerker.webp"
@@ -64,7 +64,7 @@
       "label": "Kristallkönig",
       "x": -582,
       "y": -260,
-      "description": "*cling* *pling* *ding* *rrring*",
+      "description": "Du maximierst deinen Ertrag von jeglichen Kristallen durch deine hervorrangende Abbautechnik.",
       "skillName": "CRYSTAL_KING",
       "color": "#813872",
       "icon": "icons/Kristallkönig.webp"
@@ -74,7 +74,7 @@
       "label": "Dimensionsspringer",
       "x": 342,
       "y": 187,
-      "description": "*schwoop*",
+      "description": "Du hast gelernt, wie du dich beim Reisen durch Portale unverwundbar machen kannst.",
       "skillName": "DIMENSION_JUMPER",
       "color": "#632c54",
       "icon": "icons/Dimensionsspringer.webp"
@@ -84,7 +84,7 @@
       "label": "Dämmerungsklinge",
       "x": -615,
       "y": 370,
-      "description": "*wusch*",
+      "description": "Wenn du etwas getötet hast, wirst du für kurze Zeit unverwundbar und unsichtbar. Während dieser Zeit werden deine Aktionen blockiert.",
       "skillName": "DUSKBLADE",
       "color": "#860e22",
       "icon": "icons/Dämmerungsklinge.webp"
@@ -94,7 +94,7 @@
       "label": "Zwerg",
       "x": 277,
       "y": -127,
-      "description": "*clonk* *clonk*",
+      "description": "Baust du Blöcke des Untergrundes ab, so erhöht sich deine Abbaugeschwindigkeit",
       "skillName": "DWARF",
       "color": "#edd58b",
       "icon": "icons/Zwerg.webp"
@@ -104,7 +104,7 @@
       "label": "Dauerläufer",
       "x": 282,
       "y": 399,
-      "description": "EMPTY",
+      "description": "Solange du läufst, erhöht sich ständig deine Geschwindigkeit.",
       "skillName": "ENDURANCE",
       "color": "#215531",
       "icon": "icons/Dauerläufer.webp"
@@ -114,7 +114,7 @@
       "label": "Energieriegel",
       "x": -145,
       "y": 261,
-      "description": "EMPTY",
+      "description": "Isst du Kekse, so wirst du für eine gewisse Zeit schneller und kannst höher springen.",
       "skillName": "ENERGY_COOKIES",
       "color": "#9e2f92",
       "icon": "icons/Energieriegel.webp"
@@ -124,7 +124,7 @@
       "label": "Flink",
       "x": -122,
       "y": 83,
-      "description": "EMPTY",
+      "description": "Deine standarmäßige Geschwindikeit erhöht sich.",
       "skillName": "FAST1",
       "color": "#e7a110",
       "icon": "icons/Flink.webp"
@@ -134,7 +134,7 @@
       "label": "Flink",
       "x": 319,
       "y": -455,
-      "description": "EMPTY",
+      "description": "Deine standarmäßige Geschwindikeit erhöht sich.",
       "skillName": "FAST2",
       "color": "#e7a110",
       "icon": "icons/Flink.webp"
@@ -144,7 +144,7 @@
       "label": "Flink",
       "x": -774,
       "y": 245,
-      "description": "EMPTY",
+      "description": "Deine standarmäßige Geschwindikeit erhöht sich.",
       "skillName": "FAST3",
       "color": "#e7a110",
       "icon": "icons/Flink.webp"
@@ -154,7 +154,7 @@
       "label": "Vollidiot",
       "x": 229,
       "y": 5,
-      "description": "EMPTY",
+      "description": "Wenn du wiederbelebt wirst, bekommst du mehr Geschwindigkeit und Resistenz.",
       "skillName": "FOOL",
       "color": "#9e2890",
       "icon": "icons/Vollidiot.webp"
@@ -164,7 +164,7 @@
       "label": "Geisterseele",
       "x": -562,
       "y": -706,
-      "description": "EMPTY",
+      "description": "Kurz bevor du stirbst, rettet dich die Geisterseele. Im Gegenzug blockiert sie deine Aktionen.",
       "skillName": "GHOST_SOUL",
       "color": "#542e5d",
       "icon": "icons/Geisterseele.webp"
@@ -174,7 +174,7 @@
       "label": "Heavy Metal",
       "x": -721,
       "y": 51,
-      "description": "EMPTY",
+      "description": "Du maximiertst deinen Gewinn beim Abbauen von Metallerzen.",
       "skillName": "HEAVY_METAL",
       "color": "#ee9909",
       "icon": "icons/HeavyMetal.webp"
@@ -184,18 +184,18 @@
       "label": "Auftragsmörder",
       "x": 935,
       "y": -122,
-      "description": "EMPTY",
+      "description": "Spieler die du länger beobachtest, kannst du besser ausschalten.",
       "skillName": "HITMAN",
       "color": "#378660",
       "icon": "icons/Auftragsmörder.webp"
     },
     {
       "id": 19,
-      "label": "Indianer",
+      "label": "Schnecke",
       "x": 64,
       "y": 349,
-      "description": "EMPTY",
-      "skillName": "INDIAN",
+      "description": "Wenn du schleichst, bist du schneller.",
+      "skillName": "SNAIL",
       "color": "#9b0825",
       "icon": "icons/Schnecke.webp"
     },
@@ -204,7 +204,7 @@
       "label": "Insekt",
       "x": -140,
       "y": -420,
-      "description": "EMPTY",
+      "description": "In deinem natürlichen Lebensraum, dem Gras, bist du schneller und nimmst weniger Fallschaden.",
       "skillName": "INSECT",
       "color": "#ffe9d9",
       "icon": "icons/Insekt.webp"
@@ -214,7 +214,7 @@
       "label": "Karma",
       "x": 744,
       "y": -329,
-      "description": "EMPTY",
+      "description": "Wenn du einen Angriff mit deinem Schild abwehrst, so kann der Schaden zurückgeworfen werden",
       "skillName": "KARMA",
       "color": "#123670",
       "icon": "icons/Karma.webp"
@@ -224,7 +224,7 @@
       "label": "Leutnant",
       "x": 516,
       "y": -284,
-      "description": "EMPTY",
+      "description": "Spieler in deiner Umgebung erhöhen deine maximalen Lebenspunkte",
       "skillName": "LIEUTENANT",
       "color": "#85192c",
       "icon": "icons/Leutnant.webp"
@@ -234,7 +234,7 @@
       "label": "Lebensraub",
       "x": -300,
       "y": -249,
-      "description": "EMPTY",
+      "description": "Es besteht eine Chance, dass du Leben regenerierst, wenn du anderen Schaden zufügst.",
       "skillName": "LIFESTEAL",
       "color": "#1f639b",
       "icon": "icons/Lebensraub.webp"
@@ -244,7 +244,7 @@
       "label": "Lindwurm",
       "x": 575,
       "y": 120,
-      "description": "EMPTY",
+      "description": "Du bekommst keinen Feuerschaden, allerdings nimmst du Schaden in Wasser. Im Nether und in Flammen bist du stärker, im Regen schwach.",
       "skillName": "LINDWORM",
       "color": "#bf2c31",
       "icon": "icons/Lindwurm.webp"
@@ -254,7 +254,7 @@
       "label": "Masochistisch",
       "x": -1,
       "y": 586,
-      "description": "EMPTY",
+      "description": "Umso weniger Leben du hast, desto mehr Schaden machst du.",
       "skillName": "MASOCHISTIC",
       "color": "#793374",
       "icon": "icons/Masochistisch.webp"
@@ -264,7 +264,7 @@
       "label": "Nazgul",
       "x": -359,
       "y": -404,
-      "description": "EMPTY",
+      "description": "Schlägst du einen gesunden Gegner, so wird dieser verwirrt bis er verletzt ist.",
       "skillName": "NAZGUL",
       "color": "#97001c",
       "icon": "icons/Nazgul.webp"
@@ -274,7 +274,7 @@
       "label": "Ninja",
       "x": 151,
       "y": 142,
-      "description": "EMPTY",
+      "description": "Deine Angriffsgeschwindigkeit erhöht sich.",
       "skillName": "NINJA1",
       "color": "#005142",
       "icon": "icons/Ninja.webp"
@@ -284,7 +284,7 @@
       "label": "Ninja",
       "x": -269,
       "y": -71,
-      "description": "EMPTY",
+      "description": "Deine Angriffsgeschwindigkeit erhöht sich.",
       "skillName": "NINJA2",
       "color": "#005142",
       "icon": "icons/Ninja.webp"
@@ -294,7 +294,7 @@
       "label": "Ninja",
       "x": -528,
       "y": 192,
-      "description": "EMPTY",
+      "description": "Deine Angriffsgeschwindigkeit erhöht sich.",
       "skillName": "NINJA3",
       "color": "#005142",
       "icon": "icons/Ninja.webp"
@@ -304,7 +304,7 @@
       "label": "Ninja",
       "x": -279,
       "y": -534,
-      "description": "EMPTY",
+      "description": "Deine Angriffsgeschwindigkeit erhöht sich.",
       "skillName": "NINJA4",
       "color": "#005142",
       "icon": "icons/Ninja.webp"
@@ -314,7 +314,7 @@
       "label": "Ninja",
       "x": 120,
       "y": -604,
-      "description": "EMPTY",
+      "description": "Deine Angriffsgeschwindigkeit erhöht sich.",
       "skillName": "NINJA5",
       "color": "#005142",
       "icon": "icons/Ninja.webp"
@@ -324,7 +324,7 @@
       "label": "Keine Gnade",
       "x": 777,
       "y": 232,
-      "description": "EMPTY",
+      "description": "Gegner, die kurz davor sind, zu sterben, werden exekutiert.",
       "skillName": "NO_MERCY",
       "color": "#27171a",
       "icon": "icons/Keine Gnade.webp"
@@ -334,7 +334,7 @@
       "label": "Giftdolch",
       "x": -434,
       "y": 520,
-      "description": "EMPTY",
+      "description": "Machst du einen Treffer mit deinem Schwert, so besteht die Chance, dass dein Ziel vergiftet wird.",
       "skillName": "POISON",
       "color": "#4fb81b",
       "icon": "icons/Giftdolch.webp"
@@ -344,7 +344,7 @@
       "label": "Radar",
       "x": 517,
       "y": 305,
-      "description": "EMPTY",
+      "description": "Spieler und Mobs in deiner Umgebung werden aufgedeckt (Umschaltbar mit /radar).",
       "skillName": "RADAR",
       "color": "#c4af70",
       "icon": "icons/Radar.webp"
@@ -354,7 +354,7 @@
       "label": "Sensenmann",
       "x": -601,
       "y": -404,
-      "description": "EMPTY",
+      "description": "Verletzte Gegner kannst du mit einer Hacke paralysieren.",
       "skillName": "REAPER",
       "color": "#7d1824",
       "icon": "icons/Sensenmann.webp"
@@ -364,7 +364,7 @@
       "label": "Mahlzeit",
       "x": -88,
       "y": -239,
-      "description": "EMPTY",
+      "description": "Du fühlst dich nach jeder Mahlzeit deutlich gesättigter",
       "skillName": "SATURATED",
       "color": "#ac1328",
       "icon": "icons/Mahlzeit.webp"
@@ -374,7 +374,7 @@
       "label": "Spinnenkönigin",
       "x": 530,
       "y": -99,
-      "description": "EMPTY",
+      "description": "Beim Töten von Spinnen kannst du Spinneneier finden. Diese könnten im Kampf nützlich werden.",
       "skillName": "SPIDER_QUEEN",
       "color": "#49295f",
       "icon": "icons/Spinnenkönigin.webp"
@@ -384,7 +384,7 @@
       "label": "Sprint",
       "x": 302,
       "y": -332,
-      "description": "EMPTY",
+      "description": "Nach einer kurzen Pause, bekommst du beim nächsten Laufen einen starken Geschwindigkeitsschub.",
       "skillName": "SPRINT_BURST",
       "color": "#261e35",
       "icon": "icons/Sprint.webp"
@@ -394,7 +394,7 @@
       "label": "Panzerung",
       "x": 60,
       "y": -107,
-      "description": "EMPTY",
+      "description": "Du bekommst ein Bonusherz.",
       "skillName": "TANK1",
       "color": "#7e1923",
       "icon": "icons/Panzerung.webp"
@@ -404,7 +404,7 @@
       "label": "Panzerung",
       "x": 62,
       "y": -452,
-      "description": "EMPTY",
+      "description": "Du bekommst ein Bonusherz.",
       "skillName": "TANK2",
       "color": "#7e1923",
       "icon": "icons/Panzerung.webp"
@@ -414,7 +414,7 @@
       "label": "Panzerung",
       "x": -311,
       "y": 168,
-      "description": "EMPTY",
+      "description": "Du bekommst ein Bonusherz.",
       "skillName": "TANK3",
       "color": "#7e1923",
       "icon": "icons/Panzerung.webp"
@@ -424,7 +424,7 @@
       "label": "Panzerung",
       "x": -737,
       "y": -168,
-      "description": "EMPTY",
+      "description": "Du bekommst ein Bonusherz.",
       "skillName": "TANK4",
       "color": "#7e1923",
       "icon": "icons/Panzerung.webp"
@@ -434,7 +434,7 @@
       "label": "Panzerung",
       "x": -392,
       "y": -634,
-      "description": "EMPTY",
+      "description": "Du bekommst ein Bonusherz.",
       "skillName": "TANK5",
       "color": "#7e1923",
       "icon": "icons/Panzerung.webp"
@@ -444,7 +444,7 @@
       "label": "Vibing cat",
       "x": -424,
       "y": 328,
-      "description": "EMPTY",
+      "description": "Hörst du eine Schallplatte fühlst du dich direkt wohler und regenerierst mehr Leben.",
       "skillName": "VIBING_CAT",
       "color": "#a52a93",
       "icon": "icons/VibingCat.webp"
@@ -464,224 +464,224 @@
       "label": "Werwolf",
       "x": -832,
       "y": 417,
-      "description": "EMPTY",
+      "description": "Umso heller der Mond scheint, desto mehr verwandelst du dich in ein unbezwingbares Biest.",
       "skillName": "WEREWOLF",
       "color": "#133a7d",
       "icon": "icons/Werwolf.webp"
     }
   ],
-  "connections":[
+  "connections": [
     {
-      "from":0,
-      "to":39
+      "from": 0,
+      "to": 39
     },
     {
-      "from":0,
-      "to":27
+      "from": 0,
+      "to": 27
     },
     {
-      "from":12,
-      "to":0
+      "from": 12,
+      "to": 0
     },
     {
-      "from":36,
-      "to":39
+      "from": 36,
+      "to": 39
     },
     {
-      "from":7,
-      "to":27
+      "from": 7,
+      "to": 27
     },
     {
-      "from":15,
-      "to":39
+      "from": 15,
+      "to": 39
     },
     {
-      "from":7,
-      "to":24
+      "from": 7,
+      "to": 24
     },
     {
-      "from":19,
-      "to":27
+      "from": 19,
+      "to": 27
     },
     {
-      "from":11,
-      "to":12
+      "from": 11,
+      "to": 12
     },
     {
-      "from":23,
-      "to":36
+      "from": 23,
+      "to": 36
     },
     {
-      "from":39,
-      "to":9
+      "from": 39,
+      "to": 9
     },
     {
-      "from":34,
-      "to":7
+      "from": 34,
+      "to": 7
     },
     {
-      "from":40,
-      "to":9
+      "from": 40,
+      "to": 9
     },
     {
-      "from":36,
-      "to":40
+      "from": 36,
+      "to": 40
     },
     {
-      "from":10,
-      "to":7
+      "from": 10,
+      "to": 7
     },
     {
-      "from":4,
-      "to":19
+      "from": 4,
+      "to": 19
     },
     {
-      "from":28,
-      "to":12
+      "from": 28,
+      "to": 12
     },
     {
-      "from":28,
-      "to":23
+      "from": 28,
+      "to": 23
     },
     {
-      "from":13,
-      "to":38
+      "from": 13,
+      "to": 38
     },
     {
-      "from":38,
-      "to":9
+      "from": 38,
+      "to": 9
     },
     {
-      "from":9,
-      "to":37
+      "from": 9,
+      "to": 37
     },
     {
-      "from":26,
-      "to":23
+      "from": 26,
+      "to": 23
     },
     {
-      "from":25,
-      "to":4
+      "from": 25,
+      "to": 4
     },
     {
-      "from":25,
-      "to":10
+      "from": 25,
+      "to": 10
     },
     {
-      "from":35,
-      "to":26
+      "from": 35,
+      "to": 26
     },
     {
-      "from":42,
-      "to":5
+      "from": 42,
+      "to": 5
     },
     {
-      "from":6,
-      "to":5
+      "from": 6,
+      "to": 5
     },
     {
-      "from":6,
-      "to":26
+      "from": 6,
+      "to": 26
     },
     {
-      "from":32,
-      "to":24
+      "from": 32,
+      "to": 24
     },
     {
-      "from":26,
-      "to":30
+      "from": 26,
+      "to": 30
     },
     {
-      "from":3,
-      "to":10
+      "from": 3,
+      "to": 10
     },
     {
-      "from":22,
-      "to":9
+      "from": 22,
+      "to": 9
     },
     {
-      "from":8,
-      "to":44
+      "from": 8,
+      "to": 44
     },
     {
-      "from":41,
-      "to":12
+      "from": 41,
+      "to": 12
     },
     {
-      "from":41,
-      "to":4
+      "from": 41,
+      "to": 4
     },
     {
-      "from":44,
-      "to":41
+      "from": 44,
+      "to": 41
     },
     {
-      "from":33,
-      "to":44
+      "from": 33,
+      "to": 44
     },
     {
-      "from":17,
-      "to":29
+      "from": 17,
+      "to": 29
     },
     {
-      "from":22,
-      "to":21
+      "from": 22,
+      "to": 21
     },
     {
-      "from":5,
-      "to":28
+      "from": 5,
+      "to": 28
     },
     {
-      "from":2,
-      "to":24
+      "from": 2,
+      "to": 24
     },
     {
-      "from":45,
-      "to":30
+      "from": 45,
+      "to": 30
     },
     {
-      "from":31,
-      "to":1
+      "from": 31,
+      "to": 1
     },
     {
-      "from":40,
-      "to":31
+      "from": 40,
+      "to": 31
     },
     {
-      "from":41,
-      "to":29
+      "from": 41,
+      "to": 29
     },
     {
-      "from":5,
-      "to":17
+      "from": 5,
+      "to": 17
     },
     {
-      "from":14,
-      "to":29
+      "from": 14,
+      "to": 29
     },
     {
-      "from":46,
-      "to":14
+      "from": 46,
+      "to": 14
     },
     {
-      "from":36,
-      "to":20
+      "from": 36,
+      "to": 20
     },
     {
-      "from":37,
-      "to":24
+      "from": 37,
+      "to": 24
     },
     {
-      "from":18,
-      "to":2
+      "from": 18,
+      "to": 2
     },
     {
-      "from":43,
-      "to":30
+      "from": 43,
+      "to": 30
     },
     {
-      "from":43,
-      "to":16
+      "from": 43,
+      "to": 16
     }
   ]
 }

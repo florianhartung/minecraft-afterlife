@@ -47,6 +47,10 @@ public class VirusMinecraftSkill extends MinecraftSkill {
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
+
         if (toBeDamaged.remove(Pair.of(e.getDamager().getUniqueId(), e.getEntity().getUniqueId()))) {
             return;
         }

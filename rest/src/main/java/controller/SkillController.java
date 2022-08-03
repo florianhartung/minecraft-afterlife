@@ -75,8 +75,8 @@ public class SkillController {
     @GetMapping("/{uuid}/removeall")
     public ResponseEntity<List<SkillEntity>> removeAll(@PathVariable("uuid") String uuid) {
         int skillCount = skillRepository.findAllByUuid(uuid).size();
-        skillRepository.deleteAllByUuid(uuid);
         if (addSkillpoint(uuid, skillCount)) {
+            skillRepository.deleteAllByUuid(uuid);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         return ResponseEntity.status(HttpStatus.CONFLICT).build();

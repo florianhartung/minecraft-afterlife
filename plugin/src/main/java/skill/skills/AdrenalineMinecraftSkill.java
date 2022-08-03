@@ -1,5 +1,6 @@
 package skill.skills;
 
+import hud.HudManager;
 import main.ChatHelper;
 import org.bukkit.ChatColor;
 import org.bukkit.Particle;
@@ -24,12 +25,12 @@ public class AdrenalineMinecraftSkill extends MinecraftSkill {
     private int HEAL_AMPLIFIER;
     @ConfigValue("activation-health")
     private double ACTIVATION_HEALTH; // half hearts
-    @InjectTimer(durationField = "COOLDOWN")
+    @InjectTimer(durationField = "COOLDOWN", hudEntry = HudManager.HudEntry.ADRENALINE)
     private MinecraftSkillTimer cooldownTimer;
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
-        if (e.getEntity() instanceof Player player && isActiveFor(player) && !cooldownTimer.isActive(player)) {
+        if (e.getEntity() instanceof Player player && isActiveFor(player) && !cooldownTimer.isActive(player) && !e.isCancelled()) {
             double finalHealth = player.getHealth() - e.getFinalDamage();
             if (finalHealth > 0 && finalHealth <= ACTIVATION_HEALTH) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, HEAL_DURATION, HEAL_AMPLIFIER, false, true));
@@ -38,5 +39,19 @@ public class AdrenalineMinecraftSkill extends MinecraftSkill {
                 cooldownTimer.start(player);
             }
         }
+    }
+
+    @Override
+    public void apply(Player player) {
+        super.apply(player);
+
+        HudManager.set(player, HudManager.HudEntry.ADRENALINE, 7);
+    }
+
+    @Override
+    public void remove(Player player) {
+        super.remove(player);
+        cooldownTimer.cancel(player);
+        HudManager.remove(player, HudManager.HudEntry.ADRENALINE);
     }
 }

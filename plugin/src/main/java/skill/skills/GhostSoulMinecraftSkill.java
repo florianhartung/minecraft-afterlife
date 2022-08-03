@@ -1,8 +1,10 @@
 package skill.skills;
 
+import hud.HudManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -31,16 +33,18 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
     private static int ACTIVATION_DURATION; // in ticks
     @ConfigValue("step-interval")
     private static int STEP_INTERVAL; // in ticks
+    @InjectSkill
+    private ReaperMinecraftSkill reaperMinecraftSkill;
     @InjectPlugin
     private Plugin plugin;
-    @InjectTimer(durationField = "COOLDOWN")
+    @InjectTimer(durationField = "COOLDOWN", hudEntry = HudManager.HudEntry.GHOST_SOUL)
     private MinecraftSkillTimer cooldownTimer;
     @InjectSkill
     private RadarMinecraftSkill radarSkill;
 
     private final HashMap<String, Pair<Integer, Integer>> activations = new HashMap<>();
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player && isActiveFor(player) && !cooldownTimer.isActive(player)) {
             if (!activations.containsKey(player.getUniqueId().toString())) {
@@ -54,7 +58,7 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onDamageOtherEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player player) {
             if (isInGhostForm(player)) {
@@ -63,7 +67,7 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onTakeDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player) {
             if (isInGhostForm(player)) {
@@ -72,14 +76,14 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (isInGhostForm(event.getPlayer())) {
             event.setCancelled(true);
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onBlockBreak(BlockBreakEvent event) {
         if (isInGhostForm(event.getPlayer())) {
             event.setCancelled(true);
@@ -139,6 +143,7 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
         world.spawnParticle(Particle.SPELL_WITCH, location.add(0, 3, 0), 20, 0.0d, 2.0d, 0.0d, 0);
         world.playSound(location, Sound.ENTITY_ENDERMAN_AMBIENT, SoundCategory.PLAYERS, 1, 0);
 
+        reaperMinecraftSkill.stunTimer.cancel(player);
     }
 
     private void deactivateForPlayer(Player player) {
@@ -167,5 +172,19 @@ public class GhostSoulMinecraftSkill extends MinecraftSkill {
 
     private void showPlayer(Player playerInGhostSoul, Player observer) {
         observer.showPlayer(plugin, playerInGhostSoul);
+    }
+
+    @Override
+    public void apply(Player player) {
+        super.apply(player);
+
+        HudManager.set(player, HudManager.HudEntry.GHOST_SOUL, 7);
+    }
+
+    @Override
+    public void remove(Player player) {
+        super.remove(player);
+        cooldownTimer.cancel(player);
+        HudManager.remove(player, HudManager.HudEntry.GHOST_SOUL);
     }
 }
