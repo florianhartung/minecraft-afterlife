@@ -17,10 +17,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import skill.generic.MinecraftSkill;
 import skill.generic.MinecraftSkillTimer;
-import skill.injection.ConfigValue;
-import skill.injection.Configurable;
-import skill.injection.InjectPlugin;
-import skill.injection.InjectTimer;
+import skill.injection.*;
 
 import java.util.*;
 
@@ -33,6 +30,8 @@ public class DuskbladeMinecraftSkill extends MinecraftSkill {
     private static int EFFECTS_DELAY;
 
 
+    @InjectSkill
+    private RadarMinecraftSkill radarMinecraftSkill;
     @InjectPlugin
     private Plugin plugin;
     @InjectTimer(durationField = "INVISIBILITY_DURATION", onTimerFinished = "stopInvisibility")
@@ -126,7 +125,11 @@ public class DuskbladeMinecraftSkill extends MinecraftSkill {
     }
 
     private void hidePlayer(Player toHide) {
-        Bukkit.getOnlinePlayers().forEach(player -> player.hidePlayer(plugin, toHide));
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (!radarMinecraftSkill.isTrackingEntity(player, toHide)) {
+                player.hidePlayer(plugin, toHide);
+            }
+        });
     }
 
     private void showPlayer(Player toShow) {
