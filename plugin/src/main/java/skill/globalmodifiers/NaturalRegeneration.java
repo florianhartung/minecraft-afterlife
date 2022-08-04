@@ -75,7 +75,9 @@ public class NaturalRegeneration extends MinecraftSkill {
     }
 
     private double distanceToNearestSkillBlock(Location location) {
+        assert location.getWorld() != null;
         return skillBlockLocations.stream()
+                .filter(l -> location.getWorld().equals(l.getWorld()))
                 .min(Comparator.comparingDouble(l -> l.distanceSquared(location)))
                 .map(location::distance)
                 .orElse(Double.MAX_VALUE);
