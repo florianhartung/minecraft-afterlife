@@ -2,10 +2,7 @@ package main;
 
 import config.Config;
 import config.ConfigType;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
+import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.command.Command;
@@ -49,6 +46,17 @@ public class ProjectStartManager implements Listener, CommandExecutor {
     public void onJoin(PlayerJoinEvent e) {
         if (hasStarted) {
             e.getPlayer().setGameMode(GameMode.SURVIVAL);
+
+
+            NamespacedKey rootAdvancementKey = NamespacedKey.fromString("afterlife:afterlife_root");
+            Advancement rootAdvancement = Bukkit.getAdvancement(rootAdvancementKey);
+            assert rootAdvancement != null;
+
+            AdvancementProgress progress = e.getPlayer().getAdvancementProgress(rootAdvancement);
+            if (!progress.isDone()) {
+                progress.getRemainingCriteria().forEach(progress::awardCriteria);
+                return;
+            }
             return;
         }
 
@@ -58,7 +66,7 @@ public class ProjectStartManager implements Listener, CommandExecutor {
 
     @EventHandler
     public void onDamage(EntityDamageEvent e) {
-        if (!hasStarted) {
+        if (!hasStarted && e.getEntity() instanceof Player) {
             e.setCancelled(true);
         }
     }
@@ -99,6 +107,9 @@ public class ProjectStartManager implements Listener, CommandExecutor {
         Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, this::teleportPlayersToRandomSpawns, 30);
         giveRootAdvancement();
         limitedPlaytime.resetAllData();
+        World world = Bukkit.getWorld("world");
+        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, true);
+        world.setTime(23500);
 
         return true;
     }

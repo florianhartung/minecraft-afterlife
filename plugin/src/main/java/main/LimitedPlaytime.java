@@ -43,6 +43,7 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
 
     private int byPassLoginCheckTaskId = 0;
     private LocalTime lastServerTimeCheck = LocalTime.MIN;
+    private final ZoneOffset zoneOffset;
 
     public LimitedPlaytime(Plugin plugin) {
         this.plugin = plugin;
@@ -53,6 +54,11 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
         bankedDays = config.getInt("limited-playtime.banked-days");
         serverOpenTime = LocalTime.parse(config.getString("limited-playtime.global.open-time"), CONFIG_TIME_FORMATTER);
         serverCloseTime = LocalTime.parse(config.getString("limited-playtime.global.close-time"), CONFIG_TIME_FORMATTER);
+        String zoneIdString = config.getString("limited-playtime.global.time-zone-id");
+
+        LocalDateTime now = LocalDateTime.now();
+        ZoneId zone = ZoneId.of(zoneIdString);
+        zoneOffset = zone.getRules().getOffset(now);
 
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::checkPlayTimes, 0, PLAY_TIME_CHECK_INTERVAL);
     }
@@ -81,23 +87,24 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
     }
 
     private void checkPlayTimes() {
+        LocalTime now = currentTime();
         // Skip midnight
-        if (LocalTime.now().isBefore(lastServerTimeCheck)) {
-            lastServerTimeCheck = LocalTime.now();
+        if (now.isBefore(lastServerTimeCheck)) {
+            lastServerTimeCheck = now;
         }
 
-        if (lastServerTimeCheck.isBefore(serverCloseTime) && LocalTime.now().isAfter(serverCloseTime)) {
+        if (lastServerTimeCheck.isBefore(serverCloseTime) && now.isAfter(serverCloseTime)) {
             Bukkit.getOnlinePlayers().forEach(
                     player -> player.kickPlayer("Der Server ist nun geschlossen. Er öffnet morgen um " + serverOpenTime.format(CONFIG_TIME_FORMATTER) + " Uhr erneut.")
             );
-            lastServerTimeCheck = LocalTime.now();
+            lastServerTimeCheck = now;
             return;
         }
 
 
-        Instant now = Instant.now();
+        Instant nowInstant = Instant.now();
         onlinePlayers.forEach(((uuid, data) -> {
-            long timePlayed = data.getLastCalculation().until(now, ChronoUnit.MILLIS);
+            long timePlayed = data.getLastCalculation().until(nowInstant, ChronoUnit.MILLIS);
             data.setLastCalculation(Instant.now());
 
             data.currentRemainingPlayTimeMillis -= timePlayed;
@@ -111,7 +118,7 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
                     .filter(playtime -> playtime > data.getCurrentRemainingPlayTimeMillis() && playtime < data.getCurrentRemainingPlayTimeMillis() + timePlayed)
                     .findFirst()
                     .ifPresent(playtime -> {
-                        ChatHelper.sendMessage(data.getPlayer(), "Du hast noch " + convertDurationToString(playtime) + " Sekunden deiner Spielzeit übrig.");
+                        ChatHelper.sendMessage(data.getPlayer(), "Du hast noch " + convertDurationToString(playtime) + " deiner Spielzeit übrig.");
                     });
 
             List<Long> playTimes = data.getRemainingMillisPlayTimes();
@@ -125,8 +132,6 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
                     timeToDistribute -= l;
                 }
             }
-
-            System.out.println("data = " + data);
         }));
     }
 
@@ -141,14 +146,15 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> ChatHelper.sendMessage(e.getPlayer(), "Du hast aufgrund deiner Rechte die Spielzeit-Sperre umgangen."));
             return;
         }
+        LocalTime now = LocalTime.now(ZoneId.of("Europe/Berlin"));
 
-        if (LocalTime.now().isBefore(serverOpenTime)) {
+        if (now.isBefore(serverOpenTime)) {
             e.setKickMessage("Der Server öffnet erst um " + serverOpenTime.format(CONFIG_TIME_FORMATTER) + " Uhr.");
             e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
             enableBypassIfOperator(e);
             return;
         }
-        if (LocalTime.now().isAfter(serverCloseTime)) {
+        if (now.isAfter(serverCloseTime)) {
             e.setKickMessage("Der Server ist für heute geschlossen und öffnet morgen um " + serverOpenTime.format(CONFIG_TIME_FORMATTER) + " Uhr erneut.");
             e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
             enableBypassIfOperator(e);
@@ -156,7 +162,6 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
         }
 
         PlayTimeData data = readFromConfig(e.getPlayer().getUniqueId());
-        System.out.println("data = " + data);
         if (data.getCurrentRemainingPlayTimeMillis() <= 0) {
             e.setResult(PlayerLoginEvent.Result.KICK_OTHER);
             e.setKickMessage("Du hast deine tägliche Spielzeit aufgebraucht.");
@@ -183,7 +188,7 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
 
         ConfigurationSection playerSection = playTimesConfig.getConfigurationSection("play-times." + uuid.toString());
         if (playerSection == null) {
-            data.setLastPlayed(LocalDate.now());
+            data.setLastPlayed(currentDate());
             data.setLastCalculation(Instant.now());
             data.setRemainingMillisPlayTimes(new ArrayList<>(List.of(millisecondsPerDay)));
             data.setCurrentRemainingPlayTimeMillis(millisecondsPerDay);
@@ -198,7 +203,7 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
 
         LocalDate firstSavedRemainingPlayTime = lastPlayed.minusDays(remainingPlayTimes.size() - 1);
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = currentDate();
         LocalDate tomorrow = today.plusDays(1);
 
         long remainingMillisForToday = 0;
@@ -217,7 +222,7 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
             }
         }
 
-        data.setLastPlayed(LocalDate.now());
+        data.setLastPlayed(currentDate());
         data.setRemainingMillisPlayTimes(newRemainingPlayTimes);
         data.setCurrentRemainingPlayTimeMillis(remainingMillisForToday);
         data.setLastCalculation(Instant.now());
@@ -232,7 +237,7 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
             playerSection = playTimesConfig.createSection("play-times." + playerUuid);
         }
 
-        playerSection.set("last-played", data.getLastPlayed().toEpochSecond(LocalTime.now(), OffsetDateTime.now(ZoneId.systemDefault()).getOffset()));
+        playerSection.set("last-played", data.getLastPlayed().toEpochSecond(currentTime(), OffsetDateTime.now(ZoneId.systemDefault()).getOffset()));
         playerSection.set("remaining-play-times", data.getRemainingMillisPlayTimes());
     }
 
@@ -323,6 +328,15 @@ public class LimitedPlaytime implements Listener, CommandExecutor {
         } else {
             return millis / 60_000L + " Minuten";
         }
+    }
+
+    private LocalTime currentTime() {
+        return LocalTime.now(zoneOffset);
+    }
+
+
+    private LocalDate currentDate() {
+        return LocalDate.now(zoneOffset);
     }
 
     @Setter
