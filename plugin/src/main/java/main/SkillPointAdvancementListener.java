@@ -40,15 +40,15 @@ public class SkillPointAdvancementListener implements Listener {
         if (affectedAdvancementNamespaces.contains(key.getNamespace())) {
             ResponseEntity<PlayerEntity> response = RestService.addSkillpoint(playerUUID);
             if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
-                e.getPlayer().sendMessage("Es konnte dir kein Skillpunkt gegeben werden. Bitte kontaktiere einen Administrator.");
+                e.getPlayer().sendMessage("Du konntest keinen Gralkristall erhalten. Bitte kontaktiere einen Administrator.");
                 Bukkit.getLogger().warning("Couldn't give skillpoint to player " + e.getPlayer().getDisplayName() + " from achievement " + key);
                 return;
             }
-            TextComponent actionBarText = new TextComponent("+1 Skillpunkt");
-            actionBarText.setColor(ChatColor.GOLD);
+            TextComponent actionBarText = new TextComponent("+1 Gralkristall");
+            actionBarText.setColor(ChatColor.DARK_PURPLE);
             e.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, actionBarText);
 
-            sendMessage(e.getPlayer(), "Du hast jetzt " + response.getBody().getSkillPoints() + " Skillpunkte.");
+            sendMessage(e.getPlayer(), "Du hast jetzt " + ChatColor.DARK_PURPLE + response.getBody().getSkillPoints() + " Gralkristalle.");
         }
     }
 }

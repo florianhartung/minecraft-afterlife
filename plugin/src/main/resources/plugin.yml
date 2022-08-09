@@ -5,17 +5,26 @@ main: main.Main
 description: ;)
 api-version: 1.18
 commands:
-  afterlife:
-    description: Minecraft Afterlife
   toggleend:
     description: Enables/Disables the placement of ender eyes into end portal frames
     permission: op
   skillblock:
     description: Add/Delete skillblocks
     permission: op
-    usage: /skillblock <add,delete>
+    usage: /skillblock <add|delete>
   hud:
     description: Toggles the visibility of the skills HUD
   radar:
     description: Togggles the radar skill
+  playtime:
+    permission: op
+    description: Give/take daily playtime to/from players
+    usage: /playtime <give|take> <player> <seconds>
+  startafterlife:
+    permission: op
+    description: Starts the project
+    usage: /startafterlife
+  timeleft:
+    description: Prints the daily play time left
+    usage: /timeleft
 depend: [ ProtocolLib ]

@@ -11,6 +11,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandExecutor;
@@ -141,8 +142,10 @@ public class RadarMinecraftSkill extends MinecraftSkill implements CommandExecut
         PlayerDataConfig.set(player, data);
         if (data.isRadarEnabled()) {
             activeForPlayers.add(player.getUniqueId());
+            ChatHelper.sendMessage(player, ChatColor.GREEN + "Das Radar ist nun aktiviert.");
         } else {
             activeForPlayers.remove(player.getUniqueId());
+            ChatHelper.sendMessage(player, ChatColor.RED + "Das Radar ist nun deaktiviert.");
         }
 
         return true;

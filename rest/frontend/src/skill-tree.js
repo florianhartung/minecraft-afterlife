@@ -143,21 +143,22 @@ class SkillTree extends PolymerElement {
                     width: 100%;
                     height: 100%;
                     background-color: #0000;
+                    filter: drop-shadow(0px 0px 10px rgba(255, 255, 255, 0.4));
                 }
 
                 .skill-tree-connection {
-                    stroke: var(--skill-tree-button-background);
+                    stroke: #0000
                     stroke-width: 0;
                     transition: linear 0.5s;
                 }
 
                 .skill-tree-connection[unlocked] {
-                    stroke: var(--skill-tree-button-background-skilled);
+                    stroke: rgba(180, 80, 170, 1.0);
                     stroke-width: 8;
                 }
 
                 .skill-tree-connection[skillable] {
-                    stroke: rgba(115, 32, 178, 0.8);
+                    stroke: rgba(140, 20, 140, 0.6);
                     stroke-width: 4;
                 }
 
@@ -217,11 +218,12 @@ class SkillTree extends PolymerElement {
                     position: absolute;
                     top: 10px;
                     left: 30px;
-                    color: white;
+                    color: rgb(240, 240, 240);
                     font-size: 2.5em;
                     font-family: minecraft-regular, sans-serif;
                     z-index: 3;
                     user-select: none;
+                    text-shadow: 0 0 50px #fff4, 0 0 60px #fff4, 0 0 20px #fff4;
                 }
             </style>
             <!--suppress CssOverwrittenProperties -->
@@ -267,7 +269,7 @@ class SkillTree extends PolymerElement {
                     </button>
                 </template>
                 <div class="skill-tree-skillpoints">
-                    Skillpoints: {{skillpoints}}
+                    Gralkristalle: {{skillpoints}}
                 </div>
             </div>
         `;
