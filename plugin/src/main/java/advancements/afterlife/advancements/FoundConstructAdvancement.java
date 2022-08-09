@@ -35,6 +35,7 @@ public class FoundConstructAdvancement extends AdvancementListener {
 
         Location playerLocation = e.getPlayer().getLocation();
         Optional<Location> nearest = skillBlockLocations.stream()
+                .filter(location -> e.getPlayer().getWorld().equals(location.getWorld()))
                 .min((o1, o2) -> {
                     double d1 = playerLocation.distanceSquared(o1);
                     double d2 = playerLocation.distanceSquared(o2);

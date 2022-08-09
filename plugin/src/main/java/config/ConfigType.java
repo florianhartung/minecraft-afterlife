@@ -7,7 +7,9 @@ public enum ConfigType {
     SKILL_BLOCKS("skillblocks.yml"),
     ADVANCEMENT_PARENTS("advancement-parents.yml"),
     SKILLS("skills.yml"),
-    PLAYERS("player-settings.yml");
+    PLAYERS("player-settings.yml"),
+    PLAY_TIMES("play-times.yml"),
+    PROJECT_START("project-start.yml");
 
     @Getter
     private final String filename;

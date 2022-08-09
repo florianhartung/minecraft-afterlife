@@ -33,16 +33,22 @@ public class Main extends JavaPlugin {
         AdvancementManager.init(this);
 
         SkillBlockManager skillBlockManager = new SkillBlockManager();
+        LimitedPlaytime limitedPlaytime = new LimitedPlaytime(this);
+        ProjectStartManager projectStartManager = new ProjectStartManager(this, limitedPlaytime);
 
+        register(limitedPlaytime);
         register(skillBlockManager);
+        register(projectStartManager);
         register(new SkillPointAdvancementListener());
-        register(new PlayerRegistrationListener());
+        register(new PlayerRegistrationListener(this));
         register(new AdvancementCancellingListener());
 
         // TODO: Afterlife command
         getCommand("skillblock").setExecutor(skillBlockManager);
-        getCommand("afterlife").setExecutor(new SkillsExecutor());
         getCommand("hud").setExecutor(HudManager.getInstance());
+        getCommand("playtime").setExecutor(limitedPlaytime);
+        getCommand("timeleft").setExecutor(limitedPlaytime);
+        getCommand("startafterlife").setExecutor(projectStartManager);
     }
 
     @Override

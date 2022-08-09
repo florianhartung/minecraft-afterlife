@@ -3,9 +3,10 @@ server:
   api: /api
   skills-page: /skills?token=%s
 parent-required-advancement-namespaces:
-  - afterlifetest
   - afterlife
 skillpoints-advancement-namespaces:
   - afterlife
-  - afterlifetest
 end-blocked: true
+limited-playtime:
+  seconds-per-day: 3600 # 1h
+  banked-days: 2

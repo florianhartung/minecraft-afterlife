@@ -3,6 +3,7 @@ package hud;
 import config.PlayerDataConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import main.ChatHelper;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -125,6 +126,11 @@ public class HudManager implements CommandExecutor {
             data.setHudEnabled(!data.isHudEnabled());
             PlayerDataConfig.set(player, data);
             hudEnabled.put(player.getUniqueId(), data.isHudEnabled());
+            if (data.isHudEnabled()) {
+                ChatHelper.sendMessage(player, ChatColor.GREEN + "Die HUD ist nun aktiviert.");
+            } else {
+                ChatHelper.sendMessage(player, ChatColor.RED + "Die HUD ist nun deaktiviert.");
+            }
             return true;
         }
 
