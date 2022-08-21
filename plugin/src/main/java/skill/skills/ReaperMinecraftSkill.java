@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
+import performancereport.PerfReport;
 import skill.generic.MinecraftSkill;
 import skill.generic.MinecraftSkillTimer;
 import skill.injection.ConfigValue;
@@ -116,6 +117,7 @@ public class ReaperMinecraftSkill extends MinecraftSkill {
     }
 
     private void spawnStunParticles() {
+        PerfReport.startTimer("reaper.particles");
         if (stunTimer == null) {
             return;
         }
@@ -124,6 +126,7 @@ public class ReaperMinecraftSkill extends MinecraftSkill {
             spawnParticleRing(Particle.SPELL_WITCH, player.getLocation(), 0.6d, 40);
             player.getLocation().getWorld().spawnParticle(Particle.SMOKE_NORMAL, player.getLocation(), 10, 0.15, 0.15, 0.15, 0.0);
         });
+        PerfReport.endTimer("reaper.particles");
     }
 
     @SuppressWarnings("SameParameterValue")

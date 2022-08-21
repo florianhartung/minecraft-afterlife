@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.CompassMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import performancereport.PerfReport;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -77,8 +78,10 @@ public class TrackerAdvancement extends AdvancementListener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
+        PerfReport.startTimer("advancement.tracker");
         Location playerLocation = e.getTo();
         if (playerLocation == null) {
+            PerfReport.endTimer("advancement.tracker");
             return;
         }
 
@@ -92,6 +95,8 @@ public class TrackerAdvancement extends AdvancementListener {
                 })
                 .map(nearest -> new Location(nearest.getWorld(), nearest.getX(), -64, nearest.getZ())) // Points to lodestone at y=-64, so minecraft won't convert the tracker back to a normal compass due to the non-existing lodestone
                 .ifPresent(nearest -> updateTrackersInInventory(e.getPlayer().getInventory(), nearest));
+
+        PerfReport.endTimer("advancement.tracker");
     }
 
     public void updateTrackersInInventory(PlayerInventory inventory, Location nearestSkillBlock) {

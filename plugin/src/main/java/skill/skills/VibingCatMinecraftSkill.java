@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import performancereport.PerfReport;
 import skill.generic.MinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
@@ -54,10 +55,11 @@ public class VibingCatMinecraftSkill extends MinecraftSkill {
 
     @SuppressWarnings("unused")
     private void startTickTimer() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tick, 0L, 3L);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this::tick, 0L, 10L);
     }
 
     private void tick() {
+        PerfReport.startTimer("vibingcat.tick");
         activeJukeboxesTaskIds.keySet().stream().filter(l -> l.getBlock().getType() != Material.JUKEBOX).toList().forEach(activeJukeboxesTaskIds::remove);
 
         Bukkit.getOnlinePlayers().stream().filter(this::isActiveFor).forEach(player -> {
@@ -65,12 +67,13 @@ public class VibingCatMinecraftSkill extends MinecraftSkill {
             boolean isPlayingJukebox = activeJukeboxesTaskIds.keySet().stream().min(Comparator.comparingDouble(l::distanceSquared)).map(location -> l.distance(location) < 55).orElse(false);
 
             if (isPlayingJukebox) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20, REGENERATION_AMPLIFIER, true, true, true));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 80, REGENERATION_AMPLIFIER, true, true, true));
                 if (Math.random() < 0.08 * 3) {
                     player.getWorld().spawnParticle(Particle.NOTE, player.getLocation().add(0, 1.7, 0), 3, 0.4, 0.3, 0.4, 2);
                 }
             }
         });
+        PerfReport.endTimer("vibingcat.tick");
     }
 
     @EventHandler

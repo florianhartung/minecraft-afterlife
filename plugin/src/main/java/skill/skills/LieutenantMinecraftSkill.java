@@ -5,6 +5,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import performancereport.PerfReport;
 import skill.generic.AttributeMinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
@@ -27,6 +28,7 @@ public class LieutenantMinecraftSkill extends AttributeMinecraftSkill {
     }
 
     public void onTick() {
+        PerfReport.startTimer("lieutenant.tick");
         Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(this::isActiveFor)
@@ -34,6 +36,7 @@ public class LieutenantMinecraftSkill extends AttributeMinecraftSkill {
                     int n = getNearbyPlayerCount(player);
                     setAttributeAmount(player, n * HEALTH_PER_PLAYER);
                 });
+        PerfReport.endTimer("lieutenant.tick");
     }
 
     @SuppressWarnings("unused")

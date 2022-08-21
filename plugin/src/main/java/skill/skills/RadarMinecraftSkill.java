@@ -22,6 +22,7 @@ import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import performancereport.PerfReport;
 import skill.generic.MinecraftSkill;
 import skill.injection.Command;
 import skill.injection.ConfigValue;
@@ -71,7 +72,9 @@ public class RadarMinecraftSkill extends MinecraftSkill implements CommandExecut
     }
 
     private void tick() {
+        PerfReport.startTimer("radar.tick");
         activePlayers.stream().map(Bukkit::getPlayer).filter(Objects::nonNull).forEach(player -> player.getNearbyEntities(MAX_DISTANCE, MAX_DISTANCE, MAX_DISTANCE).forEach(entity -> sendUpdateEntityMetadataPacket(entity, player)));
+        PerfReport.endTimer("radar.tick");
     }
 
     private void sendUpdateEntityMetadataPacket(Entity target, Player observer) {

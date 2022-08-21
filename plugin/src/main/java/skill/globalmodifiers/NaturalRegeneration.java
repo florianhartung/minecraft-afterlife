@@ -48,10 +48,12 @@ public class NaturalRegeneration extends MinecraftSkill {
     }
 
     private void spawnParticles() {
+        Util.startTimer("natural_regeneration_tick");
         Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(player -> distanceToNearestSkillBlock(player.getLocation()) < SKILL_BLOCK_AURA_DISTANCE)
                 .forEach(player -> player.getWorld().spawnParticle(Particle.SPELL_MOB_AMBIENT, player.getLocation(), 0, 1, 0, 0, 1));
+        Util.endTimer();
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

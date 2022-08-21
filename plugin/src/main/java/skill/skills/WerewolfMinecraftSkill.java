@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import performancereport.PerfReport;
 import skill.generic.AttributeMinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
@@ -86,11 +87,14 @@ public class WerewolfMinecraftSkill extends AttributeMinecraftSkill {
     }
 
     private void showEffects() {
+        PerfReport.startTimer("werewolf.effects");
         if (nightState == null) {
+            PerfReport.endTimer("werewolf.effects");
             return;
         }
 
         if (!nightState.isNighttime() || nightState.getEffectStrength() == 0.0f) {
+            PerfReport.endTimer("werewolf.effects");
             return;
         }
 
@@ -112,9 +116,11 @@ public class WerewolfMinecraftSkill extends AttributeMinecraftSkill {
             if (Math.random() < 0.005)
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WOLF_GROWL, SoundCategory.PLAYERS, 0.3f, 0.8f);
         });
+        PerfReport.endTimer("werewolf.effects");
     }
 
     private void update() {
+        PerfReport.startTimer("werewolf.update");
         NightState newState = currentNightState();
         if (newState == null) {
             return;
@@ -125,6 +131,7 @@ public class WerewolfMinecraftSkill extends AttributeMinecraftSkill {
         }
 
         Bukkit.getOnlinePlayers().stream().filter(this::isActiveFor).forEach(player -> applyEffects(player, nightState));
+        PerfReport.endTimer("werewolf.update");
     }
 
     private void applyEffects(Player player, NightState nightState) {

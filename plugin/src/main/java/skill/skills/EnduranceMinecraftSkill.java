@@ -11,6 +11,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.plugin.Plugin;
+import performancereport.PerfReport;
 import skill.generic.AttributeMinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
@@ -44,7 +45,9 @@ public class EnduranceMinecraftSkill extends AttributeMinecraftSkill {
     }
 
     private void tick() {
+        PerfReport.startTimer("endurance.tick");
         playerEnduranceStates.values().forEach(PlayerEnduranceState::tick);
+        PerfReport.endTimer("endurance.tick");
     }
 
     @EventHandler

@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import performancereport.PerfReport;
 import skill.generic.MinecraftSkill;
 import skill.injection.Command;
 
@@ -23,6 +24,7 @@ public class SkillManager {
 
     private static Plugin plugin;
     private static int updaterTaskId = -1;
+    public static boolean skillUpdatesEnabled = true;
 
     public static void init(Plugin plugin) {
         SkillManager.plugin = plugin;
@@ -35,6 +37,8 @@ public class SkillManager {
 
                     tryRegisterAsCommandExecutor(minecraftSkill);
                 });
+
+        ((JavaPlugin) plugin).getCommand("toggleskillupdates").setExecutor(new SkillToggleCommandExecutor());
     }
 
     private static void tryRegisterAsCommandExecutor(MinecraftSkill minecraftSkill) {
@@ -83,7 +87,14 @@ public class SkillManager {
     }
 
     public static void reloadSkills() {
+        if (!skillUpdatesEnabled) {
+            Bukkit.getLogger().log(Level.INFO, "Skipped skill reloading.");
+            return;
+        }
+
+        PerfReport.startTimer("skills.reload");
         Bukkit.getServer().getOnlinePlayers()
                 .forEach(SkillUpdater::reloadSkillsForPlayer);
+        PerfReport.endTimer("skills.reload");
     }
 }

@@ -26,6 +26,7 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
+import performancereport.PerfReport;
 import skill.generic.MinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
@@ -132,6 +133,7 @@ public class HitmanMinecraftSkill extends MinecraftSkill {
 
 
     public void updateStalkProgress() {
+        PerfReport.startTimer("hitman.updatestalk");
         activePlayers.forEach(playerUUID -> {
             Player player = Bukkit.getPlayer(playerUUID);
             if (player != null) {
@@ -150,6 +152,7 @@ public class HitmanMinecraftSkill extends MinecraftSkill {
                 }
             }
         });
+        PerfReport.endTimer("hitman.updatestalk");
     }
 
     public void updateStalkProgressForPlayer(Player player) {

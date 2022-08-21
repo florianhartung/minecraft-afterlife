@@ -35,4 +35,16 @@ public class Util {
     public static boolean isNighttime(long time) {
         return time < 23658 && time > 12542;
     }
+
+    private static String currentTimerName;
+    private static long currentTimerStartMillis;
+
+    public static void startTimer(String name) {
+        currentTimerName = name;
+        currentTimerStartMillis = System.currentTimeMillis();
+    }
+
+    public static void endTimer() {
+//        Bukkit.getLogger().log(Level.INFO, "[Timer] " + StringUtils.leftPad(Long.toString(System.currentTimeMillis() - currentTimerStartMillis), 6, ' ') + "ms: " + currentTimerName);
+    }
 }

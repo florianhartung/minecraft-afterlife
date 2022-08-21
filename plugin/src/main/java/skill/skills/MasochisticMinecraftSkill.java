@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.plugin.Plugin;
+import performancereport.PerfReport;
 import skill.generic.MinecraftSkill;
 import skill.injection.ConfigValue;
 import skill.injection.Configurable;
@@ -39,6 +40,7 @@ public class MasochisticMinecraftSkill extends MinecraftSkill {
     }
 
     private void showParticles() {
+        PerfReport.startTimer("maso.particles");
         Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(this::isActiveFor)
@@ -53,6 +55,7 @@ public class MasochisticMinecraftSkill extends MinecraftSkill {
                     float dustSize = (float) (multiplier / DAMAGE_MULTIPLIERS_ZERO_HEALTH * 1.6);
                     player.getWorld().spawnParticle(Particle.DUST_COLOR_TRANSITION, player.getLocation(), particleCount, 0.1, 0, 0.1, new Particle.DustTransition(Color.fromRGB(150, 0, 0), Color.fromRGB(70, 0, 0), dustSize));
                 });
+        PerfReport.endTimer("maso.particles");
     }
 
 

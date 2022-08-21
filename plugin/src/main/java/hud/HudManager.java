@@ -4,6 +4,7 @@ import config.PlayerDataConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import main.ChatHelper;
+import main.Util;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -43,6 +44,7 @@ public class HudManager implements CommandExecutor {
     }
 
     private void tick() {
+        Util.startTimer("hudManager_tick");
         Bukkit.getOnlinePlayers()
                 .stream()
                 .filter(player -> {
@@ -77,6 +79,8 @@ public class HudManager implements CommandExecutor {
 
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR, actionBarText);
                 });
+
+        Util.endTimer();
     }
 
     /**

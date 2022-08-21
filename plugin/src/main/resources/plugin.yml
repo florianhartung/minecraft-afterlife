@@ -27,4 +27,12 @@ commands:
   timeleft:
     description: Prints the daily play time left
     usage: /timeleft
+  toggleskillupdates:
+    description: Toggles the automatic updating of skills
+    permission: op
+    usage: /toggleskillupdates
+  perfreport:
+    permission: op
+    description: lol no
+    usage: /perfreport
 depend: [ ProtocolLib ]

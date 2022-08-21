@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.plugin.Plugin;
+import performancereport.PerfReport;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +30,9 @@ public class FoundConstructAdvancement extends AdvancementListener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
+        PerfReport.startTimer("advancement.foundconstruct");
         if (hasAchievedAdvancement(e.getPlayer())) {
+            PerfReport.endTimer("advancement.foundconstruct");
             return;
         }
 
@@ -51,6 +54,7 @@ public class FoundConstructAdvancement extends AdvancementListener {
             e.getPlayer().discoverRecipe(Objects.requireNonNull(NamespacedKey.fromString("afterlife:construct_shard_tracker")));
             ChatHelper.sendMessage(e.getPlayer(), "Du kannst nun einen Gral-Kompass herstellen.\nSieh ihn dir in deinem Rezeptbuch an.");
         }
+        PerfReport.endTimer("advancement.foundconstruct");
     }
 
     @Override

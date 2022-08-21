@@ -8,6 +8,7 @@ import hud.HudManager;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import performancereport.PerfReportCommandExecutor;
 import skill.SkillManager;
 import skillspage.SkillBlockManager;
 
@@ -49,6 +50,7 @@ public class Main extends JavaPlugin {
         getCommand("playtime").setExecutor(limitedPlaytime);
         getCommand("timeleft").setExecutor(limitedPlaytime);
         getCommand("startafterlife").setExecutor(projectStartManager);
+        getCommand("perfreport").setExecutor(new PerfReportCommandExecutor(this));
     }
 
     @Override
